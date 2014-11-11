@@ -32,7 +32,7 @@ public class TiffReader {
         fileHasBeenRead = false;
     }
 
-    /////////// Public Methods ////////////////////////////////////////////////////////////////
+    /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public void readFileData(){
         int lastIfdByte;
@@ -52,7 +52,7 @@ public class TiffReader {
         }
     }
 
-    /////////// Private Methods ///////////////////////////////////////////////////////////////
+    /////////// Private Methods /////////////////////////////////////////////////////////////
 
     private ByteOrder getByteOrder(String orderId){
 
@@ -75,16 +75,16 @@ public class TiffReader {
         byte[] bytes = getCalibrationDataBytes(ifdEndByte, fileBytes);
         marImageData.setCalibration(new CalibrationData(
                 ifdEndByte,
-                searchDirectoriesForTag(FieldTags.X_RESOLUTION_OFFSET),
-                searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET),
-                searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET),
+                marImageData.searchDirectoriesForTag(FieldTags.X_RESOLUTION_OFFSET),
+                marImageData.searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET),
+                marImageData.searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET),
                 bytes,
                 marImageData.getByteOrder()
         ));
     }
 
     private byte[] getCalibrationDataBytes(int ifdEndByte, byte[] fileBytes){
-        int imageStartByte = searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
+        int imageStartByte = marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
         int bufferLength = imageStartByte - ifdEndByte;
         byte[] data = new byte[bufferLength];
         for (int i = ifdEndByte; i < imageStartByte; i++){
@@ -164,27 +164,15 @@ public class TiffReader {
     }
 
     private int retrieveImageStartingByte(){
-        return searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
+        return marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
     }
 
     private int retrieveImageHeight(){
-        return searchDirectoriesForTag(FieldTags.IMAGE_HEIGHT);
+        return marImageData.searchDirectoriesForTag(FieldTags.IMAGE_HEIGHT);
     }
 
     private int retrieveImageWidth(){
-        return searchDirectoriesForTag(FieldTags.IMAGE_WIDTH);
-    }
-
-    private int searchDirectoriesForTag(int tag){
-        int _value = 0;
-        for (ImageFileDirectory directory : marImageData.getIfdListing()){
-            for (FieldInformation item : directory.getFields()){
-                if (item.getTag() == tag){
-                    _value = item.getValue();
-                }
-            }
-        }
-        return _value;
+        return marImageData.searchDirectoriesForTag(FieldTags.IMAGE_WIDTH);
     }
 
 }

@@ -1,6 +1,7 @@
 package xrdtiffoperations.imagemodel;
 
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
+import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 
@@ -41,5 +42,19 @@ public class TiffBase {
     public TiffBase(String _filename) {
         ifdListing = new ArrayList<>();
         filename = _filename;
+    }
+
+    /////////// Public Methods //////////////////////////////////////////////////////////////
+
+    public int searchDirectoriesForTag(int tag){
+        int _value = 0;
+        for (ImageFileDirectory directory : ifdListing){
+            for (FieldInformation item : directory.getFields()){
+                if (item.getTag() == tag){
+                    _value = item.getValue();
+                }
+            }
+        }
+        return _value;
     }
 }
