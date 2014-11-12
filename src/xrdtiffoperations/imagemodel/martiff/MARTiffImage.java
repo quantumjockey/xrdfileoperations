@@ -7,13 +7,13 @@ public class MARTiffImage extends TiffBase{
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
-    private final short INTENSITY_MAXIMUM = 32767;
-    private final short INTENSITY_MINIMUM = -32768;
+    private final int INTENSITY_MAXIMUM = 65537;
+    private final int INTENSITY_MINIMUM = 0;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     protected CalibrationData calibration;
-    protected short[][] intensityMap;
+    protected int[][] intensityMap;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
@@ -21,7 +21,7 @@ public class MARTiffImage extends TiffBase{
         return calibration;
     }
 
-    public short getIntensityMapValue(int y, int x){
+    public int getIntensityMapValue(int y, int x){
         return intensityMap[y][x];
     }
 
@@ -33,8 +33,8 @@ public class MARTiffImage extends TiffBase{
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public short getMaxValue(){
-        short maxVal = INTENSITY_MINIMUM;
+    public int getMaxValue(){
+        int maxVal = INTENSITY_MINIMUM;
         for (int y = 0; y < getHeight(); y++){
             for (int x = 0; x < getWidth(); x++){
                 if (intensityMap[y][x] > maxVal){
@@ -45,8 +45,8 @@ public class MARTiffImage extends TiffBase{
         return maxVal;
     }
 
-    public short getMinValue(){
-        short minVal = INTENSITY_MAXIMUM;
+    public int getMinValue(){
+        int minVal = INTENSITY_MAXIMUM;
         for (int y = 0; y < getHeight(); y++){
             for (int x = 0; x < getWidth(); x++){
                 if (intensityMap[y][x] < minVal){

@@ -1,4 +1,4 @@
-package xrdtiffoperations.filehandling.bytewrappers;
+package xrdtiffoperations.filehandling.bytewrappers.base;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -20,7 +20,7 @@ public class DataMasking {
         temp.setFilename(name);
         for(int y = 0; y < temp.getHeight(); y++){
             for (int x = 0; x < temp.getWidth(); x++){
-                temp.setIntensityMapCoordinate(y, x, maskValue(temp.getIntensityMapValue(y, x), (short) maxVal, (short) minVal));
+                temp.setIntensityMapCoordinate(y, x, maskValue(temp.getIntensityMapValue(y, x), maxVal, minVal));
             }
         }
 
@@ -46,8 +46,8 @@ public class DataMasking {
         return result;
     }
 
-    private static short maskValue(short _value, short _max, short _min){
-        short value;
+    private static int maskValue(int _value, int _max, int _min){
+        int value;
 
         value = _value;
         if (value < _min){
