@@ -63,6 +63,14 @@ Next, you need to confirm that the Project Structure is properly configured.
 
 Your project structure is ready to go!
 
+If the git repository wasn't automatically registered with the IDE upon project load:
+
+1.  Go to "IntelliJ IDEA" -> "Preferences..." (or hit Command + ,)
+2.  Under "Project Settings" click "Version Control"
+3.  Register the VCS root using either the "+" button or by responding to the "Fix" popup
+
+Now IntelliJ is synced with Git. You can manage commits and branches for the repository using the "VCS" menu.
+
 One last thing:
 
 1.  Click on one of the files in the test sources root
