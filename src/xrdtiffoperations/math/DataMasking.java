@@ -12,22 +12,27 @@ public class DataMasking {
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
     public static MARTiffImage maskImage(MARTiffImage image, int minVal, int maxVal){
-        WritableMARTiffImage temp = (WritableMARTiffImage)image;
-        String name = generateFilename(image, minVal, maxVal);
+        String name;
+        WritableMARTiffImage temp;
+
+        temp = (WritableMARTiffImage)image;
+        name = generateFilename(image, minVal, maxVal);
         temp.setFilename(name);
         for(int y = 0; y < temp.getHeight(); y++){
             for (int x = 0; x < temp.getWidth(); x++){
                 temp.setIntensityMapCoordinate(y, x, maskValue(temp.getIntensityMapValue(y, x), (short) maxVal, (short) minVal));
             }
         }
+
         return temp;
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
 
     private static String generateFilename(MARTiffImage file, int min, int max){
-        String result;
-        String baseName = stripFilename(file.getFilename());
+        String baseName, result;
+
+        baseName = stripFilename(file.getFilename());
         if (max != file.getMaxValue()){
             result = baseName + "_max_" + max + DEFAULT_EXTENSION;
         }
@@ -37,17 +42,21 @@ public class DataMasking {
         else{
             result = baseName + DEFAULT_EXTENSION;
         }
+
         return result;
     }
 
     private static short maskValue(short _value, short _max, short _min){
-        short value = _value;
+        short value;
+
+        value = _value;
         if (value < _min){
             value = _min;
         }
         else if (value > _max){
             value = _max;
         }
+
         return value;
     }
 

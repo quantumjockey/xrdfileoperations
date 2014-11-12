@@ -28,7 +28,6 @@ public class CalibrationData {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public CalibrationData(int ifdEndByte, int xResByte, int yResByte, int calibrationStartByte, byte[] dataBuffer, ByteOrder order) {
-
         int relativeCalibrationOffset, relativeXResOffset, relativeYResOffset;
 
         relativeXResOffset = xResByte - ifdEndByte;
@@ -42,12 +41,15 @@ public class CalibrationData {
     /////////// Private Methods ///////////////////////////////////////////////////////////////
 
     private void getCoreCalibrationData(byte[] buffer, int calOffset, ByteOrder order){
-        int calibrationLength = buffer.length - calOffset;
-        byte[] bytes = new byte[calibrationLength];
-        System.arraycopy(buffer, calOffset, bytes, 0, calibrationLength);
+        byte[] calibrationBytes;
+        int calibrationLength;
+
+        calibrationLength = buffer.length - calOffset;
+        calibrationBytes = new byte[calibrationLength];
+        System.arraycopy(buffer, calOffset, calibrationBytes, 0, calibrationLength);
         // Encoding for detector outputs required before this can properly read
         // central section reads when UTF-16 charset selected
-        coreCalibrationBytes = bytes;
+        coreCalibrationBytes = calibrationBytes;
     }
 
     private void getDetectorResolution(byte[] buffer, int relX, int relY, ByteOrder order){
@@ -62,9 +64,13 @@ public class CalibrationData {
     }
 
     private int getResValue(int offset, byte[] buffer, ByteOrder order){
-        int floatLength = 8;
-        byte[] temp = new byte[floatLength];
+        int floatLength;
+        byte[] temp;
+
+        floatLength = 8;
+        temp = new byte[floatLength];
         System.arraycopy(buffer, offset, temp, 0, floatLength);
+
         return (new IntWrapper(temp, order)).get();
     }
 

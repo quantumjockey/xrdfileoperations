@@ -34,11 +34,12 @@ public class FieldInformation {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public FieldInformation(byte[] fieldData, ByteOrder order){
+        byte[] _fieldTag, _fieldType, _fieldValue, _typeCount;
 
-        byte[] _fieldTag = new byte[2];
-        byte[] _fieldType = new byte[2];
-        byte[] _typeCount = new byte[4];
-        byte[] _fieldValue = new byte[4];
+        _fieldTag = new byte[2];
+        _fieldType = new byte[2];
+        _typeCount = new byte[4];
+        _fieldValue = new byte[4];
 
         for (int i = 0; i < 12; i++) {
             if (i < 2){

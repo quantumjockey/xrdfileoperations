@@ -34,19 +34,24 @@ public class ImageFileDirectory {
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
     public int getTagValue(short specifiedTag){
-        int value = -1;
+        int value;
+
+        value = -1;
         for (FieldInformation item : fields){
             if (item.getTag() == specifiedTag) {
                 value = item.getValue();
             }
         }
+
         return value;
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
 
     private void getFields(byte[] bytes, ByteOrder byteOrder){
-        int cursor = 2;
+        int cursor;
+
+        cursor = 2;
         for (int i = 0; i < numFields; i++){
             byte[] fieldBytes = new byte[FIELD_ENTRY_LENGTH];
             System.arraycopy(bytes, cursor, fieldBytes, 0, FIELD_ENTRY_LENGTH);
@@ -56,8 +61,11 @@ public class ImageFileDirectory {
     }
 
     private int getFieldsCount(byte[] bytes, ByteOrder byteOrder){
-        byte[] _fieldsCount = new byte[2];
+        byte[] _fieldsCount;
+
+        _fieldsCount = new byte[2];
         System.arraycopy(bytes, 0, _fieldsCount, 0, 2);
+
         return (new ShortWrapper(_fieldsCount, byteOrder)).get();
     }
 

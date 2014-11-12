@@ -36,6 +36,7 @@ public class TiffReader {
 
     public void readFileData(){
         int lastIfdByte;
+
         getFileHeader(fileBytesRaw);
         lastIfdByte = getIFDByteGroups(fileBytesRaw, marImageData.getFirstIfdOffset());
         getCalibrationData(lastIfdByte, fileBytesRaw);
@@ -55,7 +56,6 @@ public class TiffReader {
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
     private ByteOrder getByteOrder(String orderId){
-
         ByteOrder order;
 
         switch (orderId){
@@ -73,7 +73,9 @@ public class TiffReader {
     }
 
     private void getCalibrationData(int ifdEndByte, byte[] fileBytes){
-        byte[] bytes = getCalibrationDataBytes(ifdEndByte, fileBytes);
+        byte[] bytes;
+
+        bytes = getCalibrationDataBytes(ifdEndByte, fileBytes);
         marImageData.setCalibration(new CalibrationData(
                 ifdEndByte,
                 marImageData.searchDirectoriesForTag(FieldTags.X_RESOLUTION_OFFSET),
@@ -85,20 +87,25 @@ public class TiffReader {
     }
 
     private byte[] getCalibrationDataBytes(int ifdEndByte, byte[] fileBytes){
-        int imageStartByte = marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
-        int bufferLength = imageStartByte - ifdEndByte;
-        byte[] data = new byte[bufferLength];
+        int imageStartByte, bufferLength;
+        byte[] data;
+
+        imageStartByte = marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
+        bufferLength = imageStartByte - ifdEndByte;
+        data = new byte[bufferLength];
         System.arraycopy(fileBytes, ifdEndByte, data, 0, bufferLength);
+
         return data;
     }
 
     private void getFileHeader(byte[] imageData){
+        byte[] _byteOrder,_identifier,_ifdOffset;
+        int cursor;
 
-        byte[] _byteOrder = new byte[2];
-        byte[] _identifier = new byte[2];
-        byte[] _ifdOffset = new byte[4];
-
-        int cursor = 0;
+        _byteOrder = new byte[2];
+        _identifier = new byte[2];
+        _ifdOffset = new byte[4];
+        cursor = 0;
 
         while (cursor < 8) {
             if (cursor < 2){
@@ -117,21 +124,31 @@ public class TiffReader {
     }
 
     private int getIFDByteGroups(byte[] imageData, int firstIfdOffset){
-        byte[] _fieldsCount = new byte[2];
+        byte[] _fieldsCount, directoryBytes;
+        int directoryLength, fieldsCount;
+        ImageFileDirectory directory;
+
+        _fieldsCount = new byte[2];
         System.arraycopy(imageData, firstIfdOffset, _fieldsCount, 0, 2);
-        int fieldsCount = (new ShortWrapper(_fieldsCount, marImageData.getByteOrder())).get();
-        int directoryLength = 2 + (fieldsCount * 12) + 4;
-        byte[] directoryBytes = new byte[directoryLength];
+        fieldsCount = (new ShortWrapper(_fieldsCount, marImageData.getByteOrder())).get();
+        directoryLength = 2 + (fieldsCount * 12) + 4;
+        directoryBytes = new byte[directoryLength];
         System.arraycopy(imageData, firstIfdOffset, directoryBytes, 0, directoryLength);
-        ImageFileDirectory directory = new ImageFileDirectory(directoryBytes, marImageData.getByteOrder());
+        directory = new ImageFileDirectory(directoryBytes, marImageData.getByteOrder());
         marImageData.getIfdListing().add(directory);
+
         return firstIfdOffset + directoryLength;
     }
 
     private void retrieveImageData(int startingByte, int imageHeight, int imageWidth){
-        short[] linearImageArray = new short[imageHeight * imageWidth];
-        byte[] pixelTemp = new byte[2];
-        int z = 0;
+        short[] linearImageArray;
+        byte[] pixelTemp;
+        int z;
+
+        linearImageArray = new short[imageHeight * imageWidth];
+        pixelTemp = new byte[2];
+        z = 0;
+
         for(int i = 0; i < (fileBytesRaw.length - startingByte); i++){
             if ((startingByte + i ) % 2 == 0){
                 pixelTemp[0] = fileBytesRaw[startingByte + i];
