@@ -27,6 +27,8 @@ If you're planning to wrap this module in a project with your favorite IDE, plea
 
 If IntelliJ IDEA is not installed, download and install the latest version from the [JetBrains website](https://www.jetbrains.com/idea/).
 
+### Setup Project Files
+
 Next, create the project files:
 
 1.  Open up IntelliJ IDEA and select "New Project" from the startup menu
@@ -35,6 +37,8 @@ Next, create the project files:
 4.  Once you've confirmed that the names match, click "Finish" to create the .iml file and .idea project directory
 
 Once you've created the project files, you must now set up the sources and test roots.
+
+### Identify Sources Directory
 
 To set up the sources root:
 
@@ -45,6 +49,8 @@ To set up the sources root:
 
 The directory's folder icon should turn blue in the Project tool window, indicating that it is now the root directory for storing project source files.
 
+### Identify Test Sources Directory
+
 To set up the tests root:
 
 1.  With the Project tool window still open, right-click on the "test" folder to pull up the project item context menu
@@ -52,6 +58,8 @@ To set up the tests root:
 3.  Click on "Test Sources Root"
 
 The directory's folder icon should turn green in the Project tool window, indicating that it is now the root directory for storing project unit tests.
+
+### Configure Project Structure
 
 Next, you need to confirm that the Project Structure is properly configured.
 
@@ -63,6 +71,8 @@ Next, you need to confirm that the Project Structure is properly configured.
 
 Your project structure is ready to go!
 
+### Register Git Repository
+
 If the git repository wasn't automatically registered with the IDE upon project load:
 
 1.  Go to "IntelliJ IDEA" -> "Preferences..." (or hit Command + ,)
@@ -71,11 +81,13 @@ If the git repository wasn't automatically registered with the IDE upon project 
 
 Now IntelliJ is synced with Git. You can manage commits and branches for the repository using the "VCS" menu.
 
+### Confirm Test Framework is Active
+
 One last thing:
 
 1.  Click on one of the files in the test sources root
 2.  If the org.junit packages for jUnit4 have not been loaded, click "Fix" in the popup that displays the error for missing jUnit packages
 
-All jUnit4 packages should be attached to the module project and you should be ready to run unit tests.
+All jUnit4 packages should be attached to the module and you're ready to run unit tests.
 
 Happy development!
