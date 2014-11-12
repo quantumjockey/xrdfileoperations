@@ -34,14 +34,14 @@ public class WritableMARTiffImage extends MARTiffImage{
     // MARTiffImage fields
 
     public void initializeIntensityMap(int height, int width){
-        intensityMap = new short[height][width];
+        intensityMap = new int[height][width];
     }
 
     public void setCalibration(CalibrationData data){
         calibration = data;
     }
 
-    public void setIntensityMapCoordinate(int y, int x, short value){
+    public void setIntensityMapCoordinate(int y, int x, int value){
         intensityMap[y][x] = value;
     }
 

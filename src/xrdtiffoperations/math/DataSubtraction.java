@@ -58,8 +58,8 @@ public class DataSubtraction {
         return name.replace(DEFAULT_EXTENSION, "");
     }
 
-    private static short subtractIntensity(short firstValue, short secondValue){
-        return (short)(firstValue - secondValue);
+    private static int subtractIntensity(int firstValue, int secondValue){
+        return (firstValue - secondValue);
     }
 
 }
