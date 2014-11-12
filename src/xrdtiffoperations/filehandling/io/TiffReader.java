@@ -1,5 +1,6 @@
 package xrdtiffoperations.filehandling.io;
 
+import xrdtiffoperations.filehandling.bytewrappers.CharWrapper;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
@@ -141,11 +142,11 @@ public class TiffReader {
     }
 
     private void retrieveImageData(int startingByte, int imageHeight, int imageWidth){
-        short[] linearImageArray;
+        int[] linearImageArray;
         byte[] pixelTemp;
         int z;
 
-        linearImageArray = new short[imageHeight * imageWidth];
+        linearImageArray = new int[imageHeight * imageWidth];
         pixelTemp = new byte[2];
         z = 0;
 
@@ -155,7 +156,7 @@ public class TiffReader {
             }
             else if ((startingByte + i ) % 2 != 0) {
                 pixelTemp[1] = fileBytesRaw[startingByte + i];
-                linearImageArray[z] = (new ShortWrapper(pixelTemp, marImageData.getByteOrder())).get();
+                linearImageArray[z] = (int)(new CharWrapper(pixelTemp, marImageData.getByteOrder())).get();
                 z++;
             }
         }
