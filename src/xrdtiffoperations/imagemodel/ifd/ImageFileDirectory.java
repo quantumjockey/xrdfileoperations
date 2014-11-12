@@ -49,9 +49,7 @@ public class ImageFileDirectory {
         int cursor = 2;
         for (int i = 0; i < numFields; i++){
             byte[] fieldBytes = new byte[FIELD_ENTRY_LENGTH];
-            for (int j = 0; j < FIELD_ENTRY_LENGTH; j++){
-                fieldBytes[j] = bytes[cursor + j];
-            }
+            System.arraycopy(bytes, cursor, fieldBytes, 0, FIELD_ENTRY_LENGTH);
             fields.add(new FieldInformation(fieldBytes, byteOrder));
             cursor += FIELD_ENTRY_LENGTH;
         }
@@ -59,9 +57,7 @@ public class ImageFileDirectory {
 
     private int getFieldsCount(byte[] bytes, ByteOrder byteOrder){
         byte[] _fieldsCount = new byte[2];
-        for (int i = 0; i < 2; i++) {
-             _fieldsCount[i] = bytes[i];
-        }
+        System.arraycopy(bytes, 0, _fieldsCount, 0, 2);
         return (new ShortWrapper(_fieldsCount, byteOrder)).get();
     }
 

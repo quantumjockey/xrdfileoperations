@@ -31,7 +31,7 @@ public class CalibrationData {
 
         int relativeCalibrationOffset, relativeXResOffset, relativeYResOffset;
 
-        relativeXResOffset = xResByte - ifdEndByte;;
+        relativeXResOffset = xResByte - ifdEndByte;
         relativeYResOffset = yResByte - ifdEndByte;
         getDetectorResolution(dataBuffer, relativeXResOffset, relativeYResOffset, order);
 
@@ -44,9 +44,7 @@ public class CalibrationData {
     private void getCoreCalibrationData(byte[] buffer, int calOffset, ByteOrder order){
         int calibrationLength = buffer.length - calOffset;
         byte[] bytes = new byte[calibrationLength];
-        for(int i = 0; i < calibrationLength; i++){
-            bytes[i] = buffer[i + calOffset];
-        }
+        System.arraycopy(buffer, calOffset, bytes, 0, calibrationLength);
         // Encoding for detector outputs required before this can properly read
         // central section reads when UTF-16 charset selected
         coreCalibrationBytes = bytes;
@@ -66,9 +64,7 @@ public class CalibrationData {
     private int getResValue(int offset, byte[] buffer, ByteOrder order){
         int floatLength = 8;
         byte[] temp = new byte[floatLength];
-        for (int i = 0; i < floatLength; i++){
-            temp[i] = buffer[offset + i];
-        }
+        System.arraycopy(buffer, offset, temp, 0, floatLength);
         return (new IntWrapper(temp, order)).get();
     }
 
