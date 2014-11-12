@@ -58,14 +58,15 @@ public class TiffReader {
 
         ByteOrder order;
 
-        if(orderId == "II"){
-            order = ByteOrder.LITTLE_ENDIAN;
-        }
-        else if(orderId == "MM") {
-            order = ByteOrder.BIG_ENDIAN;
-        }
-        else{
-            order = ByteOrder.nativeOrder();
+        switch (orderId){
+            case "II":
+                order = ByteOrder.LITTLE_ENDIAN;
+                break;
+            case "MM":
+                order = ByteOrder.BIG_ENDIAN;
+                break;
+            default:
+                order = ByteOrder.nativeOrder();
         }
 
         return order;
@@ -87,9 +88,7 @@ public class TiffReader {
         int imageStartByte = marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
         int bufferLength = imageStartByte - ifdEndByte;
         byte[] data = new byte[bufferLength];
-        for (int i = ifdEndByte; i < imageStartByte; i++){
-            data[i - ifdEndByte] = fileBytes[i];
-        }
+        System.arraycopy(fileBytes, ifdEndByte, data, 0, bufferLength);
         return data;
     }
 
@@ -118,26 +117,14 @@ public class TiffReader {
     }
 
     private int getIFDByteGroups(byte[] imageData, int firstIfdOffset){
-
         byte[] _fieldsCount = new byte[2];
-
-        for (int i = 0; i < 2; i++) {
-            _fieldsCount[i] = imageData[firstIfdOffset + i];
-        }
-
+        System.arraycopy(imageData, firstIfdOffset, _fieldsCount, 0, 2);
         int fieldsCount = (new ShortWrapper(_fieldsCount, marImageData.getByteOrder())).get();
-
         int directoryLength = 2 + (fieldsCount * 12) + 4;
-
         byte[] directoryBytes = new byte[directoryLength];
-
-        for (int i = 0; i < directoryLength; i++){
-            directoryBytes[i] = imageData[firstIfdOffset + i];
-        }
-
+        System.arraycopy(imageData, firstIfdOffset, directoryBytes, 0, directoryLength);
         ImageFileDirectory directory = new ImageFileDirectory(directoryBytes, marImageData.getByteOrder());
         marImageData.getIfdListing().add(directory);
-
         return firstIfdOffset + directoryLength;
     }
 
