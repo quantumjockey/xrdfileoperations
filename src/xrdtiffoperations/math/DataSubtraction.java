@@ -11,25 +11,25 @@ public class DataSubtraction {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
-    public static MARTiffImage subtractImages(MARTiffImage firstImage, MARTiffImage secondImage){
+    public static MARTiffImage subtractImages(MARTiffImage subtractedImage, MARTiffImage baseImage){
         String filename;
         int height, width;
         WritableMARTiffImage temp;
 
-        filename = generateFilename(firstImage, secondImage, false);
+        filename = generateFilename(subtractedImage, baseImage, false);
         temp = new WritableMARTiffImage(filename);
-        temp.setIfdListing(firstImage.getIfdListing());
-        temp.setByteOrder(firstImage.getByteOrder());
-        temp.setCalibration(firstImage.getCalibration());
+        temp.setIfdListing(subtractedImage.getIfdListing());
+        temp.setByteOrder(subtractedImage.getByteOrder());
+        temp.setCalibration(subtractedImage.getCalibration());
 
-        height = (firstImage.getHeight() < secondImage.getHeight()) ? firstImage.getHeight() : secondImage.getHeight();
-        width  = (firstImage.getWidth() < secondImage.getWidth()) ? firstImage.getWidth() : secondImage.getWidth();
+        height = (subtractedImage.getHeight() < baseImage.getHeight()) ? subtractedImage.getHeight() : baseImage.getHeight();
+        width  = (subtractedImage.getWidth() < baseImage.getWidth()) ? subtractedImage.getWidth() : baseImage.getWidth();
 
         temp.initializeIntensityMap(height, width);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                temp.setIntensityMapCoordinate(y, x, subtractIntensity(firstImage.getIntensityMapValue(y, x), secondImage.getIntensityMapValue(y, x)));
+                temp.setIntensityMapCoordinate(y, x, subtractIntensity(subtractedImage.getIntensityMapValue(y, x), baseImage.getIntensityMapValue(y, x)));
             }
         }
 
@@ -38,11 +38,11 @@ public class DataSubtraction {
 
     /////////// Private Methods /////////////////////////////////////////////////////////////////
 
-    private static String generateFilename(MARTiffImage firstFile, MARTiffImage secondFile, boolean longName){
+    private static String generateFilename(MARTiffImage subtractedFile, MARTiffImage baseFile, boolean longName){
         String firstSegment, result, secondSegment;
 
-        firstSegment = stripFilename(firstFile.getFilename());
-        secondSegment = stripFilename(secondFile.getFilename());
+        firstSegment = stripFilename(subtractedFile.getFilename());
+        secondSegment = stripFilename(baseFile.getFilename());
         if (longName){
             result = firstSegment + "_minus_" + secondSegment + DEFAULT_EXTENSION;
         }
