@@ -134,7 +134,8 @@ public class TiffWriter {
 
         for (int y = 0; y < gridHeight; y++){
             for (int x = 0; x < gridWidth; x++){
-                bytes.putChar((char)cachedData.getIntensityMapValue(y, x));
+                bytes.putShort((short)cachedData.getIntensityMapValue(y, x));
+                // risky cast - must determine methods to explicitly prevent buffer overflow without marring data integrity
             }
         }
 
