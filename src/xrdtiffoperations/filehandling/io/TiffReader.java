@@ -2,7 +2,6 @@ package xrdtiffoperations.filehandling.io;
 
 import xrdtiffoperations.filehandling.bytewrappers.CharWrapper;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
-import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
 import xrdtiffoperations.filehandling.bytewrappers.IntWrapper;
@@ -15,6 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class TiffReader {
+
+    /////////// Constants ///////////////////////////////////////////////////////////////////
+
+    private final int FIT2D_STARTING_BYTE_SHIFT = -2;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -150,7 +153,7 @@ public class TiffReader {
         pixelTemp = new byte[2];
         z = 0;
 
-        for(int i = 0; i < (fileBytesRaw.length - startingByte); i++){
+        for(int i = 0; i < ((fileBytesRaw.length + FIT2D_STARTING_BYTE_SHIFT) - startingByte); i++){
             if ((startingByte + i ) % 2 == 0){
                 pixelTemp[0] = fileBytesRaw[startingByte + i];
             }
@@ -169,7 +172,7 @@ public class TiffReader {
     }
 
     private int retrieveImageStartingByte(){
-        return marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
+        return marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS) + FIT2D_STARTING_BYTE_SHIFT;
     }
 
     private int retrieveImageHeight(){
