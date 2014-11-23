@@ -11,25 +11,25 @@ public class DataSubtraction {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
-    public static MARTiffImage subtractImages(MARTiffImage subtractedImage, MARTiffImage baseImage){
+    public static MARTiffImage subtractImages(MARTiffImage darkFieldImage, MARTiffImage diffractionImage){
         String filename;
         int height, width;
         WritableMARTiffImage temp;
 
-        filename = generateFilename(subtractedImage, baseImage, false);
+        filename = generateFilename(darkFieldImage, diffractionImage, false);
         temp = new WritableMARTiffImage(filename);
-        temp.setIfdListing(subtractedImage.getIfdListing());
-        temp.setByteOrder(subtractedImage.getByteOrder());
-        temp.setCalibration(subtractedImage.getCalibration());
+        temp.setIfdListing(darkFieldImage.getIfdListing());
+        temp.setByteOrder(darkFieldImage.getByteOrder());
+        temp.setCalibration(darkFieldImage.getCalibration());
 
-        height = (subtractedImage.getHeight() < baseImage.getHeight()) ? subtractedImage.getHeight() : baseImage.getHeight();
-        width  = (subtractedImage.getWidth() < baseImage.getWidth()) ? subtractedImage.getWidth() : baseImage.getWidth();
+        height = (darkFieldImage.getHeight() < diffractionImage.getHeight()) ? darkFieldImage.getHeight() : diffractionImage.getHeight();
+        width  = (darkFieldImage.getWidth() < diffractionImage.getWidth()) ? darkFieldImage.getWidth() : diffractionImage.getWidth();
 
         temp.initializeIntensityMap(height, width);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                temp.setIntensityMapCoordinate(y, x, subtractIntensity(subtractedImage.getIntensityMapValue(y, x), baseImage.getIntensityMapValue(y, x)));
+                temp.setIntensityMapCoordinate(y, x, subtractIntensity(darkFieldImage.getIntensityMapValue(y, x), diffractionImage.getIntensityMapValue(y, x)));
             }
         }
 
@@ -38,11 +38,11 @@ public class DataSubtraction {
 
     /////////// Private Methods /////////////////////////////////////////////////////////////////
 
-    private static String generateFilename(MARTiffImage subtractedFile, MARTiffImage baseFile, boolean longName){
+    private static String generateFilename(MARTiffImage darkFieldImageFile, MARTiffImage diffractionImageFile, boolean longName){
         String firstSegment, result, secondSegment;
 
-        firstSegment = stripFilename(subtractedFile.getFilename());
-        secondSegment = stripFilename(baseFile.getFilename());
+        firstSegment = stripFilename(darkFieldImageFile.getFilename());
+        secondSegment = stripFilename(diffractionImageFile.getFilename());
         if (longName){
             result = firstSegment + "_minus_" + secondSegment + DEFAULT_EXTENSION;
         }
