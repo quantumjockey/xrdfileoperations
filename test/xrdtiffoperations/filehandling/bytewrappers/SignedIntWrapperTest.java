@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CharWrapperTest {
+public class SignedIntWrapperTest {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -26,12 +26,12 @@ public class CharWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void get_characterConverted_returnInput(){
+    public void get_integerWithinBoundsConverted_returnInput(){
 
     }
 
     @Test
-    public void get_integerWithinBoundsConverted_returnInput(){
+    public void get_integerBeyondBoundsConverted_returnZero(){
 
     }
 
@@ -41,7 +41,7 @@ public class CharWrapperTest {
     }
 
     @Test
-    public void get_CharacterBeyondStorableLimit_returnZero(){
+    public void get_IntegerBeyondStorableLimit_returnZero(){
 
     }
 }

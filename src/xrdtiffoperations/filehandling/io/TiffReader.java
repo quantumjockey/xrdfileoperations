@@ -1,11 +1,11 @@
 package xrdtiffoperations.filehandling.io;
 
-import xrdtiffoperations.filehandling.bytewrappers.CharWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
-import xrdtiffoperations.filehandling.bytewrappers.IntWrapper;
-import xrdtiffoperations.filehandling.bytewrappers.ShortWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 import xrdtiffoperations.imagemodel.martiff.WritableMARTiffImage;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 import java.io.IOException;
@@ -123,8 +123,8 @@ public class TiffReader {
         }
 
         marImageData.setByteOrder(getByteOrder(new String(_byteOrder)));
-        marImageData.setIdentifier((new ShortWrapper(_identifier, marImageData.getByteOrder())).get());
-        marImageData.setFirstIfdOffset((new IntWrapper(_ifdOffset, marImageData.getByteOrder())).get());
+        marImageData.setIdentifier((new SignedShortWrapper(_identifier, marImageData.getByteOrder())).get());
+        marImageData.setFirstIfdOffset((new SignedIntWrapper(_ifdOffset, marImageData.getByteOrder())).get());
     }
 
     private int getIFDByteGroups(byte[] imageData, int firstIfdOffset){
@@ -134,7 +134,7 @@ public class TiffReader {
 
         _fieldsCount = new byte[2];
         System.arraycopy(imageData, firstIfdOffset, _fieldsCount, 0, 2);
-        fieldsCount = (new ShortWrapper(_fieldsCount, marImageData.getByteOrder())).get();
+        fieldsCount = (new SignedShortWrapper(_fieldsCount, marImageData.getByteOrder())).get();
         directoryLength = 2 + (fieldsCount * 12) + 4;
         directoryBytes = new byte[directoryLength];
         System.arraycopy(imageData, firstIfdOffset, directoryBytes, 0, directoryLength);
@@ -159,7 +159,7 @@ public class TiffReader {
             }
             else if ((startingByte + i ) % 2 != 0) {
                 pixelTemp[1] = fileBytesRaw[startingByte + i];
-                linearImageArray[z] = (int)(new CharWrapper(pixelTemp, marImageData.getByteOrder())).get();
+                linearImageArray[z] = (int)(new UnsignedShortWrapper(pixelTemp, marImageData.getByteOrder())).get();
                 z++;
             }
         }

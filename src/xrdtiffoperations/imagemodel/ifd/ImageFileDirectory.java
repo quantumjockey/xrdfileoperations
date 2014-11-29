@@ -1,7 +1,7 @@
 package xrdtiffoperations.imagemodel.ifd;
 
 import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
-import xrdtiffoperations.filehandling.bytewrappers.ShortWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class ImageFileDirectory {
         _fieldsCount = new byte[2];
         System.arraycopy(bytes, 0, _fieldsCount, 0, 2);
 
-        return (new ShortWrapper(_fieldsCount, byteOrder)).get();
+        return (new SignedShortWrapper(_fieldsCount, byteOrder)).get();
     }
 
 }

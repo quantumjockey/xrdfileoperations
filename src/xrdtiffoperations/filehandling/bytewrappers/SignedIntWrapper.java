@@ -4,18 +4,18 @@ import xrdtiffoperations.filehandling.bytewrappers.base.WrapperBase;
 
 import java.nio.ByteOrder;
 
-public class ShortWrapper extends WrapperBase {
+public class SignedIntWrapper extends WrapperBase {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public ShortWrapper(byte[] bytes, ByteOrder order){
-        super(bytes, order);
+    public SignedIntWrapper(byte[] bytes, ByteOrder order){
+        super(bytes ,order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public short get(){
-        return buffer.getShort();
+    public int get(){
+        return buffer.getInt();
     }
 
 }

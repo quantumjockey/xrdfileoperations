@@ -4,11 +4,11 @@ import xrdtiffoperations.filehandling.bytewrappers.base.WrapperBase;
 
 import java.nio.ByteOrder;
 
-public class CharWrapper extends WrapperBase {
+public class UnsignedShortWrapper extends WrapperBase {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public CharWrapper(byte[] bytes, ByteOrder order){
+    public UnsignedShortWrapper(byte[] bytes, ByteOrder order){
         super(bytes, order);
     }
 

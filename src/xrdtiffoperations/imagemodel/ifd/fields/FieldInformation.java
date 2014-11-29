@@ -1,7 +1,7 @@
 package xrdtiffoperations.imagemodel.ifd.fields;
 
-import xrdtiffoperations.filehandling.bytewrappers.IntWrapper;
-import xrdtiffoperations.filehandling.bytewrappers.ShortWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 import java.nio.ByteOrder;
 
 public class FieldInformation {
@@ -56,10 +56,10 @@ public class FieldInformation {
             }
         }
 
-        tag = (new ShortWrapper(_fieldTag, order)).get();
-        type = (new ShortWrapper(_fieldType, order)).get();
-        count = (new ShortWrapper(_typeCount, order)).get();
-        value = (new IntWrapper(_fieldValue, order)).get();
+        tag = (new SignedShortWrapper(_fieldTag, order)).get();
+        type = (new SignedShortWrapper(_fieldType, order)).get();
+        count = (new SignedShortWrapper(_typeCount, order)).get();
+        value = (new SignedIntWrapper(_fieldValue, order)).get();
     }
 
 }

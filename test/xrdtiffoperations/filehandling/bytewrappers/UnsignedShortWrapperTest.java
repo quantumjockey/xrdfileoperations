@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class IntWrapperTest {
+public class UnsignedShortWrapperTest {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -26,12 +26,12 @@ public class IntWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void get_integerWithinBoundsConverted_returnInput(){
+    public void get_characterConverted_returnInput(){
 
     }
 
     @Test
-    public void get_integerBeyondBoundsConverted_returnZero(){
+    public void get_integerWithinBoundsConverted_returnInput(){
 
     }
 
@@ -41,7 +41,7 @@ public class IntWrapperTest {
     }
 
     @Test
-    public void get_IntegerBeyondStorableLimit_returnZero(){
+    public void get_CharacterBeyondStorableLimit_returnZero(){
 
     }
 }
