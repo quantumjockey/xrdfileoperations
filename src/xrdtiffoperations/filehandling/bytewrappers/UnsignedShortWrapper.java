@@ -13,13 +13,14 @@ public class UnsignedShortWrapper extends WrapperBase {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public UnsignedShortWrapper(byte[] bytes, ByteOrder order){
-        super(bytes, order);
+    public UnsignedShortWrapper(ByteOrder order){
+        super(Character.BYTES, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public int get(){
+        wrap();
         int input = (int)buffer.getChar();
 
         if (input > MAX_BOUND) return MAX_BOUND;

@@ -8,13 +8,14 @@ public class SignedShortWrapper extends WrapperBase {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public SignedShortWrapper(byte[] bytes, ByteOrder order){
-        super(bytes, order);
+    public SignedShortWrapper(ByteOrder order){
+        super(Short.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public short get(){
+        wrap();
         return buffer.getShort();
     }
 

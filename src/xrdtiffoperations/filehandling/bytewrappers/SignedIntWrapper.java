@@ -8,13 +8,14 @@ public class SignedIntWrapper extends WrapperBase {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public SignedIntWrapper(byte[] bytes, ByteOrder order){
-        super(bytes ,order);
+    public SignedIntWrapper(ByteOrder order){
+        super(Integer.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public int get(){
+        wrap();
         return buffer.getInt();
     }
 
