@@ -6,6 +6,11 @@ import java.nio.ByteOrder;
 
 public class UnsignedShortWrapper extends WrapperBase {
 
+    /////////// Constants ///////////////////////////////////////////////////////////////////
+
+    private final int MAX_BOUND = 65535;
+    private final int MIN_BOUND = 0;
+
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public UnsignedShortWrapper(byte[] bytes, ByteOrder order){
@@ -14,8 +19,13 @@ public class UnsignedShortWrapper extends WrapperBase {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public char get(){
-        return buffer.getChar();
+    public int get(){
+        int input = (int)buffer.getChar();
+
+        if (input > MAX_BOUND) return MAX_BOUND;
+        if (input < MIN_BOUND) return MIN_BOUND;
+
+        return input;
     }
 
 }
