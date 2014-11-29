@@ -1,5 +1,6 @@
 package xrdtiffoperations.filehandling.io;
 
+import xrdtiffoperations.filehandling.bytewrappers.TiffByteOrderWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
@@ -59,23 +60,6 @@ public class TiffReader {
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private ByteOrder getByteOrder(String orderId){
-        ByteOrder order;
-
-        switch (orderId){
-            case "II":
-                order = ByteOrder.LITTLE_ENDIAN;
-                break;
-            case "MM":
-                order = ByteOrder.BIG_ENDIAN;
-                break;
-            default:
-                order = ByteOrder.nativeOrder();
-        }
-
-        return order;
-    }
-
     private void getCalibrationData(int ifdEndByte, byte[] fileBytes){
         byte[] bytes;
 
@@ -103,63 +87,78 @@ public class TiffReader {
     }
 
     private void getFileHeader(byte[] imageData){
-        byte[] _byteOrder,_identifier,_ifdOffset;
+        TiffByteOrderWrapper _byteOrder;
+        SignedShortWrapper _identifier;
+        SignedIntWrapper _ifdOffset;
         int cursor;
 
-        _byteOrder = new byte[2];
-        _identifier = new byte[2];
-        _ifdOffset = new byte[4];
+        _byteOrder = new TiffByteOrderWrapper();
         cursor = 0;
 
+        while (cursor < 2){
+            _byteOrder.getDataBytes()[cursor] = imageData[cursor];
+            cursor++;
+        }
+
+        _identifier = new SignedShortWrapper(_byteOrder.get());
+        _ifdOffset = new SignedIntWrapper(_byteOrder.get());
+
         while (cursor < 8) {
-            if (cursor < 2){
-                _byteOrder[cursor] = imageData[cursor];
-            } else if(cursor >= 2 && cursor < 4){
-                _identifier[cursor - 2] = imageData[cursor];
+            if(cursor >= 2 && cursor < 4){
+                _identifier.getDataBytes()[cursor - 2] = imageData[cursor];
             } else if(cursor >= 4 && cursor <= 8) {
-                _ifdOffset[cursor - 4] = imageData[cursor];
+                _ifdOffset.getDataBytes()[cursor - 4] = imageData[cursor];
             }
             cursor++;
         }
 
-        marImageData.setByteOrder(getByteOrder(new String(_byteOrder)));
-        marImageData.setIdentifier((new SignedShortWrapper(_identifier, marImageData.getByteOrder())).get());
-        marImageData.setFirstIfdOffset((new SignedIntWrapper(_ifdOffset, marImageData.getByteOrder())).get());
+        marImageData.setByteOrder(_byteOrder.get());
+        marImageData.setIdentifier(_identifier.get());
+        marImageData.setFirstIfdOffset(_ifdOffset.get());
     }
 
     private int getIFDByteGroups(byte[] imageData, int firstIfdOffset){
-        byte[] _fieldsCount, directoryBytes;
+        ByteOrder _byteOrder;
+        SignedShortWrapper _fieldsCount;
+        byte[] directoryBytes;
         int directoryLength, fieldsCount;
         ImageFileDirectory directory;
 
-        _fieldsCount = new byte[2];
-        System.arraycopy(imageData, firstIfdOffset, _fieldsCount, 0, 2);
-        fieldsCount = (new SignedShortWrapper(_fieldsCount, marImageData.getByteOrder())).get();
+        _byteOrder = marImageData.getByteOrder();
+        _fieldsCount = new SignedShortWrapper(_byteOrder);
+
+        System.arraycopy(imageData, firstIfdOffset, _fieldsCount.getDataBytes(), 0, 2);
+
+        fieldsCount = _fieldsCount.get();
         directoryLength = 2 + (fieldsCount * 12) + 4;
         directoryBytes = new byte[directoryLength];
+
         System.arraycopy(imageData, firstIfdOffset, directoryBytes, 0, directoryLength);
-        directory = new ImageFileDirectory(directoryBytes, marImageData.getByteOrder());
+
+        directory = new ImageFileDirectory(directoryBytes, _byteOrder);
         marImageData.getIfdListing().add(directory);
 
         return firstIfdOffset + directoryLength;
     }
 
     private void retrieveImageData(int startingByte, int imageHeight, int imageWidth){
+        ByteOrder _byteOrder;
         int[] linearImageArray;
-        byte[] pixelTemp;
+        UnsignedShortWrapper pixelTemp;
         int z;
 
+        _byteOrder = marImageData.getByteOrder();
         linearImageArray = new int[imageHeight * imageWidth];
-        pixelTemp = new byte[2];
+        pixelTemp = new UnsignedShortWrapper(_byteOrder);
         z = 0;
 
         for(int i = 0; i < ((fileBytesRaw.length + FIT2D_STARTING_BYTE_SHIFT) - startingByte); i++){
             if ((startingByte + i ) % 2 == 0){
-                pixelTemp[0] = fileBytesRaw[startingByte + i];
+                pixelTemp.getDataBytes()[0] = fileBytesRaw[startingByte + i];
             }
             else if ((startingByte + i ) % 2 != 0) {
-                pixelTemp[1] = fileBytesRaw[startingByte + i];
-                linearImageArray[z] = (new UnsignedShortWrapper(pixelTemp, marImageData.getByteOrder())).get();
+                pixelTemp.getDataBytes()[1] = fileBytesRaw[startingByte + i];
+                linearImageArray[z] = pixelTemp.get();
                 z++;
             }
         }

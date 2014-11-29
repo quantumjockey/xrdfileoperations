@@ -1,6 +1,8 @@
 package xrdtiffoperations.imagemodel.martiff.components;
 
 import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.SignedLongWrapper;
+
 import java.nio.ByteOrder;
 
 public class CalibrationData {
@@ -64,14 +66,12 @@ public class CalibrationData {
     }
 
     private int getResValue(int offset, byte[] buffer, ByteOrder order){
-        int floatLength;
-        byte[] temp;
+        SignedLongWrapper temp;
 
-        floatLength = 8;
-        temp = new byte[floatLength];
-        System.arraycopy(buffer, offset, temp, 0, floatLength);
+        temp = new SignedLongWrapper(order);
+        System.arraycopy(buffer, offset, temp.getDataBytes(), 0, 8);
 
-        return (new SignedIntWrapper(temp, order)).get();
+        return temp.get();
     }
 
 }

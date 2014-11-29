@@ -61,12 +61,12 @@ public class ImageFileDirectory {
     }
 
     private int getFieldsCount(byte[] bytes, ByteOrder byteOrder){
-        byte[] _fieldsCount;
+        SignedShortWrapper _fieldsCount;
 
-        _fieldsCount = new byte[2];
-        System.arraycopy(bytes, 0, _fieldsCount, 0, 2);
+        _fieldsCount = new SignedShortWrapper(byteOrder);
+        System.arraycopy(bytes, 0, _fieldsCount.getDataBytes(), 0, 2);
 
-        return (new SignedShortWrapper(_fieldsCount, byteOrder)).get();
+        return _fieldsCount.get();
     }
 
 }

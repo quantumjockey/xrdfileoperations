@@ -34,32 +34,33 @@ public class FieldInformation {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public FieldInformation(byte[] fieldData, ByteOrder order){
-        byte[] _fieldTag, _fieldType, _fieldValue, _typeCount;
+        SignedShortWrapper _fieldTag, _fieldType;
+        SignedIntWrapper _fieldValue, _typeCount;
 
-        _fieldTag = new byte[2];
-        _fieldType = new byte[2];
-        _typeCount = new byte[4];
-        _fieldValue = new byte[4];
+        _fieldTag = new SignedShortWrapper(order);
+        _fieldType = new SignedShortWrapper(order);
+        _typeCount = new SignedIntWrapper(order);
+        _fieldValue = new SignedIntWrapper(order);
 
         for (int i = 0; i < 12; i++) {
             if (i < 2){
-                _fieldTag[i] = fieldData[i];
+                _fieldTag.getDataBytes()[i] = fieldData[i];
             }
             else if(i >= 2 && i < 4){
-                _fieldType[i - 2] = fieldData[i];
+                _fieldType.getDataBytes()[i - 2] = fieldData[i];
             }
             else if(i >= 4 && i < 8){
-                _typeCount[i - 4] = fieldData[i];
+                _typeCount.getDataBytes()[i - 4] = fieldData[i];
             }
             else if(i >= 8 && i < 12){
-                _fieldValue[i - 8] = fieldData[i];
+                _fieldValue.getDataBytes()[i - 8] = fieldData[i];
             }
         }
 
-        tag = (new SignedShortWrapper(_fieldTag, order)).get();
-        type = (new SignedShortWrapper(_fieldType, order)).get();
-        count = (new SignedShortWrapper(_typeCount, order)).get();
-        value = (new SignedIntWrapper(_fieldValue, order)).get();
+        tag = _fieldTag.get();
+        type = _fieldType.get();
+        count = _typeCount.get();
+        value = _fieldValue.get();
     }
 
 }
