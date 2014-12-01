@@ -3,32 +3,26 @@ package xrdtiffoperations.filehandling.bytewrappers.base;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class ByteWrapper {
+public class ByteWrapper extends ByteData {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     protected ByteBuffer buffer;
-    protected byte[] dataBytes;
     private ByteOrder order;
-
-    /////////// Accessors ///////////////////////////////////////////////////////////////////
-
-    public byte[] getDataBytes(){
-        return dataBytes;
-    }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public ByteWrapper(int bitCount, ByteOrder _order){
+        super();
         this.order = _order;
-        dataBytes = new byte[getByteCount(bitCount)];
+        this.dataBytes = new byte[getByteCount(bitCount)];
     }
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////
 
     protected void wrap(){
-        buffer = ByteBuffer.wrap(dataBytes);
-        buffer.order(order);
+        this.buffer = ByteBuffer.wrap(dataBytes);
+        this.buffer.order(order);
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
