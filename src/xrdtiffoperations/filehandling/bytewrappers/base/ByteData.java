@@ -18,6 +18,8 @@ public class ByteData {
         this.dataBytes = new byte[numBytes];
     }
 
-    public ByteData(){ }
+    public ByteData() {
+        // left empty so that time, memory not wasted by initializing array here then re-initializing in superclass
+    }
 
 }
