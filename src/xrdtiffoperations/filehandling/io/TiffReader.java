@@ -152,7 +152,7 @@ public class TiffReader {
             }
             else if ((startingByte + i ) % 2 != 0) {
                 pixelTemp.getDataBytes()[1] = fileBytesRaw[startingByte + i];
-                linearImageArray[z] = pixelTemp.get();
+                linearImageArray[z] = pixelTemp.getAsInt();
                 z++;
             }
         }
