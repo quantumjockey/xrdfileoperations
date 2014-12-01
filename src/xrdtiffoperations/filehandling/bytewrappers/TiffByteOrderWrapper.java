@@ -1,14 +1,14 @@
 package xrdtiffoperations.filehandling.bytewrappers;
 
-import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.base.ByteData;
 import java.nio.ByteOrder;
 
-public class TiffByteOrderWrapper extends ByteWrapper {
+public class TiffByteOrderWrapper extends ByteData {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TiffByteOrderWrapper(){
-        super(16, ByteOrder.nativeOrder());
+        super(2);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
