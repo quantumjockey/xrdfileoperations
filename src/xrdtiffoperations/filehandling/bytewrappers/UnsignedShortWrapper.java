@@ -14,7 +14,7 @@ public class UnsignedShortWrapper extends ByteWrapper {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public UnsignedShortWrapper(ByteOrder order){
-        super(Character.BYTES, order);
+        super(Character.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
