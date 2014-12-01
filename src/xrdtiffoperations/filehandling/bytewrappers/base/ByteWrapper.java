@@ -3,7 +3,7 @@ package xrdtiffoperations.filehandling.bytewrappers.base;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public abstract class ByteWrapper<T> extends ByteData {
+public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
