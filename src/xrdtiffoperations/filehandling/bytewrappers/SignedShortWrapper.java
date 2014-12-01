@@ -4,7 +4,7 @@ import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
 
 import java.nio.ByteOrder;
 
-public class SignedShortWrapper extends ByteWrapper {
+public class SignedShortWrapper extends ByteWrapper<Short> {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
@@ -14,7 +14,8 @@ public class SignedShortWrapper extends ByteWrapper {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public short get(){
+    @Override
+    public Short get(){
         wrap();
         return buffer.getShort();
     }

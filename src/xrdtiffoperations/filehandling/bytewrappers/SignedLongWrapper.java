@@ -3,7 +3,7 @@ package xrdtiffoperations.filehandling.bytewrappers;
 import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
 import java.nio.ByteOrder;
 
-public class SignedLongWrapper extends ByteWrapper {
+public class SignedLongWrapper extends ByteWrapper<Integer> {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
@@ -13,7 +13,8 @@ public class SignedLongWrapper extends ByteWrapper {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public int get(){
+    @Override
+    public Integer get(){
         wrap();
         return buffer.getInt();
     }

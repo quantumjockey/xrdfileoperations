@@ -4,7 +4,7 @@ import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
 
 import java.nio.ByteOrder;
 
-public class UnsignedShortWrapper extends ByteWrapper {
+public class UnsignedShortWrapper extends ByteWrapper<Character> {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,14 @@ public class UnsignedShortWrapper extends ByteWrapper {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public int get(){
+    @Override
+    public Character get(){
         wrap();
-        int input = (int)buffer.getChar();
+        return buffer.getChar();
+    }
+
+    public int getAsInt(){
+        int input = (int)this.get();
 
         if (input > MAX_BOUND) return MAX_BOUND;
         if (input < MIN_BOUND) return MIN_BOUND;

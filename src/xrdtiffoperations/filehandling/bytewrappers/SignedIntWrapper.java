@@ -4,7 +4,7 @@ import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
 
 import java.nio.ByteOrder;
 
-public class SignedIntWrapper extends ByteWrapper {
+public class SignedIntWrapper extends ByteWrapper<Integer> {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
@@ -14,7 +14,8 @@ public class SignedIntWrapper extends ByteWrapper {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public int get(){
+    @Override
+    public Integer get(){
         wrap();
         return buffer.getInt();
     }
