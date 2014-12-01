@@ -119,12 +119,14 @@ public class TiffReader {
         _byteOrder = marImageData.getByteOrder();
         _fieldsCount = new SignedShortWrapper(_byteOrder);
 
+        // extract fields count
         System.arraycopy(imageData, firstIfdOffset, _fieldsCount.getDataBytes(), 0, 2);
 
         fieldsCount = _fieldsCount.get();
         directoryLength = 2 + (fieldsCount * 12) + 4;
         directoryBytes = new byte[directoryLength];
 
+        // extract remaining IFD data
         System.arraycopy(imageData, firstIfdOffset, directoryBytes, 0, directoryLength);
 
         directory = new ImageFileDirectory(directoryBytes, _byteOrder);
