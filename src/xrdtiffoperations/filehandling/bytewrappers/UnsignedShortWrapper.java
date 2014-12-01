@@ -1,10 +1,10 @@
 package xrdtiffoperations.filehandling.bytewrappers;
 
-import xrdtiffoperations.filehandling.bytewrappers.base.WrapperBase;
+import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
 
 import java.nio.ByteOrder;
 
-public class UnsignedShortWrapper extends WrapperBase {
+public class UnsignedShortWrapper extends ByteWrapper {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 

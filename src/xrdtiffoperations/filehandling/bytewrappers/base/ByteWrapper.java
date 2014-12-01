@@ -3,7 +3,7 @@ package xrdtiffoperations.filehandling.bytewrappers.base;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class WrapperBase {
+public class ByteWrapper {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@ public class WrapperBase {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public WrapperBase(int bitCount, ByteOrder _order){
+    public ByteWrapper(int bitCount, ByteOrder _order){
         this.order = _order;
         dataBytes = new byte[getByteCount(bitCount)];
     }

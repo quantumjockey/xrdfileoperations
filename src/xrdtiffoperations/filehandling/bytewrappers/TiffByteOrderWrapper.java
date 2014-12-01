@@ -1,9 +1,9 @@
 package xrdtiffoperations.filehandling.bytewrappers;
 
-import xrdtiffoperations.filehandling.bytewrappers.base.WrapperBase;
+import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
 import java.nio.ByteOrder;
 
-public class TiffByteOrderWrapper extends WrapperBase {
+public class TiffByteOrderWrapper extends ByteWrapper {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
