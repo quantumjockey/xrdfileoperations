@@ -90,30 +90,22 @@ public class TiffReader {
         TiffByteOrderWrapper _byteOrder;
         SignedShortWrapper _identifier;
         SignedIntWrapper _ifdOffset;
-        int cursor;
 
         _byteOrder = new TiffByteOrderWrapper();
-        cursor = 0;
 
-        while (cursor < 2){
-            _byteOrder.getDataBytes()[cursor] = imageData[cursor];
-            cursor++;
-        }
+        // extract byte order
+        System.arraycopy(imageData, 0, _byteOrder.getDataBytes(), 0, 2);
+        marImageData.setByteOrder(_byteOrder.get());
 
         _identifier = new SignedShortWrapper(_byteOrder.get());
         _ifdOffset = new SignedIntWrapper(_byteOrder.get());
 
-        while (cursor < 8) {
-            if(cursor >= 2 && cursor < 4){
-                _identifier.getDataBytes()[cursor - 2] = imageData[cursor];
-            } else if(cursor >= 4 && cursor <= 8) {
-                _ifdOffset.getDataBytes()[cursor - 4] = imageData[cursor];
-            }
-            cursor++;
-        }
-
-        marImageData.setByteOrder(_byteOrder.get());
+        // extract file identifier
+        System.arraycopy(imageData, 2, _identifier.getDataBytes(), 0, 2);
         marImageData.setIdentifier(_identifier.get());
+
+        // extract first IFD offset value
+        System.arraycopy(imageData, 4, _ifdOffset.getDataBytes(), 0, 4);
         marImageData.setFirstIfdOffset(_ifdOffset.get());
     }
 
