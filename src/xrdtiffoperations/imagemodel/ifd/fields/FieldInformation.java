@@ -42,6 +42,12 @@ public class FieldInformation extends ByteSerializer {
         return value;
     }
 
+    /////////// Mutators ////////////////////////////////////////////////////////////////////
+
+    public void setValue(int _value){
+        this.value = _value;
+    }
+
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public FieldInformation(){
