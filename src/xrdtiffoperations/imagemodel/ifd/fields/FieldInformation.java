@@ -7,7 +7,7 @@ import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class FieldInformation implements ByteSerializer {
+public class FieldInformation extends ByteSerializer {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
@@ -51,6 +51,7 @@ public class FieldInformation implements ByteSerializer {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
+    @Override
     public void fromByteArray(byte[] fieldData, ByteOrder order){
         SignedShortWrapper _fieldTag, _fieldType;
         SignedIntWrapper _fieldValue, _typeCount;
@@ -79,11 +80,11 @@ public class FieldInformation implements ByteSerializer {
             value = _fieldValue.get();
         }
         else{
-            System.out.println("Byte array is " + fieldData.length + " bytes and not of proper length.");
-            System.out.println("Array must contain exactly " + ENTRY_LENGTH + " bytes to accord with TIFF 2.0 Revision 6.0 specification.");
+            displaySizeAlert(fieldData.length, ENTRY_LENGTH);
         }
     }
 
+    @Override
     public byte[] toByteArray(ByteOrder order){
         ByteBuffer bytes;
 
