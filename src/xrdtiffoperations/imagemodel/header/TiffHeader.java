@@ -40,31 +40,31 @@ public class TiffHeader extends ByteSerializer{
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] fieldData, ByteOrder order){
+    public void fromByteArray(byte[] dataBytes, ByteOrder order){
         TiffByteOrderWrapper _byteOrder;
         SignedShortWrapper _identifier;
         SignedIntWrapper _ifdOffset;
 
-        if (fieldData.length == BYTE_LENGTH) {
+        if (dataBytes.length == BYTE_LENGTH) {
         _byteOrder = new TiffByteOrderWrapper();
 
         // extract byte order
-        System.arraycopy(fieldData, 0, _byteOrder.getDataBytes(), 0, ORDER_BYTES_LENGTH);
+        System.arraycopy(dataBytes, 0, _byteOrder.getDataBytes(), 0, ORDER_BYTES_LENGTH);
         byteOrder = _byteOrder.get();
 
         _identifier = new SignedShortWrapper(_byteOrder.get());
         _ifdOffset = new SignedIntWrapper(_byteOrder.get());
 
         // extract file identifier
-        System.arraycopy(fieldData, 2, _identifier.getDataBytes(), 0, FILE_ID_BYTES_LENGTH);
+        System.arraycopy(dataBytes, 2, _identifier.getDataBytes(), 0, FILE_ID_BYTES_LENGTH);
         fileID = _identifier.get();
 
         // extract first IFD offset value
-        System.arraycopy(fieldData, 4, _ifdOffset.getDataBytes(), 0, FIRST_IFD_OFFSET_BYTES_LENGTH);
+        System.arraycopy(dataBytes, 4, _ifdOffset.getDataBytes(), 0, FIRST_IFD_OFFSET_BYTES_LENGTH);
         firstIfdOffset = _ifdOffset.get();
         }
         else{
-            displaySizeAlert(fieldData.length, BYTE_LENGTH);
+            displaySizeAlert(dataBytes.length, BYTE_LENGTH);
         }
     }
 

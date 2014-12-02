@@ -51,9 +51,9 @@ public class ImageFileDirectory extends ByteSerializer {
     }
 
     @Override
-    public void fromByteArray(byte[] fieldData, ByteOrder order){
-        numFields = extractFieldsCount(fieldData, order);
-        extractFields(fieldData, order);
+    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+        numFields = extractFieldsCount(dataBytes, order);
+        extractFields(dataBytes, order);
     }
 
     @Override

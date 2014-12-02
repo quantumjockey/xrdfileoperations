@@ -6,7 +6,7 @@ public abstract class ByteSerializer {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public abstract void fromByteArray(byte[] fieldData, ByteOrder order);
+    public abstract void fromByteArray(byte[] dataBytes, ByteOrder order);
     public abstract byte[] toByteArray(ByteOrder order);
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////

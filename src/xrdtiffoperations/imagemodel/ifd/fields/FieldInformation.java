@@ -57,20 +57,20 @@ public class FieldInformation extends ByteSerializer {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] fieldData, ByteOrder order){
+    public void fromByteArray(byte[] dataBytes, ByteOrder order){
         SignedShortWrapper _fieldTag, _fieldType;
         SignedIntWrapper _fieldValue, _typeCount;
 
-        if (fieldData.length == BYTE_LENGTH) {
+        if (dataBytes.length == BYTE_LENGTH) {
             _fieldTag = new SignedShortWrapper(order);
             _fieldType = new SignedShortWrapper(order);
             _typeCount = new SignedIntWrapper(order);
             _fieldValue = new SignedIntWrapper(order);
 
-            System.arraycopy(fieldData, 0, _fieldTag.getDataBytes(), 0, TAG_BYTES_LENGTH);
-            System.arraycopy(fieldData, 2, _fieldType.getDataBytes(), 0, TYPE_BYTES_LENGTH);
-            System.arraycopy(fieldData, 4, _typeCount.getDataBytes(), 0, COUNT_BYTES_LENGTH);
-            System.arraycopy(fieldData, 8, _fieldValue.getDataBytes(), 0, VALUE_BYTES_LENGTH);
+            System.arraycopy(dataBytes, 0, _fieldTag.getDataBytes(), 0, TAG_BYTES_LENGTH);
+            System.arraycopy(dataBytes, 2, _fieldType.getDataBytes(), 0, TYPE_BYTES_LENGTH);
+            System.arraycopy(dataBytes, 4, _typeCount.getDataBytes(), 0, COUNT_BYTES_LENGTH);
+            System.arraycopy(dataBytes, 8, _fieldValue.getDataBytes(), 0, VALUE_BYTES_LENGTH);
 
             tag = _fieldTag.get();
             type = _fieldType.get();
@@ -78,7 +78,7 @@ public class FieldInformation extends ByteSerializer {
             value = _fieldValue.get();
         }
         else{
-            displaySizeAlert(fieldData.length, BYTE_LENGTH);
+            displaySizeAlert(dataBytes.length, BYTE_LENGTH);
         }
     }
 
