@@ -11,10 +11,6 @@ import java.nio.file.Paths;
 
 public class TiffWriter {
 
-    /////////// Constants ///////////////////////////////////////////////////////////////////
-
-    private final int HEADER_LENGTH = 8;
-
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     private MARTiffImage cachedData;
@@ -43,26 +39,6 @@ public class TiffWriter {
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
-
-    private byte[] createHeaderBytes(ByteOrder order){
-        ByteBuffer bytes;
-        String id;
-
-        bytes = ByteBuffer.allocate(HEADER_LENGTH);
-        bytes.order(order);
-
-        if(order == ByteOrder.BIG_ENDIAN){
-            id = "MM";
-        }
-        else{
-            id = "II";
-        }
-        bytes.put(id.getBytes());
-        bytes.putShort((short)42);
-        bytes.putInt(HEADER_LENGTH);
-
-        return bytes.array();
-    }
 
     private byte[] createImageBytes(ByteOrder order){
         int gridHeight, gridWidth, numBytes;
@@ -115,8 +91,8 @@ public class TiffWriter {
         byte[] header, ifd, image, region;
         ByteBuffer bytes;
 
-        order = cachedData.getByteOrder();
-        header = createHeaderBytes(order);
+        order = cachedData.getHeader().getByteOrder();
+        header = cachedData.getHeader().toByteArray(order);
         ifd = cachedData.getIfdListing().get(0).toByteArray(order);
         lengthOfHeadPlusIfd = header.length + ifd.length;
         region = createRegionBeforeImageData(order, lengthOfHeadPlusIfd);

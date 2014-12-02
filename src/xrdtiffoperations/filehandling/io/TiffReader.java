@@ -1,11 +1,10 @@
 package xrdtiffoperations.filehandling.io;
 
-import xrdtiffoperations.filehandling.bytewrappers.TiffByteOrderWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
+import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
-import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 import xrdtiffoperations.imagemodel.martiff.WritableMARTiffImage;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
@@ -43,7 +42,7 @@ public class TiffReader {
         int lastIfdByte;
 
         getFileHeader(fileBytesRaw);
-        lastIfdByte = getIFDByteGroups(fileBytesRaw, marImageData.getFirstIfdOffset());
+        lastIfdByte = getIFDByteGroups(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset());
         getCalibrationData(lastIfdByte, fileBytesRaw);
         retrieveImageData(retrieveImageStartingByte(), retrieveImageHeight(), retrieveImageWidth());
         fileHasBeenRead = true;
@@ -70,7 +69,7 @@ public class TiffReader {
                 marImageData.searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET),
                 marImageData.searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET),
                 bytes,
-                marImageData.getByteOrder()
+                marImageData.getHeader().getByteOrder()
         ));
     }
 
@@ -87,26 +86,9 @@ public class TiffReader {
     }
 
     private void getFileHeader(byte[] imageData){
-        TiffByteOrderWrapper _byteOrder;
-        SignedShortWrapper _identifier;
-        SignedIntWrapper _ifdOffset;
-
-        _byteOrder = new TiffByteOrderWrapper();
-
-        // extract byte order
-        System.arraycopy(imageData, 0, _byteOrder.getDataBytes(), 0, 2);
-        marImageData.setByteOrder(_byteOrder.get());
-
-        _identifier = new SignedShortWrapper(_byteOrder.get());
-        _ifdOffset = new SignedIntWrapper(_byteOrder.get());
-
-        // extract file identifier
-        System.arraycopy(imageData, 2, _identifier.getDataBytes(), 0, 2);
-        marImageData.setIdentifier(_identifier.get());
-
-        // extract first IFD offset value
-        System.arraycopy(imageData, 4, _ifdOffset.getDataBytes(), 0, 4);
-        marImageData.setFirstIfdOffset(_ifdOffset.get());
+        byte[] headerBytes = new byte[TiffHeader.BYTE_LENGTH];
+        System.arraycopy(imageData, 0, headerBytes, 0, TiffHeader.BYTE_LENGTH);
+        marImageData.getHeader().fromByteArray(headerBytes, null);
     }
 
     private int getIFDByteGroups(byte[] imageData, int firstIfdOffset){
@@ -116,7 +98,7 @@ public class TiffReader {
         int directoryLength, fieldsCount;
         ImageFileDirectory directory;
 
-        _byteOrder = marImageData.getByteOrder();
+        _byteOrder = marImageData.getHeader().getByteOrder();
         _fieldsCount = new SignedShortWrapper(_byteOrder);
 
         // extract fields count
@@ -142,7 +124,7 @@ public class TiffReader {
         UnsignedShortWrapper pixelTemp;
         int z;
 
-        _byteOrder = marImageData.getByteOrder();
+        _byteOrder = marImageData.getHeader().getByteOrder();
         linearImageArray = new int[imageHeight * imageWidth];
         pixelTemp = new UnsignedShortWrapper(_byteOrder);
         z = 0;

@@ -19,7 +19,7 @@ public class DataSubtraction {
         filename = generateFilename(darkFieldImage, diffractionImage, false);
         temp = new WritableMARTiffImage(filename);
         temp.setIfdListing(darkFieldImage.getIfdListing());
-        temp.setByteOrder(darkFieldImage.getByteOrder());
+        temp.setHeader(darkFieldImage.getHeader());
         temp.setCalibration(darkFieldImage.getCalibration());
 
         height = (darkFieldImage.getHeight() < diffractionImage.getHeight()) ? darkFieldImage.getHeight() : diffractionImage.getHeight();

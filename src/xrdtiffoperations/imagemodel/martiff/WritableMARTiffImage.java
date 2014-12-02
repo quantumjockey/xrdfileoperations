@@ -1,5 +1,6 @@
 package xrdtiffoperations.imagemodel.martiff;
 
+import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 import java.nio.ByteOrder;
@@ -11,24 +12,16 @@ public class WritableMARTiffImage extends MARTiffImage{
 
     // TiffBase fields
 
-    public void setByteOrder(ByteOrder order){
-        byteOrder = order;
-    }
-
-    public void setIdentifier(short id){
-        identifier = id;
-    }
-
     public void setFilename(String name){
         filename = name;
     }
 
-    public void setIfdListing(ArrayList<ImageFileDirectory> listing){
-        ifdListing = listing;
+    public void setHeader(TiffHeader _header){
+        header = _header;
     }
 
-    public void setFirstIfdOffset(int offset){
-        firstIfdOffset = offset;
+    public void setIfdListing(ArrayList<ImageFileDirectory> listing){
+        ifdListing = listing;
     }
 
     // MARTiffImage fields

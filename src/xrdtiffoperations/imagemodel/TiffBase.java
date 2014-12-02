@@ -1,5 +1,6 @@
 package xrdtiffoperations.imagemodel;
 
+import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
 import java.nio.ByteOrder;
@@ -9,32 +10,22 @@ public class TiffBase {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    protected ByteOrder byteOrder;
-    protected short identifier;
     protected String filename;
-    protected int firstIfdOffset;
+    protected TiffHeader header;
     protected ArrayList<ImageFileDirectory> ifdListing;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
-
-    public ByteOrder getByteOrder(){
-        return byteOrder;
-    }
-
-    public short getIdentifier(){
-        return identifier;
-    }
 
     public String getFilename(){
         return filename;
     }
 
-    public ArrayList<ImageFileDirectory> getIfdListing(){
-        return ifdListing;
+    public TiffHeader getHeader(){
+        return header;
     }
 
-    public int getFirstIfdOffset(){
-        return firstIfdOffset;
+    public ArrayList<ImageFileDirectory> getIfdListing(){
+        return ifdListing;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
@@ -42,6 +33,7 @@ public class TiffBase {
     public TiffBase(String _filename) {
         ifdListing = new ArrayList<>();
         filename = _filename;
+        header = new TiffHeader();
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
