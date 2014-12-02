@@ -15,7 +15,7 @@ public class FieldInformation extends ByteSerializer {
     private final int TYPE_BYTES_LENGTH = 2;
     private final int VALUE_BYTES_LENGTH = 4;
 
-    public static final int ENTRY_LENGTH = 12;
+    public static final int BYTE_LENGTH = 12;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@ public class FieldInformation extends ByteSerializer {
         SignedShortWrapper _fieldTag, _fieldType;
         SignedIntWrapper _fieldValue, _typeCount;
 
-        if (fieldData.length == ENTRY_LENGTH) {
+        if (fieldData.length == BYTE_LENGTH) {
             _fieldTag = new SignedShortWrapper(order);
             _fieldType = new SignedShortWrapper(order);
             _typeCount = new SignedIntWrapper(order);
@@ -78,7 +78,7 @@ public class FieldInformation extends ByteSerializer {
             value = _fieldValue.get();
         }
         else{
-            displaySizeAlert(fieldData.length, ENTRY_LENGTH);
+            displaySizeAlert(fieldData.length, BYTE_LENGTH);
         }
     }
 
@@ -86,7 +86,7 @@ public class FieldInformation extends ByteSerializer {
     public byte[] toByteArray(ByteOrder order){
         ByteBuffer bytes;
 
-        bytes = ByteBuffer.allocate(ENTRY_LENGTH);
+        bytes = ByteBuffer.allocate(BYTE_LENGTH);
         bytes.order(order);
         bytes.putShort(this.getTag());
         bytes.putShort(this.getType());
