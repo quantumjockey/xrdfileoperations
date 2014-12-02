@@ -1,6 +1,5 @@
 package xrdtiffoperations.imagemodel.martiff.components;
 
-import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import java.nio.ByteOrder;
 
 public class CalibrationData {
@@ -53,23 +52,17 @@ public class CalibrationData {
     }
 
     private void getDetectorResolution(byte[] buffer, int relX, int relY, ByteOrder order){
-        detectorXResolution = new ResolutionAxis(
-                getResValue(relX, buffer, order),
-                getResValue(relX + 4, buffer, order)
-        );
-        detectorYResolution = new ResolutionAxis(
-                getResValue(relY, buffer, order),
-                getResValue(relY + 4, buffer, order)
-        );
-    }
+        byte[] xRes, yRes;
 
-    private int getResValue(int offset, byte[] buffer, ByteOrder order){
-        SignedIntWrapper temp;
+        xRes = new byte[ResolutionAxis.BYTE_LENGTH];
+        System.arraycopy(buffer, relX, xRes, 0, ResolutionAxis.BYTE_LENGTH);
+        detectorXResolution = new ResolutionAxis();
+        detectorXResolution.fromByteArray(xRes, order);
 
-        temp = new SignedIntWrapper(order);
-        System.arraycopy(buffer, offset, temp.getDataBytes(), 0, 4);
-
-        return temp.get();
+        yRes = new byte[ResolutionAxis.BYTE_LENGTH];
+        System.arraycopy(buffer, relY, yRes, 0, ResolutionAxis.BYTE_LENGTH);
+        detectorYResolution = new ResolutionAxis();
+        detectorXResolution.fromByteArray(yRes, order);
     }
 
 }
