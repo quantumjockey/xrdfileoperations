@@ -17,7 +17,6 @@ public class TiffWriter {
     private final int HEADER_LENGTH = 8;
     private final int IFD_BUFFER_LENGTH = 4;
     private final int IFD_ENTRY_COUNT_LENGTH = 2;
-    private final int IFD_LENGTH = 12;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -87,27 +86,14 @@ public class TiffWriter {
         ByteBuffer bytes;
 
         count = createIFDEntryCountBytes(order);
-        byteCount = IFD_ENTRY_COUNT_LENGTH + (cachedData.getIfdListing().get(0).getFields().size() * IFD_LENGTH) + IFD_BUFFER_LENGTH;
+        byteCount = IFD_ENTRY_COUNT_LENGTH + (cachedData.getIfdListing().get(0).getFields().size() * FieldInformation.ENTRY_LENGTH) + IFD_BUFFER_LENGTH;
         bytes = ByteBuffer.allocate(byteCount);
         bytes.order(order);
         bytes.put(count);
         for (FieldInformation item : cachedData.getIfdListing().get(0).getFields()){
-            bytes.put(createIFDEntryBytes(order, item));
+            bytes.put(item.toByteArray(order));
         }
         bytes.put(createIFDBuffer(order));
-
-        return bytes.array();
-    }
-
-    private byte[] createIFDEntryBytes(ByteOrder order, FieldInformation info){
-        ByteBuffer bytes;
-
-        bytes = ByteBuffer.allocate(IFD_LENGTH);
-        bytes.order(order);
-        bytes.putShort(info.getTag());
-        bytes.putShort(info.getType());
-        bytes.putInt(info.getCount());
-        bytes.putInt(info.getValue());
 
         return bytes.array();
     }

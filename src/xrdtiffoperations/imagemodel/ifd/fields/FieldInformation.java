@@ -2,9 +2,21 @@ package xrdtiffoperations.imagemodel.ifd.fields;
 
 import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
+import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
+
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class FieldInformation {
+public class FieldInformation implements ByteSerializer {
+
+    /////////// Constants ///////////////////////////////////////////////////////////////////
+
+    private final int COUNT_BYTES_LENGTH = 4;
+    private final int TAG_BYTES_LENGTH = 2;
+    private final int TYPE_BYTES_LENGTH = 2;
+    private final int VALUE_BYTES_LENGTH = 4;
+
+    public static final int ENTRY_LENGTH = 12;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -33,34 +45,56 @@ public class FieldInformation {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public FieldInformation(byte[] fieldData, ByteOrder order){
+    public FieldInformation(){
+        this.count = 1;
+    }
+
+    /////////// Public Methods //////////////////////////////////////////////////////////////
+
+    public void fromByteArray(byte[] fieldData, ByteOrder order){
         SignedShortWrapper _fieldTag, _fieldType;
         SignedIntWrapper _fieldValue, _typeCount;
 
-        _fieldTag = new SignedShortWrapper(order);
-        _fieldType = new SignedShortWrapper(order);
-        _typeCount = new SignedIntWrapper(order);
-        _fieldValue = new SignedIntWrapper(order);
+        if (fieldData.length == ENTRY_LENGTH) {
+            _fieldTag = new SignedShortWrapper(order);
+            _fieldType = new SignedShortWrapper(order);
+            _typeCount = new SignedIntWrapper(order);
+            _fieldValue = new SignedIntWrapper(order);
 
-        for (int i = 0; i < 12; i++) {
-            if (i < 2){
-                _fieldTag.getDataBytes()[i] = fieldData[i];
+            for (int i = 0; i < ENTRY_LENGTH; i++) {
+                if (i < 2) {
+                    _fieldTag.getDataBytes()[i] = fieldData[i];
+                } else if (i >= 2 && i < 4) {
+                    _fieldType.getDataBytes()[i - 2] = fieldData[i];
+                } else if (i >= 4 && i < 8) {
+                    _typeCount.getDataBytes()[i - 4] = fieldData[i];
+                } else if (i >= 8 && i < 12) {
+                    _fieldValue.getDataBytes()[i - 8] = fieldData[i];
+                }
             }
-            else if(i >= 2 && i < 4){
-                _fieldType.getDataBytes()[i - 2] = fieldData[i];
-            }
-            else if(i >= 4 && i < 8){
-                _typeCount.getDataBytes()[i - 4] = fieldData[i];
-            }
-            else if(i >= 8 && i < 12){
-                _fieldValue.getDataBytes()[i - 8] = fieldData[i];
-            }
+
+            tag = _fieldTag.get();
+            type = _fieldType.get();
+            count = _typeCount.get();
+            value = _fieldValue.get();
         }
+        else{
+            System.out.println("Byte array is " + fieldData.length + " bytes and not of proper length.");
+            System.out.println("Array must contain exactly " + ENTRY_LENGTH + " bytes to accord with TIFF 2.0 Revision 6.0 specification.");
+        }
+    }
 
-        tag = _fieldTag.get();
-        type = _fieldType.get();
-        count = _typeCount.get();
-        value = _fieldValue.get();
+    public byte[] toByteArray(ByteOrder order){
+        ByteBuffer bytes;
+
+        bytes = ByteBuffer.allocate(ENTRY_LENGTH);
+        bytes.order(order);
+        bytes.putShort(this.getTag());
+        bytes.putShort(this.getType());
+        bytes.putInt(this.getCount());
+        bytes.putInt(this.getValue());
+
+        return bytes.array();
     }
 
 }
