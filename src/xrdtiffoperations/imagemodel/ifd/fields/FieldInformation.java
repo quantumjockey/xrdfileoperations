@@ -3,7 +3,6 @@ package xrdtiffoperations.imagemodel.ifd.fields;
 import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -62,17 +61,10 @@ public class FieldInformation extends ByteSerializer {
             _typeCount = new SignedIntWrapper(order);
             _fieldValue = new SignedIntWrapper(order);
 
-            for (int i = 0; i < ENTRY_LENGTH; i++) {
-                if (i < 2) {
-                    _fieldTag.getDataBytes()[i] = fieldData[i];
-                } else if (i >= 2 && i < 4) {
-                    _fieldType.getDataBytes()[i - 2] = fieldData[i];
-                } else if (i >= 4 && i < 8) {
-                    _typeCount.getDataBytes()[i - 4] = fieldData[i];
-                } else if (i >= 8 && i < 12) {
-                    _fieldValue.getDataBytes()[i - 8] = fieldData[i];
-                }
-            }
+            System.arraycopy(fieldData, 0, _fieldTag.getDataBytes(), 0, TAG_BYTES_LENGTH);
+            System.arraycopy(fieldData, 2, _fieldType.getDataBytes(), 0, TYPE_BYTES_LENGTH);
+            System.arraycopy(fieldData, 4, _typeCount.getDataBytes(), 0, COUNT_BYTES_LENGTH);
+            System.arraycopy(fieldData, 8, _fieldValue.getDataBytes(), 0, VALUE_BYTES_LENGTH);
 
             tag = _fieldTag.get();
             type = _fieldType.get();
