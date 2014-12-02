@@ -1,6 +1,5 @@
 package xrdtiffoperations.filehandling.io;
 
-import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
 import java.io.IOException;
@@ -15,8 +14,6 @@ public class TiffWriter {
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
     private final int HEADER_LENGTH = 8;
-    private final int IFD_BUFFER_LENGTH = 4;
-    private final int IFD_ENTRY_COUNT_LENGTH = 2;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -63,47 +60,6 @@ public class TiffWriter {
         bytes.put(id.getBytes());
         bytes.putShort((short)42);
         bytes.putInt(HEADER_LENGTH);
-
-        return bytes.array();
-    }
-
-    private byte[] createIFDBuffer(ByteOrder order){
-        ByteBuffer bytes;
-
-        bytes = ByteBuffer.allocate(IFD_BUFFER_LENGTH);
-        bytes.order(order);
-
-        for (int i = 0; i < IFD_BUFFER_LENGTH; i++){
-            bytes.put((byte)0);
-        }
-
-        return bytes.array();
-    }
-
-    private byte[] createIFDBytes(ByteOrder order){
-        byte[] count;
-        int byteCount;
-        ByteBuffer bytes;
-
-        count = createIFDEntryCountBytes(order);
-        byteCount = IFD_ENTRY_COUNT_LENGTH + (cachedData.getIfdListing().get(0).getFields().size() * FieldInformation.ENTRY_LENGTH) + IFD_BUFFER_LENGTH;
-        bytes = ByteBuffer.allocate(byteCount);
-        bytes.order(order);
-        bytes.put(count);
-        for (FieldInformation item : cachedData.getIfdListing().get(0).getFields()){
-            bytes.put(item.toByteArray(order));
-        }
-        bytes.put(createIFDBuffer(order));
-
-        return bytes.array();
-    }
-
-    private byte[] createIFDEntryCountBytes(ByteOrder order){
-        ByteBuffer bytes;
-
-        bytes = ByteBuffer.allocate(IFD_ENTRY_COUNT_LENGTH);
-        bytes.order(order);
-        bytes.putShort((short)cachedData.getIfdListing().get(0).getFields().size());
 
         return bytes.array();
     }
@@ -161,7 +117,7 @@ public class TiffWriter {
 
         order = cachedData.getByteOrder();
         header = createHeaderBytes(order);
-        ifd = createIFDBytes(order);
+        ifd = cachedData.getIfdListing().get(0).toByteArray(order);
         lengthOfHeadPlusIfd = header.length + ifd.length;
         region = createRegionBeforeImageData(order, lengthOfHeadPlusIfd);
         image = createImageBytes(order);

@@ -129,7 +129,8 @@ public class TiffReader {
         // extract remaining IFD data
         System.arraycopy(imageData, firstIfdOffset, directoryBytes, 0, directoryLength);
 
-        directory = new ImageFileDirectory(directoryBytes, _byteOrder);
+        directory = new ImageFileDirectory();
+        directory.fromByteArray(directoryBytes, _byteOrder);
         marImageData.getIfdListing().add(directory);
 
         return firstIfdOffset + directoryLength;
