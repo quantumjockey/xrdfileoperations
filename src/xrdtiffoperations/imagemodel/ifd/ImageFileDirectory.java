@@ -2,15 +2,19 @@ package xrdtiffoperations.imagemodel.ifd;
 
 import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
 import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
-
+import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 
-public class ImageFileDirectory {
+public class ImageFileDirectory extends ByteSerializer {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
     private static int FIELD_ENTRY_LENGTH = 12;
+
+    private final int IFD_BUFFER_LENGTH = 4;
+    private final int IFD_ENTRY_COUNT_LENGTH = 2;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -25,10 +29,8 @@ public class ImageFileDirectory {
 
     /////////// Constructors //////////////////////////////////////////////////////////////////
 
-    public ImageFileDirectory(byte[] directoryBytes, ByteOrder order){
-        numFields = getFieldsCount(directoryBytes, order);
+    public ImageFileDirectory(){
         fields = new ArrayList<>();
-        getFields(directoryBytes, order);
     }
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
@@ -46,7 +48,55 @@ public class ImageFileDirectory {
         return value;
     }
 
+    @Override
+    public void fromByteArray(byte[] fieldData, ByteOrder order){
+        numFields = getFieldsCount(fieldData, order);
+        getFields(fieldData, order);
+    }
+
+    @Override
+    public byte[] toByteArray(ByteOrder order){
+        byte[] count;
+        int byteCount;
+        ByteBuffer bytes;
+
+        count = createIFDEntryCountBytes(order);
+        byteCount = IFD_ENTRY_COUNT_LENGTH + (fields.size() * FieldInformation.ENTRY_LENGTH) + IFD_BUFFER_LENGTH;
+        bytes = ByteBuffer.allocate(byteCount);
+        bytes.order(order);
+        bytes.put(count);
+        for (FieldInformation item : fields){
+            bytes.put(item.toByteArray(order));
+        }
+        bytes.put(createIFDBuffer(order));
+
+        return bytes.array();
+    }
+
     /////////// Private Methods ///////////////////////////////////////////////////////////////
+
+    private byte[] createIFDBuffer(ByteOrder order){
+        ByteBuffer bytes;
+
+        bytes = ByteBuffer.allocate(IFD_BUFFER_LENGTH);
+        bytes.order(order);
+
+        for (int i = 0; i < IFD_BUFFER_LENGTH; i++){
+            bytes.put((byte)0);
+        }
+
+        return bytes.array();
+    }
+
+    private byte[] createIFDEntryCountBytes(ByteOrder order){
+        ByteBuffer bytes;
+
+        bytes = ByteBuffer.allocate(IFD_ENTRY_COUNT_LENGTH);
+        bytes.order(order);
+        bytes.putShort((short)fields.size());
+
+        return bytes.array();
+    }
 
     private void getFields(byte[] bytes, ByteOrder byteOrder){
         int cursor;
