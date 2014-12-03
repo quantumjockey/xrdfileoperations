@@ -41,9 +41,9 @@ public class TiffReader {
         int lastIfdByte;
 
         getFileHeader(fileBytesRaw);
-        lastIfdByte = getFirstIFD(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset());
-        getCalibrationData(lastIfdByte, fileBytesRaw);
-        retrieveImageData(retrieveImageStartingByte(), retrieveImageHeight(), retrieveImageWidth());
+        lastIfdByte = getFirstIFD(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset(), marImageData.getHeader().getByteOrder());
+        getCalibrationData(lastIfdByte, fileBytesRaw, marImageData.getHeader().getByteOrder());
+        getImageData(retrieveImageStartingByte(), retrieveImageHeight(), retrieveImageWidth(), marImageData.getHeader().getByteOrder());
         fileHasBeenRead = true;
     }
 
@@ -58,7 +58,7 @@ public class TiffReader {
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private void getCalibrationData(int ifdEndByte, byte[] fileBytes){
+    private void getCalibrationData(int ifdEndByte, byte[] fileBytes, ByteOrder _byteOrder){
         byte[] bytes;
 
         bytes = getCalibrationDataBytes(ifdEndByte, fileBytes);
@@ -68,7 +68,7 @@ public class TiffReader {
                 marImageData.searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET),
                 marImageData.searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET),
                 bytes,
-                marImageData.getHeader().getByteOrder()
+                _byteOrder
         ));
     }
 
@@ -90,13 +90,11 @@ public class TiffReader {
         marImageData.getHeader().fromByteArray(headerBytes, null);
     }
 
-    private int getFirstIFD(byte[] imageData, int firstIfdOffset){
-        ByteOrder _byteOrder;
+    private int getFirstIFD(byte[] imageData, int firstIfdOffset, ByteOrder _byteOrder){
         byte[] directoryBytes;
         int directoryLength, fieldsCount;
         ImageFileDirectory directory;
 
-        _byteOrder = marImageData.getHeader().getByteOrder();
         fieldsCount = ImageFileDirectory.extractNumFields(imageData, firstIfdOffset, _byteOrder);
         directoryLength = ImageFileDirectory.calculateDirectoryLengthWithoutFieldsCount(fieldsCount);
         directoryBytes = new byte[directoryLength];
@@ -111,13 +109,11 @@ public class TiffReader {
         return firstIfdOffset + directoryLength;
     }
 
-    private void retrieveImageData(int startingByte, int imageHeight, int imageWidth){
-        ByteOrder _byteOrder;
+    private void getImageData(int startingByte, int imageHeight, int imageWidth, ByteOrder _byteOrder){
         int[] linearImageArray;
         UnsignedShortWrapper pixelTemp;
         int z;
 
-        _byteOrder = marImageData.getHeader().getByteOrder();
         linearImageArray = new int[imageHeight * imageWidth];
         pixelTemp = new UnsignedShortWrapper(_byteOrder);
         z = 0;
