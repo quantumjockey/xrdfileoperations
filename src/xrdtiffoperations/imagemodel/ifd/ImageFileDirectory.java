@@ -11,8 +11,8 @@ public class ImageFileDirectory extends ByteSerializer {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
-    private final int END_BUFFER_LENGTH = 4;
-    private final int FIELD_COUNT_LENGTH = 2;
+    public static final int END_BUFFER_LENGTH = 4;
+    public static final int FIELD_COUNT_LENGTH = 2;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -33,6 +33,19 @@ public class ImageFileDirectory extends ByteSerializer {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
+    public static int calculateDirectoryLengthWithoutFieldsCount(int fieldsCount){
+        return (fieldsCount * FieldInformation.BYTE_LENGTH) + END_BUFFER_LENGTH;
+    }
+
+    public static int extractNumFields(byte[] imageData, int firstIfdOffset, ByteOrder _byteOrder) {
+        SignedShortWrapper _fieldsCount;
+
+        _fieldsCount = new SignedShortWrapper(_byteOrder);
+        System.arraycopy(imageData, firstIfdOffset, _fieldsCount.getDataBytes(), 0, ImageFileDirectory.FIELD_COUNT_LENGTH);
+
+        return _fieldsCount.get();
+    }
+
     public int getByteLength(){
         return FIELD_COUNT_LENGTH + (fields.size() * FieldInformation.BYTE_LENGTH) + END_BUFFER_LENGTH;
     }
@@ -50,18 +63,18 @@ public class ImageFileDirectory extends ByteSerializer {
         return value;
     }
 
+    @Override
+    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+        numFields = calculateNumFields(dataBytes);
+        extractFields(dataBytes, order);
+    }
+
     public void setTagValue(short specifiedTag, int tagValue){
         for (FieldInformation item : fields){
             if (item.getTag() == specifiedTag) {
                 item.setValue(tagValue);
             }
         }
-    }
-
-    @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order){
-        numFields = extractFieldsCount(dataBytes, order);
-        extractFields(dataBytes, order);
     }
 
     @Override
@@ -82,6 +95,15 @@ public class ImageFileDirectory extends ByteSerializer {
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
+
+    private int calculateNumFields(byte[] bytes){
+        int numFields, totalBytes;
+
+        totalBytes = bytes.length - END_BUFFER_LENGTH;
+        numFields = totalBytes / FieldInformation.BYTE_LENGTH;
+
+        return numFields;
+    }
 
     private byte[] createBuffer(ByteOrder order){
         ByteBuffer bytes;
@@ -109,7 +131,7 @@ public class ImageFileDirectory extends ByteSerializer {
     private void extractFields(byte[] bytes, ByteOrder byteOrder){
         int cursor;
 
-        cursor = 2;
+        cursor = 0;
 
         for (int i = 0; i < numFields; i++){
             byte[] fieldBytes = new byte[FieldInformation.BYTE_LENGTH];
@@ -119,15 +141,6 @@ public class ImageFileDirectory extends ByteSerializer {
             fields.add(newField);
             cursor += FieldInformation.BYTE_LENGTH;
         }
-    }
-
-    private int extractFieldsCount(byte[] bytes, ByteOrder byteOrder){
-        SignedShortWrapper _fieldsCount;
-
-        _fieldsCount = new SignedShortWrapper(byteOrder);
-        System.arraycopy(bytes, 0, _fieldsCount.getDataBytes(), 0, FIELD_COUNT_LENGTH);
-
-        return _fieldsCount.get();
     }
 
 }

@@ -5,7 +5,6 @@ import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
-import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 import xrdtiffoperations.imagemodel.martiff.WritableMARTiffImage;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class TiffReader {
         int lastIfdByte;
 
         getFileHeader(fileBytesRaw);
-        lastIfdByte = getIFDByteGroups(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset());
+        lastIfdByte = getFirstIFD(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset());
         getCalibrationData(lastIfdByte, fileBytesRaw);
         retrieveImageData(retrieveImageStartingByte(), retrieveImageHeight(), retrieveImageWidth());
         fileHasBeenRead = true;
@@ -91,25 +90,19 @@ public class TiffReader {
         marImageData.getHeader().fromByteArray(headerBytes, null);
     }
 
-    private int getIFDByteGroups(byte[] imageData, int firstIfdOffset){
+    private int getFirstIFD(byte[] imageData, int firstIfdOffset){
         ByteOrder _byteOrder;
-        SignedShortWrapper _fieldsCount;
         byte[] directoryBytes;
         int directoryLength, fieldsCount;
         ImageFileDirectory directory;
 
         _byteOrder = marImageData.getHeader().getByteOrder();
-        _fieldsCount = new SignedShortWrapper(_byteOrder);
-
-        // extract fields count
-        System.arraycopy(imageData, firstIfdOffset, _fieldsCount.getDataBytes(), 0, 2);
-
-        fieldsCount = _fieldsCount.get();
-        directoryLength = 2 + (fieldsCount * 12) + 4;
+        fieldsCount = ImageFileDirectory.extractNumFields(imageData, firstIfdOffset, _byteOrder);
+        directoryLength = ImageFileDirectory.calculateDirectoryLengthWithoutFieldsCount(fieldsCount);
         directoryBytes = new byte[directoryLength];
 
         // extract remaining IFD data
-        System.arraycopy(imageData, firstIfdOffset, directoryBytes, 0, directoryLength);
+        System.arraycopy(imageData, firstIfdOffset + ImageFileDirectory.FIELD_COUNT_LENGTH, directoryBytes, 0, directoryLength);
 
         directory = new ImageFileDirectory();
         directory.fromByteArray(directoryBytes, _byteOrder);
