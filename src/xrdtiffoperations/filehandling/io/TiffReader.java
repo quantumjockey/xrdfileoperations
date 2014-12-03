@@ -38,11 +38,9 @@ public class TiffReader {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public void readFileData(){
-        int lastIfdByte;
-
         getFileHeader(fileBytesRaw);
-        lastIfdByte = getFirstIFD(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset(), marImageData.getHeader().getByteOrder());
-        getCalibrationData(lastIfdByte, fileBytesRaw, marImageData.getHeader().getByteOrder());
+        getFirstIFD(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset(), marImageData.getHeader().getByteOrder());
+        getCalibrationData(fileBytesRaw, marImageData.getHeader().getByteOrder());
         getImageData(retrieveImageStartingByte(), retrieveImageHeight(), retrieveImageWidth(), marImageData.getHeader().getByteOrder());
         fileHasBeenRead = true;
     }
@@ -58,9 +56,11 @@ public class TiffReader {
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private void getCalibrationData(int ifdEndByte, byte[] fileBytes, ByteOrder _byteOrder){
+    private void getCalibrationData(byte[] fileBytes, ByteOrder _byteOrder){
         byte[] bytes;
+        int ifdEndByte;
 
+        ifdEndByte = marImageData.getHeader().getFirstIfdOffset() + marImageData.getIfdListing().get(0).getByteLength();
         bytes = getCalibrationDataBytes(ifdEndByte, fileBytes);
         marImageData.setCalibration(new CalibrationData(
                 ifdEndByte,
