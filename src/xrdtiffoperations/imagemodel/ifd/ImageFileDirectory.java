@@ -50,6 +50,14 @@ public class ImageFileDirectory extends ByteSerializer {
         return value;
     }
 
+    public void setTagValue(short specifiedTag, int tagValue){
+        for (FieldInformation item : fields){
+            if (item.getTag() == specifiedTag) {
+                item.setValue(tagValue);
+            }
+        }
+    }
+
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order){
         numFields = extractFieldsCount(dataBytes, order);
