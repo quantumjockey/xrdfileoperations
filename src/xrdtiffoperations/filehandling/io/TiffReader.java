@@ -129,7 +129,7 @@ public class TiffReader {
         pixelTemp = new UnsignedShortWrapper(_byteOrder);
         z = 0;
 
-        for(int i = 0; i < ((fileBytesRaw.length + FIT2D_STARTING_BYTE_SHIFT) - startingByte); i++){
+        for(int i = 0; i < (retrieveImageDataLength()); i++){
             if ((startingByte + i ) % 2 == 0){
                 pixelTemp.getDataBytes()[0] = fileBytesRaw[startingByte + i];
             }
@@ -149,6 +149,10 @@ public class TiffReader {
 
     private int retrieveImageStartingByte(){
         return marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS) + FIT2D_STARTING_BYTE_SHIFT;
+    }
+
+    private int retrieveImageDataLength(){
+        return marImageData.searchDirectoriesForTag(FieldTags.STRIP_BYTE_COUNTS);
     }
 
     private int retrieveImageHeight(){
