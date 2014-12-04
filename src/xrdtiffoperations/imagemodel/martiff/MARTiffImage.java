@@ -117,34 +117,22 @@ public class MARTiffImage extends TiffBase {
     }
 
     private void getImageData(byte[] fileBytes, ByteOrder _byteOrder){
-        int[] linearImageArray;
-        UnsignedShortWrapper pixelTemp;
-        int z;
-        int dataLength, startingByte;
+        UnsignedShortWrapper pixelTempShort;
+        int startingByte;
         int imageHeight, imageWidth;
+        int sampleByteLength;
 
-        dataLength = searchDirectoriesForTag(FieldTags.STRIP_BYTE_COUNTS);
         imageHeight = searchDirectoriesForTag(FieldTags.IMAGE_HEIGHT);
         imageWidth = searchDirectoriesForTag(FieldTags.IMAGE_WIDTH);
         startingByte = searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
+        sampleByteLength = searchDirectoriesForTag(FieldTags.BITS_PER_SAMPLE) / Byte.SIZE;
 
-        linearImageArray = new int[imageHeight * imageWidth];
-        pixelTemp = new UnsignedShortWrapper(_byteOrder);
-        z = 0;
-
-        for(int i = 0; i < (dataLength); i++){
-            if ((startingByte + i ) % 2 == 0){
-                pixelTemp.getDataBytes()[0] = fileBytes[startingByte + i];
-            }
-            else if ((startingByte + i ) % 2 != 0) {
-                pixelTemp.getDataBytes()[1] = fileBytes[startingByte + i];
-                linearImageArray[z] = pixelTemp.getAsInt();
-                z++;
-            }
-        }
+        pixelTempShort = new UnsignedShortWrapper(_byteOrder);
         intensityMap = new int[imageHeight][imageWidth];
+
         cycleImageDataBytes((y, x) -> {
-            intensityMap[y][x] = linearImageArray[x + (y * imageHeight)];
+            System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTempShort.getDataBytes(), 0, sampleByteLength);
+            intensityMap[y][x] = pixelTempShort.getAsInt();
         });
     }
 
