@@ -2,6 +2,7 @@ package xrdtiffoperations.imagemodel.ifd;
 
 import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
 import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
+import xrdtiffoperations.imagemodel.ifd.fields.WritableFieldInformation;
 import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -33,6 +34,15 @@ public class ImageFileDirectory extends ByteSerializer {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
+    public void addEntry(short tag, short type, int count, int value){
+        WritableFieldInformation newField = new WritableFieldInformation();
+        newField.setTag(tag);
+        newField.setType(type);
+        newField.setCount(count);
+        newField.setValue(value);
+        fields.add(newField);
+    }
+
     public static int calculateDirectoryLengthWithoutFieldsCount(int fieldsCount){
         return (fieldsCount * FieldInformation.BYTE_LENGTH) + END_BUFFER_LENGTH;
     }
@@ -51,24 +61,17 @@ public class ImageFileDirectory extends ByteSerializer {
     }
 
     public int getTagValue(short specifiedTag){
+        FieldInformation selected;
         int value;
 
-        value = -1;
-        for (FieldInformation item : fields){
-            if (item.getTag() == specifiedTag) {
-                value = item.getValue();
-            }
-        }
+        selected = getField(specifiedTag);
+        value = (selected != null) ? selected.getValue() : -1;
 
         return value;
     }
 
-    public void setTagValue(short specifiedTag, int tagValue){
-        for (FieldInformation item : fields){
-            if (item.getTag() == specifiedTag) {
-                item.setValue(tagValue);
-            }
-        }
+    public void removeEntry(short specifiedTag){
+        fields.remove(getField(specifiedTag));
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
@@ -118,6 +121,15 @@ public class ImageFileDirectory extends ByteSerializer {
             fields.add(newField);
             cursor += FieldInformation.BYTE_LENGTH;
         }
+    }
+
+    private FieldInformation getField(short specifiedTag){
+        for (FieldInformation item : fields){
+            if (item.getTag() == specifiedTag) {
+                return item;
+            }
+        }
+        return null;
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////

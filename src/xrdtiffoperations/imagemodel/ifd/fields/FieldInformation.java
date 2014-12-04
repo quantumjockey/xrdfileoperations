@@ -19,10 +19,10 @@ public class FieldInformation extends ByteSerializer {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    private short tag;
-    private short type;
-    private int count;
-    private int value;
+    protected short tag;
+    protected short type;
+    protected int count;
+    protected int value;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
@@ -40,12 +40,6 @@ public class FieldInformation extends ByteSerializer {
 
     public int getValue(){
         return value;
-    }
-
-    /////////// Mutators ////////////////////////////////////////////////////////////////////
-
-    public void setValue(int _value){
-        this.value = _value;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
