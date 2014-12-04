@@ -9,6 +9,7 @@ public class FieldTags {
     public static final short BITS_PER_SAMPLE = 258;
     public static final short COMPRESSION = 259;
     public static final short PHOTOMETRIC_INTERPRETATION = 262;
+    public static final short IMAGE_DESCRIPTION = 270;
     public static final short STRIP_OFFSETS = 273;
     public static final short ORIENTATION = 274;
     public static final short ROWS_PER_STRIP = 278;
