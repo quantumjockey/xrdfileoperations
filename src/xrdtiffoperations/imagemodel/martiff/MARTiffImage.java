@@ -14,10 +14,6 @@ public class MARTiffImage extends TiffBase {
 
     private final int INTENSITY_MAXIMUM = Integer.MAX_VALUE;
     private final int INTENSITY_MINIMUM = Integer.MIN_VALUE;
-    private final short CALIBRATION_OFFSET_SIGNED = -30826;
-
-    // (FOR INTEGRITY TESTING ONLY) //
-    private final int FIT2D_IMAGE_DATA_STARTING_BYTE_READ_SHIFT = -2;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -111,7 +107,7 @@ public class MARTiffImage extends TiffBase {
         int bufferLength, calibrationStartByte, imageStartByte;
         byte[] data;
 
-        calibrationStartByte = searchDirectoriesForTag(CALIBRATION_OFFSET_SIGNED);
+        calibrationStartByte = searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED);
         imageStartByte = searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
         bufferLength = imageStartByte - calibrationStartByte;
         data = new byte[bufferLength];
@@ -168,7 +164,7 @@ public class MARTiffImage extends TiffBase {
         int totalSize;
 
         imageMetaBytes = super.toByteArray(order);
-        emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(CALIBRATION_OFFSET_SIGNED));
+        emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED));
         calibrationBytes = calibration.toByteArray(order);
         imageDataBytes = createImageBytes(order);
 
