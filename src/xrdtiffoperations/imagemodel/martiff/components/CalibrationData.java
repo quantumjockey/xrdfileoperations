@@ -1,14 +1,14 @@
 package xrdtiffoperations.imagemodel.martiff.components;
 
+import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class CalibrationData {
+public class CalibrationData extends ByteSerializer {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     private byte[] coreCalibrationBytes;
-    private ResolutionAxis detectorXResolution;
-    private ResolutionAxis detectorYResolution;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
@@ -16,53 +16,26 @@ public class CalibrationData {
         return coreCalibrationBytes;
     }
 
-    public ResolutionAxis getDetectorXResolution(){
-        return detectorXResolution;
-    }
-
-    public ResolutionAxis getDetectorYResolution(){
-        return detectorYResolution;
-    }
-
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public CalibrationData(int ifdEndByte, int xResByte, int yResByte, int calibrationStartByte, byte[] dataBuffer, ByteOrder order) {
-        int relativeCalibrationOffset, relativeXResOffset, relativeYResOffset;
+    public CalibrationData() { }
 
-        relativeXResOffset = xResByte - ifdEndByte;
-        relativeYResOffset = yResByte - ifdEndByte;
-        getDetectorResolution(dataBuffer, relativeXResOffset, relativeYResOffset, order);
+    /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
-        relativeCalibrationOffset = calibrationStartByte - ifdEndByte;
-        getCoreCalibrationData(dataBuffer, relativeCalibrationOffset, order);
+    @Override
+    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+        coreCalibrationBytes = dataBytes;
     }
 
-    /////////// Private Methods ///////////////////////////////////////////////////////////////
+    @Override
+    public byte[] toByteArray(ByteOrder order){
+        ByteBuffer bytes;
 
-    private void getCoreCalibrationData(byte[] buffer, int calOffset, ByteOrder order){
-        byte[] calibrationBytes;
-        int calibrationLength;
+        bytes = ByteBuffer.allocate(coreCalibrationBytes.length);
+        bytes.order(order);
+        bytes.put(coreCalibrationBytes);
 
-        calibrationLength = buffer.length - calOffset;
-        calibrationBytes = new byte[calibrationLength];
-        System.arraycopy(buffer, calOffset, calibrationBytes, 0, calibrationLength);
-        // Encoding for detector outputs required before this can properly read
-        // central section reads when UTF-16 charset selected
-        coreCalibrationBytes = calibrationBytes;
-    }
-
-    private void getDetectorResolution(byte[] buffer, int relX, int relY, ByteOrder order){
-        byte[] xRes, yRes;
-
-        xRes = new byte[ResolutionAxis.BYTE_LENGTH];
-        System.arraycopy(buffer, relX, xRes, 0, ResolutionAxis.BYTE_LENGTH);
-        detectorXResolution = new ResolutionAxis();
-        detectorXResolution.fromByteArray(xRes, order);
-
-        yRes = new byte[ResolutionAxis.BYTE_LENGTH];
-        System.arraycopy(buffer, relY, yRes, 0, ResolutionAxis.BYTE_LENGTH);
-        detectorYResolution = new ResolutionAxis();
-        detectorXResolution.fromByteArray(yRes, order);
+        return bytes.array();
     }
 
 }

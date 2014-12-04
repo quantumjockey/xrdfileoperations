@@ -3,6 +3,8 @@ package xrdtiffoperations.imagemodel;
 import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
+import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
+import xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
 import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -15,6 +17,8 @@ public class TiffBase extends ByteSerializer {
     protected String filename;
     protected TiffHeader header;
     protected ArrayList<ImageFileDirectory> ifdListing;
+    protected ResolutionAxis imageXResolution;
+    protected ResolutionAxis imageYResolution;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
@@ -30,12 +34,22 @@ public class TiffBase extends ByteSerializer {
         return ifdListing;
     }
 
+    public ResolutionAxis getImageXResolution(){
+        return imageXResolution;
+    }
+
+    public ResolutionAxis getImageYResolution(){
+        return imageYResolution;
+    }
+
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TiffBase(String _filename) {
         ifdListing = new ArrayList<>();
         filename = _filename;
         header = new TiffHeader();
+        imageXResolution = new ResolutionAxis();
+        imageYResolution = new ResolutionAxis();
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -77,22 +91,37 @@ public class TiffBase extends ByteSerializer {
         ifdListing.add(directory);
     }
 
+    private void getImageResolution(byte[] imageData, ByteOrder order){
+        byte[] xRes, yRes;
+
+        xRes = new byte[ResolutionAxis.BYTE_LENGTH];
+        System.arraycopy(imageData, searchDirectoriesForTag(FieldTags.X_RESOLUTION_OFFSET), xRes, 0, ResolutionAxis.BYTE_LENGTH);
+        imageXResolution.fromByteArray(xRes, order);
+
+        yRes = new byte[ResolutionAxis.BYTE_LENGTH];
+        System.arraycopy(imageData, searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET), yRes, 0, ResolutionAxis.BYTE_LENGTH);
+        imageYResolution.fromByteArray(yRes, order);
+    }
+
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order){
         getFileHeader(dataBytes);
         getFirstIFD(dataBytes, header.getFirstIfdOffset(), header.getByteOrder());
+        getImageResolution(dataBytes, order);
     }
 
     @Override
     public byte[] toByteArray(ByteOrder order){
         ByteBuffer bytes;
 
-        bytes = ByteBuffer.allocate(TiffHeader.BYTE_LENGTH + ifdListing.get(0).getByteLength());
+        bytes = ByteBuffer.allocate(TiffHeader.BYTE_LENGTH + ifdListing.get(0).getByteLength() + (ResolutionAxis.BYTE_LENGTH * 2));
         bytes.order(order);
         bytes.put(header.toByteArray(order));
         bytes.put(ifdListing.get(0).toByteArray(order));
+        bytes.put(imageXResolution.toByteArray(order));
+        bytes.put(imageYResolution.toByteArray(order));
 
         return bytes.array();
     }
