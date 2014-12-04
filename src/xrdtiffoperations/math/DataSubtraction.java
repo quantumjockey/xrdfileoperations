@@ -29,7 +29,7 @@ public class DataSubtraction {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                temp.setIntensityMapCoordinate(y, x, subtractIntensity(darkFieldImage.getIntensityMapValue(y, x), diffractionImage.getIntensityMapValue(y, x)));
+                temp.setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getIntensityMapValue(y, x), darkFieldImage.getIntensityMapValue(y, x)));
             }
         }
 
