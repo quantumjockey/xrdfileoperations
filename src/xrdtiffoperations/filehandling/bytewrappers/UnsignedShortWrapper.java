@@ -1,9 +1,10 @@
 package xrdtiffoperations.filehandling.bytewrappers;
 
 import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
 import java.nio.ByteOrder;
 
-public class UnsignedShortWrapper extends ByteWrapper<Character> {
+public class UnsignedShortWrapper extends ByteWrapper<Character> implements IntegerWrapper {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
@@ -19,9 +20,8 @@ public class UnsignedShortWrapper extends ByteWrapper<Character> {
         return buffer.getChar();
     }
 
-    public int getAsInt(){
+    public int getAsIntPrimitive(){
         return (int)get();
     }
 
 }
-
