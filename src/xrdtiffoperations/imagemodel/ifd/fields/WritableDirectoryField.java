@@ -1,6 +1,6 @@
 package xrdtiffoperations.imagemodel.ifd.fields;
 
-public class WritableFieldInformation extends FieldInformation {
+public class WritableDirectoryField extends DirectoryField {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 

@@ -2,7 +2,7 @@ package xrdtiffoperations.imagemodel;
 
 import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
-import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
+import xrdtiffoperations.imagemodel.ifd.fields.DirectoryField;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
 import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
@@ -57,7 +57,7 @@ public class TiffBase extends ByteSerializer {
     public int searchDirectoriesForTag(int tag){
         int _value = 0;
         for (ImageFileDirectory directory : ifdListing){
-            for (FieldInformation item : directory.getFields()){
+            for (DirectoryField item : directory.getFields()){
                 if (item.getTag() == tag){
                     _value = item.getValue();
                 }

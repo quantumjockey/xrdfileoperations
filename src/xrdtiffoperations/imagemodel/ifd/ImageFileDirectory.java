@@ -1,8 +1,8 @@
 package xrdtiffoperations.imagemodel.ifd;
 
-import xrdtiffoperations.imagemodel.ifd.fields.FieldInformation;
+import xrdtiffoperations.imagemodel.ifd.fields.DirectoryField;
 import xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
-import xrdtiffoperations.imagemodel.ifd.fields.WritableFieldInformation;
+import xrdtiffoperations.imagemodel.ifd.fields.WritableDirectoryField;
 import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -18,11 +18,11 @@ public class ImageFileDirectory extends ByteSerializer {
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     private int numFields;
-    private ArrayList<FieldInformation> fields;
+    private ArrayList<DirectoryField> fields;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public ArrayList<FieldInformation> getFields(){
+    public ArrayList<DirectoryField> getFields(){
         return fields;
     }
 
@@ -35,7 +35,7 @@ public class ImageFileDirectory extends ByteSerializer {
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
     public void addEntry(short tag, short type, int count, int value){
-        WritableFieldInformation newField = new WritableFieldInformation();
+        WritableDirectoryField newField = new WritableDirectoryField();
         newField.setTag(tag);
         newField.setType(type);
         newField.setCount(count);
@@ -44,7 +44,7 @@ public class ImageFileDirectory extends ByteSerializer {
     }
 
     public static int calculateDirectoryLengthWithoutFieldsCount(int fieldsCount){
-        return (fieldsCount * FieldInformation.BYTE_LENGTH) + END_BUFFER_LENGTH;
+        return (fieldsCount * DirectoryField.BYTE_LENGTH) + END_BUFFER_LENGTH;
     }
 
     public static int extractNumFields(byte[] imageData, int firstIfdOffset, ByteOrder _byteOrder) {
@@ -57,11 +57,11 @@ public class ImageFileDirectory extends ByteSerializer {
     }
 
     public int getByteLength(){
-        return FIELD_COUNT_LENGTH + (fields.size() * FieldInformation.BYTE_LENGTH) + END_BUFFER_LENGTH;
+        return FIELD_COUNT_LENGTH + (fields.size() * DirectoryField.BYTE_LENGTH) + END_BUFFER_LENGTH;
     }
 
     public int getTagValue(short specifiedTag){
-        FieldInformation selected;
+        DirectoryField selected;
         int value;
 
         selected = getField(specifiedTag);
@@ -80,7 +80,7 @@ public class ImageFileDirectory extends ByteSerializer {
         int numFields, totalBytes;
 
         totalBytes = bytes.length - END_BUFFER_LENGTH;
-        numFields = totalBytes / FieldInformation.BYTE_LENGTH;
+        numFields = totalBytes / DirectoryField.BYTE_LENGTH;
 
         return numFields;
     }
@@ -114,17 +114,17 @@ public class ImageFileDirectory extends ByteSerializer {
         cursor = 0;
 
         for (int i = 0; i < numFields; i++){
-            byte[] fieldBytes = new byte[FieldInformation.BYTE_LENGTH];
-            System.arraycopy(bytes, cursor, fieldBytes, 0, FieldInformation.BYTE_LENGTH);
-            FieldInformation newField = new FieldInformation();
+            byte[] fieldBytes = new byte[DirectoryField.BYTE_LENGTH];
+            System.arraycopy(bytes, cursor, fieldBytes, 0, DirectoryField.BYTE_LENGTH);
+            DirectoryField newField = new DirectoryField();
             newField.fromByteArray(fieldBytes, byteOrder);
             fields.add(newField);
-            cursor += FieldInformation.BYTE_LENGTH;
+            cursor += DirectoryField.BYTE_LENGTH;
         }
     }
 
-    private FieldInformation getField(short specifiedTag){
-        for (FieldInformation item : fields){
+    private DirectoryField getField(short specifiedTag){
+        for (DirectoryField item : fields){
             if (item.getTag() == specifiedTag) {
                 return item;
             }
@@ -149,7 +149,7 @@ public class ImageFileDirectory extends ByteSerializer {
         bytes = ByteBuffer.allocate(getByteLength());
         bytes.order(order);
         bytes.put(count);
-        for (FieldInformation item : fields){
+        for (DirectoryField item : fields){
             bytes.put(item.toByteArray(order));
         }
         bytes.put(createBuffer(order));

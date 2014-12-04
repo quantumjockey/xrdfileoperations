@@ -6,7 +6,7 @@ import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class FieldInformation extends ByteSerializer {
+public class DirectoryField extends ByteSerializer {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
@@ -44,7 +44,7 @@ public class FieldInformation extends ByteSerializer {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public FieldInformation(){
+    public DirectoryField(){
         this.count = 1;
     }
 
