@@ -12,7 +12,7 @@ public class MARTiffImage extends TiffBase {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
-    private final int INTENSITY_MAXIMUM = 65537;
+    private final int INTENSITY_MAXIMUM = 65535;
     private final int INTENSITY_MINIMUM = 0;
     private final short CALIBRATION_OFFSET_SIGNED = -30826;
 
@@ -23,6 +23,10 @@ public class MARTiffImage extends TiffBase {
 
     protected CalibrationData calibration;
     protected int[][] intensityMap;
+
+    // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
+    private int intensityMax;
+    private int intensityMin;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
@@ -44,27 +48,23 @@ public class MARTiffImage extends TiffBase {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public int getMaxValue(){
-        int maxVal = INTENSITY_MINIMUM;
-        for (int y = 0; y < getHeight(); y++){
-            for (int x = 0; x < getWidth(); x++){
-                if (intensityMap[y][x] > maxVal){
-                    maxVal = intensityMap[y][x];
-                }
+        intensityMax = INTENSITY_MINIMUM;
+        cycleImageDataBytes((y, x) -> {
+            if (intensityMap[y][x] > intensityMax) {
+                intensityMax = intensityMap[y][x];
             }
-        }
-        return maxVal;
+        });
+        return intensityMax;
     }
 
     public int getMinValue(){
-        int minVal = INTENSITY_MAXIMUM;
-        for (int y = 0; y < getHeight(); y++){
-            for (int x = 0; x < getWidth(); x++){
-                if (intensityMap[y][x] < minVal){
-                    minVal = intensityMap[y][x];
-                }
+        intensityMin = INTENSITY_MAXIMUM;
+        cycleImageDataBytes((y, x) -> {
+            if (intensityMap[y][x] < intensityMin) {
+                intensityMin = intensityMap[y][x];
             }
-        }
-        return minVal;
+        });
+        return intensityMin;
     }
 
     public int getHeight(){
@@ -78,23 +78,33 @@ public class MARTiffImage extends TiffBase {
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
     private byte[] createImageBytes(ByteOrder order){
-        int gridHeight, gridWidth, numBytes;
+        int numBytes;
         ByteBuffer bytes;
 
         numBytes = getIfdListing().get(0).getTagValue(FieldTags.STRIP_BYTE_COUNTS);
         bytes = ByteBuffer.allocate(numBytes);
         bytes.order(order);
-        gridHeight = getHeight();
-        gridWidth = getWidth();
 
-        for (int y = 0; y < gridHeight; y++){
-            for (int x = 0; x < gridWidth; x++){
-                bytes.putShort((short)getIntensityMapValue(y, x));
-                // risky cast - must determine methods to explicitly prevent buffer overflow without marring data integrity
-            }
-        }
+        cycleImageDataBytes((y, x) -> {
+            bytes.putShort((short) getIntensityMapValue(y, x));
+            // risky cast - must determine methods to explicitly prevent buffer overflow without marring data integrity
+        });
 
         return bytes.array();
+    }
+
+    private void cycleImageDataBytes(EnvyForCSharpDelegates action){
+        for (int y = 0; y < getHeight(); y++){
+            for (int x = 0; x < getWidth(); x++){
+                try {
+                    action.callMethod(y, x);
+                }
+                catch (Exception e){
+                    System.out.println("Error accessing data at pixel (" + y + "," + x + ").");
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void getCalibrationData(byte[] fileBytes, ByteOrder _byteOrder){
@@ -137,11 +147,9 @@ public class MARTiffImage extends TiffBase {
             }
         }
         intensityMap = new int[imageHeight][imageWidth];
-        for (int y = 0; y < imageHeight; y++){
-            for (int x = 0; x < imageWidth; x++){
-                intensityMap[y][x] = linearImageArray[x + (y * imageHeight)];
-            }
-        }
+        cycleImageDataBytes((y, x) -> {
+            intensityMap[y][x] = linearImageArray[x + (y * imageHeight)];
+        });
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
@@ -174,6 +182,12 @@ public class MARTiffImage extends TiffBase {
         bytes.put(imageDataBytes);
 
         return bytes.array();
+    }
+
+    /////////// Private Interfaces //////////////////////////////////////////////////////////
+
+    private interface EnvyForCSharpDelegates {
+        void callMethod(int a, int b);
     }
 
 }
