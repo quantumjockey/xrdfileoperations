@@ -39,7 +39,6 @@ public class TiffReader {
 
     public void readFileData(){
         marImageData.fromByteArray(fileBytesRaw, null);
-        getCalibrationData(fileBytesRaw, marImageData.getHeader().getByteOrder());
         getImageData(retrieveImageStartingByte(), retrieveImageHeight(), retrieveImageWidth(), marImageData.getHeader().getByteOrder());
         fileHasBeenRead = true;
     }
@@ -54,34 +53,6 @@ public class TiffReader {
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
-
-    private void getCalibrationData(byte[] fileBytes, ByteOrder _byteOrder){
-        byte[] bytes;
-        int ifdEndByte;
-
-        ifdEndByte = marImageData.getHeader().getFirstIfdOffset() + marImageData.getIfdListing().get(0).getByteLength();
-        bytes = getCalibrationDataBytes(ifdEndByte, fileBytes);
-        marImageData.setCalibration(new CalibrationData(
-                ifdEndByte,
-                marImageData.searchDirectoriesForTag(FieldTags.X_RESOLUTION_OFFSET),
-                marImageData.searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET),
-                marImageData.searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET),
-                bytes,
-                _byteOrder
-        ));
-    }
-
-    private byte[] getCalibrationDataBytes(int ifdEndByte, byte[] fileBytes){
-        int imageStartByte, bufferLength;
-        byte[] data;
-
-        imageStartByte = marImageData.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
-        bufferLength = imageStartByte - ifdEndByte;
-        data = new byte[bufferLength];
-        System.arraycopy(fileBytes, ifdEndByte, data, 0, bufferLength);
-
-        return data;
-    }
 
     private void getImageData(int startingByte, int imageHeight, int imageWidth, ByteOrder _byteOrder){
         int[] linearImageArray;
