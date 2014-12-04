@@ -38,8 +38,7 @@ public class TiffReader {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public void readFileData(){
-        getFileHeader(fileBytesRaw);
-        getFirstIFD(fileBytesRaw, marImageData.getHeader().getFirstIfdOffset(), marImageData.getHeader().getByteOrder());
+        marImageData.fromByteArray(fileBytesRaw, null);
         getCalibrationData(fileBytesRaw, marImageData.getHeader().getByteOrder());
         getImageData(retrieveImageStartingByte(), retrieveImageHeight(), retrieveImageWidth(), marImageData.getHeader().getByteOrder());
         fileHasBeenRead = true;
@@ -82,31 +81,6 @@ public class TiffReader {
         System.arraycopy(fileBytes, ifdEndByte, data, 0, bufferLength);
 
         return data;
-    }
-
-    private void getFileHeader(byte[] imageData){
-        byte[] headerBytes = new byte[TiffHeader.BYTE_LENGTH];
-        System.arraycopy(imageData, 0, headerBytes, 0, TiffHeader.BYTE_LENGTH);
-        marImageData.getHeader().fromByteArray(headerBytes, null);
-    }
-
-    private int getFirstIFD(byte[] imageData, int firstIfdOffset, ByteOrder _byteOrder){
-        byte[] directoryBytes;
-        int directoryLength, fieldsCount;
-        ImageFileDirectory directory;
-
-        fieldsCount = ImageFileDirectory.extractNumFields(imageData, firstIfdOffset, _byteOrder);
-        directoryLength = ImageFileDirectory.calculateDirectoryLengthWithoutFieldsCount(fieldsCount);
-        directoryBytes = new byte[directoryLength];
-
-        // extract remaining IFD data
-        System.arraycopy(imageData, firstIfdOffset + ImageFileDirectory.FIELD_COUNT_LENGTH, directoryBytes, 0, directoryLength);
-
-        directory = new ImageFileDirectory();
-        directory.fromByteArray(directoryBytes, _byteOrder);
-        marImageData.getIfdListing().add(directory);
-
-        return firstIfdOffset + directoryLength;
     }
 
     private void getImageData(int startingByte, int imageHeight, int imageWidth, ByteOrder _byteOrder){

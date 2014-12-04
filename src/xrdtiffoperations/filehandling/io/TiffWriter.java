@@ -85,20 +85,17 @@ public class TiffWriter {
 
     private byte[] generateFileBytes(){
         ByteOrder order;
-        int byteCount, lengthOfHeadPlusIfd;
-        byte[] header, ifd, image, region;
+        int byteCount;
+        byte[] headerAndFirstIfd, image, region;
         ByteBuffer bytes;
 
         order = cachedData.getHeader().getByteOrder();
-        header = cachedData.getHeader().toByteArray(order);
-        ifd = cachedData.getIfdListing().get(0).toByteArray(order);
-        lengthOfHeadPlusIfd = header.length + ifd.length;
-        region = createRegionBeforeImageData(order, lengthOfHeadPlusIfd);
+        headerAndFirstIfd = cachedData.toByteArray(order);
+        region = createRegionBeforeImageData(order, headerAndFirstIfd.length);
         image = createImageBytes(order);
-        byteCount = header.length + ifd.length + region.length + image.length;
+        byteCount = headerAndFirstIfd.length + region.length + image.length;
         bytes = ByteBuffer.allocate(byteCount);
-        bytes.put(header);
-        bytes.put(ifd);
+        bytes.put(headerAndFirstIfd);
         bytes.put(region);
         bytes.put(image);
 

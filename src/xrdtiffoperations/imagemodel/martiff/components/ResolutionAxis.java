@@ -39,6 +39,8 @@ public class ResolutionAxis extends ByteSerializer{
         return (double)numerator / (double)denominator;
     }
 
+    /////////// ByteSerializer Methods //////////////////////////////////////////////////////
+
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order){
         SignedIntWrapper denum, num;

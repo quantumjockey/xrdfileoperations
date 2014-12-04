@@ -54,7 +54,7 @@ public class FieldInformation extends ByteSerializer {
         this.count = 1;
     }
 
-    /////////// Public Methods //////////////////////////////////////////////////////////////
+    /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order){
@@ -68,9 +68,9 @@ public class FieldInformation extends ByteSerializer {
             _fieldValue = new SignedIntWrapper(order);
 
             System.arraycopy(dataBytes, 0, _fieldTag.getDataBytes(), 0, TAG_BYTES_LENGTH);
-            System.arraycopy(dataBytes, 2, _fieldType.getDataBytes(), 0, TYPE_BYTES_LENGTH);
-            System.arraycopy(dataBytes, 4, _typeCount.getDataBytes(), 0, COUNT_BYTES_LENGTH);
-            System.arraycopy(dataBytes, 8, _fieldValue.getDataBytes(), 0, VALUE_BYTES_LENGTH);
+            System.arraycopy(dataBytes, TAG_BYTES_LENGTH, _fieldType.getDataBytes(), 0, TYPE_BYTES_LENGTH);
+            System.arraycopy(dataBytes, TAG_BYTES_LENGTH + TYPE_BYTES_LENGTH, _typeCount.getDataBytes(), 0, COUNT_BYTES_LENGTH);
+            System.arraycopy(dataBytes, TAG_BYTES_LENGTH + TYPE_BYTES_LENGTH + COUNT_BYTES_LENGTH, _fieldValue.getDataBytes(), 0, VALUE_BYTES_LENGTH);
 
             tag = _fieldTag.get();
             type = _fieldType.get();

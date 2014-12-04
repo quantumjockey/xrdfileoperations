@@ -37,7 +37,7 @@ public class TiffHeader extends ByteSerializer{
         return firstIfdOffset;
     }
 
-    /////////// Public Methods //////////////////////////////////////////////////////////////
+    /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order){

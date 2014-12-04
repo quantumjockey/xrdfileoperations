@@ -63,35 +63,12 @@ public class ImageFileDirectory extends ByteSerializer {
         return value;
     }
 
-    @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order){
-        numFields = calculateNumFields(dataBytes);
-        extractFields(dataBytes, order);
-    }
-
     public void setTagValue(short specifiedTag, int tagValue){
         for (FieldInformation item : fields){
             if (item.getTag() == specifiedTag) {
                 item.setValue(tagValue);
             }
         }
-    }
-
-    @Override
-    public byte[] toByteArray(ByteOrder order){
-        byte[] count;
-        ByteBuffer bytes;
-
-        count = createEntryCountBytes(order);
-        bytes = ByteBuffer.allocate(getByteLength());
-        bytes.order(order);
-        bytes.put(count);
-        for (FieldInformation item : fields){
-            bytes.put(item.toByteArray(order));
-        }
-        bytes.put(createBuffer(order));
-
-        return bytes.array();
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
@@ -141,6 +118,31 @@ public class ImageFileDirectory extends ByteSerializer {
             fields.add(newField);
             cursor += FieldInformation.BYTE_LENGTH;
         }
+    }
+
+    /////////// ByteSerializer Methods //////////////////////////////////////////////////////
+
+    @Override
+    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+        numFields = calculateNumFields(dataBytes);
+        extractFields(dataBytes, order);
+    }
+
+    @Override
+    public byte[] toByteArray(ByteOrder order){
+        byte[] count;
+        ByteBuffer bytes;
+
+        count = createEntryCountBytes(order);
+        bytes = ByteBuffer.allocate(getByteLength());
+        bytes.order(order);
+        bytes.put(count);
+        for (FieldInformation item : fields){
+            bytes.put(item.toByteArray(order));
+        }
+        bytes.put(createBuffer(order));
+
+        return bytes.array();
     }
 
 }

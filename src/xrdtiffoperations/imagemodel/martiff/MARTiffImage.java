@@ -2,8 +2,10 @@ package xrdtiffoperations.imagemodel.martiff;
 
 import xrdtiffoperations.imagemodel.TiffBase;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
-public class MARTiffImage extends TiffBase{
+public class MARTiffImage extends TiffBase {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
@@ -63,6 +65,26 @@ public class MARTiffImage extends TiffBase{
 
     public int getWidth(){
         return intensityMap[0].length;
+    }
+
+    /////////// ByteSerializer Methods //////////////////////////////////////////////////////
+
+    @Override
+    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+        super.fromByteArray(dataBytes, order);
+    }
+
+    @Override
+    public byte[] toByteArray(ByteOrder order){
+        ByteBuffer bytes;
+        byte[] headerAndFirstIFDBytes;
+
+        headerAndFirstIFDBytes = super.toByteArray(order);
+        bytes = ByteBuffer.allocate(headerAndFirstIFDBytes.length);
+        bytes.order(order);
+        bytes.put(headerAndFirstIFDBytes);
+
+        return bytes.array();
     }
 
 }
