@@ -1,4 +1,4 @@
-package xrdtiffoperations.imagemodel.martiff.components;
+package xrdtiffoperations.imagemodel.attributes;
 
 import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
