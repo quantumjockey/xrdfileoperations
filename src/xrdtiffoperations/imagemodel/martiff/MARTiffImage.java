@@ -134,14 +134,18 @@ public class MARTiffImage extends TiffBase {
 
         intensityMap = new int[imageHeight][imageWidth];
 
-        if (sampleByteLength == 4 && sampleType == SampleTypes.IEEE_FLOATING_POINT_DATA){
-            pixelTemp = new SignedFloatWrapper(_byteOrder);
-        }
-        else if (sampleByteLength == 2){
-            pixelTemp = new UnsignedShortWrapper(_byteOrder);
-        }
-        else {
-            pixelTemp = new SignedIntWrapper(_byteOrder);
+        switch (sampleByteLength){
+            case 4:
+                pixelTemp = (sampleType == SampleTypes.IEEE_FLOATING_POINT_DATA)
+                        ? new SignedFloatWrapper(_byteOrder)
+                        : new SignedIntWrapper(_byteOrder);
+                break;
+            case 2:
+                pixelTemp = new UnsignedShortWrapper(_byteOrder);
+                break;
+            default:
+                pixelTemp = new SignedIntWrapper(_byteOrder);
+                break;
         }
 
         cycleImageDataBytes((y, x) -> {
