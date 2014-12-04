@@ -132,7 +132,7 @@ public class MARTiffImage extends TiffBase {
 
         cycleImageDataBytes((y, x) -> {
             System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTempShort.getDataBytes(), 0, sampleByteLength);
-            intensityMap[y][x] = pixelTempShort.getAsInt();
+            intensityMap[y][x] = pixelTempShort.get();
         });
     }
 
