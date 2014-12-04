@@ -3,25 +3,20 @@ package xrdtiffoperations.filehandling.bytewrappers;
 import xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
 import java.nio.ByteOrder;
 
-public class UnsignedShortWrapper extends ByteWrapper<Character> {
+public class SignedFloatWrapper extends ByteWrapper<Float> {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public UnsignedShortWrapper(ByteOrder order){
-        super(Character.SIZE, order);
+    public SignedFloatWrapper(ByteOrder order){
+        super(Float.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Character get(){
+    public Float get(){
         wrap();
-        return buffer.getChar();
-    }
-
-    public int getAsInt(){
-        return (int)get();
+        return buffer.getFloat();
     }
 
 }
-

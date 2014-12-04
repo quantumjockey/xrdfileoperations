@@ -16,6 +16,7 @@ public class FieldTags {
     public static final short X_RESOLUTION_OFFSET = 282;
     public static final short Y_RESOLUTION_OFFSET = 283;
     public static final short RESOLUTION_UNIT = 296;
+    public static final short SAMPLE_FORMAT = 339;
     public static final short CALIBRATION_DATA_OFFSET_SIGNED = -30826;
 
 }

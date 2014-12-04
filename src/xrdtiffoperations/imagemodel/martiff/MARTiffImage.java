@@ -1,9 +1,12 @@
 package xrdtiffoperations.imagemodel.martiff;
 
+import xrdtiffoperations.filehandling.bytewrappers.SignedFloatWrapper;
+import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import xrdtiffoperations.filehandling.tools.ByteArray;
 import xrdtiffoperations.imagemodel.TiffBase;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
+import xrdtiffoperations.imagemodel.ifd.fields.SampleTypes;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -118,22 +121,43 @@ public class MARTiffImage extends TiffBase {
 
     private void getImageData(byte[] fileBytes, ByteOrder _byteOrder){
         UnsignedShortWrapper pixelTempShort;
+        SignedIntWrapper pixelTempInteger;
+        SignedFloatWrapper pixelTempFloat;
         int startingByte;
         int imageHeight, imageWidth;
-        int sampleByteLength;
+        int sampleByteLength, sampleType;
 
         imageHeight = searchDirectoriesForTag(FieldTags.IMAGE_HEIGHT);
         imageWidth = searchDirectoriesForTag(FieldTags.IMAGE_WIDTH);
         startingByte = searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
         sampleByteLength = searchDirectoriesForTag(FieldTags.BITS_PER_SAMPLE) / Byte.SIZE;
+        sampleType = searchDirectoriesForTag(FieldTags.SAMPLE_FORMAT);
 
-        pixelTempShort = new UnsignedShortWrapper(_byteOrder);
         intensityMap = new int[imageHeight][imageWidth];
 
-        cycleImageDataBytes((y, x) -> {
-            System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTempShort.getDataBytes(), 0, sampleByteLength);
-            intensityMap[y][x] = pixelTempShort.get();
-        });
+        // The following requires refactoring into one loop for cycling; extending ByteWrapper from interface Comparable prevents such refactoring from executing successfully at this time.
+
+        if (sampleByteLength == 4 && sampleType == SampleTypes.IEEE_FLOATING_POINT_DATA){
+            pixelTempFloat = new SignedFloatWrapper(_byteOrder);
+            cycleImageDataBytes((y, x) -> {
+                System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTempFloat.getDataBytes(), 0, sampleByteLength);
+                intensityMap[y][x] = Math.round(pixelTempFloat.get());
+            });
+        }
+        else if (sampleByteLength == 2){
+            pixelTempShort = new UnsignedShortWrapper(_byteOrder);
+            cycleImageDataBytes((y, x) -> {
+                System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTempShort.getDataBytes(), 0, sampleByteLength);
+                intensityMap[y][x] = pixelTempShort.getAsInt();
+            });
+        }
+        else {
+            pixelTempInteger = new SignedIntWrapper(_byteOrder);
+            cycleImageDataBytes((y, x) -> {
+                System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTempInteger.getDataBytes(), 0, sampleByteLength);
+                intensityMap[y][x] = pixelTempInteger.get();
+            });
+        }
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
