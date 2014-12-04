@@ -12,8 +12,8 @@ public class MARTiffImage extends TiffBase {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
-    private final int INTENSITY_MAXIMUM = 65535;
-    private final int INTENSITY_MINIMUM = 0;
+    private final int INTENSITY_MAXIMUM = Integer.MAX_VALUE;
+    private final int INTENSITY_MINIMUM = Integer.MIN_VALUE;
     private final short CALIBRATION_OFFSET_SIGNED = -30826;
 
     // (FOR INTEGRITY TESTING ONLY) //
