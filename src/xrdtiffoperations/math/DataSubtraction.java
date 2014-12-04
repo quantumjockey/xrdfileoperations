@@ -1,13 +1,10 @@
 package xrdtiffoperations.math;
 
+import xrdtiffoperations.imagemodel.FileExtensions;
 import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
 import xrdtiffoperations.imagemodel.martiff.WritableMARTiffImage;
 
 public class DataSubtraction {
-
-    /////////// Constants /////////////////////////////////////////////////////////////////////
-
-    private static final String DEFAULT_EXTENSION = ".tif";
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
@@ -44,18 +41,18 @@ public class DataSubtraction {
         firstSegment = stripFilename(darkFieldImageFile.getFilename());
         secondSegment = stripFilename(diffractionImageFile.getFilename());
         if (longName){
-            result = firstSegment + "_minus_" + secondSegment + DEFAULT_EXTENSION;
+            result = firstSegment + "_minus_" + secondSegment + FileExtensions.DEFAULT;
         }
         else{
             String[] suffixParts = secondSegment.split("_");
-            result = firstSegment + "_bknd_" + suffixParts[suffixParts.length - 1] + DEFAULT_EXTENSION;
+            result = firstSegment + "_bknd_" + suffixParts[suffixParts.length - 1] + FileExtensions.DEFAULT;
         }
 
         return result;
     }
 
     private static String stripFilename(String name){
-        return name.replace(DEFAULT_EXTENSION, "");
+        return name.replace(FileExtensions.DEFAULT, "");
     }
 
     private static int subtractIntensity(int firstValue, int secondValue){

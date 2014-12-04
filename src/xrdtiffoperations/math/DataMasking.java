@@ -1,13 +1,10 @@
 package xrdtiffoperations.math;
 
+import xrdtiffoperations.imagemodel.FileExtensions;
 import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
 import xrdtiffoperations.imagemodel.martiff.WritableMARTiffImage;
 
 public class DataMasking {
-
-    /////////// Constants /////////////////////////////////////////////////////////////////////
-
-    private static final String DEFAULT_EXTENSION = ".tif";
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
@@ -34,13 +31,13 @@ public class DataMasking {
 
         baseName = stripFilename(file.getFilename());
         if (max != file.getMaxValue()){
-            result = baseName + "_max_" + max + DEFAULT_EXTENSION;
+            result = baseName + "_max_" + max + FileExtensions.DEFAULT;
         }
         else if (min != file.getMinValue()){
-            result = baseName + "_min_" + min + DEFAULT_EXTENSION;
+            result = baseName + "_min_" + min + FileExtensions.DEFAULT;
         }
         else{
-            result = baseName + DEFAULT_EXTENSION;
+            result = baseName + FileExtensions.DEFAULT;
         }
 
         return result;
@@ -61,7 +58,7 @@ public class DataMasking {
     }
 
     private static String stripFilename(String name){
-        return name.replace(DEFAULT_EXTENSION, "");
+        return name.replace(FileExtensions.DEFAULT, "");
     }
 
 }
