@@ -218,22 +218,20 @@ public class MARTiffImage extends TiffBase {
     @Override
     public byte[] toByteArray(ByteOrder order){
         ByteBuffer bytes;
-        byte[] calibrationBytes, emptyBytes, imageDataBytes, imageMetaBytes;
+        byte[] emptyBytes, imageDataBytes, imageMetaBytes;
         int totalSize;
 
         imageDataBytes = createImageBytes(order, this.fileOutputFormat);
 
         imageMetaBytes = super.toByteArray(order);
         emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED));
-        calibrationBytes = calibration.toByteArray(order);
 
-        totalSize = imageMetaBytes.length + emptyBytes.length + calibrationBytes.length + imageDataBytes.length;
+        totalSize = imageMetaBytes.length + emptyBytes.length + imageDataBytes.length;
 
         bytes = ByteBuffer.allocate(totalSize);
         bytes.order(order);
         bytes.put(imageMetaBytes);
         bytes.put(emptyBytes);
-        bytes.put(calibrationBytes);
         bytes.put(imageDataBytes);
 
         return bytes.array();
