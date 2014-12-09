@@ -81,23 +81,46 @@ public class MARTiffImage extends TiffBase {
     }
 
     public void setFileOutputFormat(String fileType){
-        fileOutputFormat = fileType;
+        this.fileOutputFormat = fileType;
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private byte[] createImageBytes(ByteOrder order){
+    private ByteBuffer createByteBuffer(ByteOrder order, int numPixels, int bytesPerPixel){
+        ByteBuffer buffer;
         int numBytes;
+
+        numBytes = numPixels * bytesPerPixel;
+        buffer = ByteBuffer.allocate(numBytes);
+        buffer.order(order);
+
+        return buffer;
+    }
+
+    private byte[] createImageBytes(ByteOrder order, String imageType){
         ByteBuffer bytes;
+        int numPixels;
 
-        numBytes = getIfdListing().get(0).getTagValue(FieldTags.STRIP_BYTE_COUNTS);
-        bytes = ByteBuffer.allocate(numBytes);
-        bytes.order(order);
+        numPixels = getHeight() * getWidth();
 
-        cycleImageDataBytes((y, x) -> {
-            bytes.putShort((short) getIntensityMapValue(y, x));
-            // risky cast - must determine methods to explicitly prevent buffer overflow without marring data integrity
-        });
+        switch (imageType) {
+            case FileTypes.TIFF_8_BIT_INT:
+                bytes = createByteBuffer(order, numPixels, 1);
+                cycleImageDataBytes((y, x) -> bytes.put(scaleDataToByte(getIntensityMapValue(y, x))));
+                break;
+            case FileTypes.TIFF_16_BIT_INT:
+                bytes = createByteBuffer(order, numPixels, 2);
+                cycleImageDataBytes((y, x) -> bytes.putChar(scaleDataToUnsignedShort(getIntensityMapValue(y, x))));
+                break;
+            case FileTypes.TIFF_32_BIT_FLOAT:
+                bytes = createByteBuffer(order, numPixels, 4);
+                cycleImageDataBytes((y, x) -> bytes.putFloat((float)getIntensityMapValue(y, x)));
+                break;
+            default: //FileTypes.TIFF_32_BIT_INT:
+                bytes = createByteBuffer(order, numPixels, 4);
+                cycleImageDataBytes((y, x) -> bytes.putInt(getIntensityMapValue(y, x)));
+                break;
+        }
 
         return bytes.array();
     }
@@ -163,6 +186,26 @@ public class MARTiffImage extends TiffBase {
         });
     }
 
+    private byte scaleDataToByte(int dataValue){
+        byte scaledValue;
+        float scale;
+
+        scale = (dataValue - getMinValue()) / (getMaxValue() - getMinValue());
+        scaledValue = (byte)(scale * (float)Byte.MAX_VALUE);
+
+        return scaledValue;
+    }
+
+    private char scaleDataToUnsignedShort(int dataValue){
+        char scaledValue;
+        float scale;
+
+        scale = (dataValue - getMinValue()) / (getMaxValue() - getMinValue());
+        scaledValue = (char)(scale * (float)Character.MAX_VALUE);
+
+        return scaledValue;
+    }
+
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
@@ -178,10 +221,11 @@ public class MARTiffImage extends TiffBase {
         byte[] calibrationBytes, emptyBytes, imageDataBytes, imageMetaBytes;
         int totalSize;
 
+        imageDataBytes = createImageBytes(order, this.fileOutputFormat);
+
         imageMetaBytes = super.toByteArray(order);
         emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED));
         calibrationBytes = calibration.toByteArray(order);
-        imageDataBytes = createImageBytes(order);
 
         totalSize = imageMetaBytes.length + emptyBytes.length + calibrationBytes.length + imageDataBytes.length;
 
