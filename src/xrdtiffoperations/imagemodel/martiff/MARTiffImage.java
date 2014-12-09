@@ -5,6 +5,7 @@ import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
 import xrdtiffoperations.filehandling.tools.ByteArray;
+import xrdtiffoperations.imagemodel.FileTypes;
 import xrdtiffoperations.imagemodel.TiffBase;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.ifd.fields.SampleTypes;
@@ -28,6 +29,9 @@ public class MARTiffImage extends TiffBase {
     private int intensityMax;
     private int intensityMin;
 
+    // For indicating file format when converting data to byte array
+    private String fileOutputFormat;
+
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public CalibrationData getCalibration(){
@@ -43,6 +47,7 @@ public class MARTiffImage extends TiffBase {
     public MARTiffImage(String _filename) {
         super(_filename);
         calibration = new CalibrationData();
+        fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -73,6 +78,10 @@ public class MARTiffImage extends TiffBase {
 
     public int getWidth(){
         return intensityMap[0].length;
+    }
+
+    public void setFileOutputFormat(String fileType){
+        fileOutputFormat = fileType;
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////

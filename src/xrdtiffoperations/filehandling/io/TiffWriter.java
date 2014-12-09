@@ -16,8 +16,9 @@ public class TiffWriter {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public TiffWriter(MARTiffImage dataSource){
+    public TiffWriter(MARTiffImage dataSource, String fileType){
         cachedData = dataSource;
+        cachedData.setFileOutputFormat(fileType);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
