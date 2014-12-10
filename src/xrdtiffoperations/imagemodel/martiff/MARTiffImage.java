@@ -4,7 +4,6 @@ import xrdtiffoperations.filehandling.bytewrappers.SignedFloatWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
-import xrdtiffoperations.filehandling.scaling.ScaleData;
 import xrdtiffoperations.filehandling.tools.ByteArray;
 import xrdtiffoperations.imagemodel.FileTypes;
 import xrdtiffoperations.imagemodel.TiffBase;
@@ -108,14 +107,6 @@ public class MARTiffImage extends TiffBase {
         numPixels = getHeight() * getWidth();
 
         switch (imageType) {
-            case FileTypes.TIFF_8_BIT_INT:
-                bytes = createByteBuffer(order, numPixels, 1);
-                cycleImageDataBytes((y, x) -> bytes.put(ScaleData.toByte(getIntensityMapValue(y, x), getMaxValue(), getMinValue())));
-                break;
-            case FileTypes.TIFF_16_BIT_INT:
-                bytes = createByteBuffer(order, numPixels, 2);
-                cycleImageDataBytes((y, x) -> bytes.putChar(ScaleData.toUnsignedShort(getIntensityMapValue(y, x), getMaxValue(), getMinValue())));
-                break;
             case FileTypes.TIFF_32_BIT_FLOAT:
                 bytes = createByteBuffer(order, numPixels, 4);
                 cycleImageDataBytes((y, x) -> bytes.putFloat((float)getIntensityMapValue(y, x)));
@@ -201,14 +192,6 @@ public class MARTiffImage extends TiffBase {
         this.getIfdListing().get(0).removeEntry(FieldTags.SAMPLE_FORMAT);
 
         switch (imageType) {
-            case FileTypes.TIFF_8_BIT_INT:
-                bitsPerSample = 8;
-                sampleFormat = SampleTypes.UNSIGNED_INTEGER_DATA;
-                break;
-            case FileTypes.TIFF_16_BIT_INT:
-                bitsPerSample = 16;
-                sampleFormat = SampleTypes.UNSIGNED_INTEGER_DATA;
-                break;
             case FileTypes.TIFF_32_BIT_FLOAT:
                 bitsPerSample = 32;
                 sampleFormat = SampleTypes.IEEE_FLOATING_POINT_DATA;
