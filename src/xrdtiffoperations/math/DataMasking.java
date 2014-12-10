@@ -13,7 +13,7 @@ public class DataMasking {
         WritableMARTiffImage temp;
 
         temp = (WritableMARTiffImage)image;
-        name = generateFilename(image, minVal, maxVal);
+        name = generateFilename(image);
         temp.setFilename(name);
         for(int y = 0; y < temp.getHeight(); y++){
             for (int x = 0; x < temp.getWidth(); x++){
@@ -26,19 +26,11 @@ public class DataMasking {
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
 
-    private static String generateFilename(MARTiffImage file, int min, int max){
+    private static String generateFilename(MARTiffImage file){
         String baseName, result;
 
         baseName = stripFilename(file.getFilename());
-        if (max != file.getMaxValue()){
-            result = baseName + "_max_" + max + FileExtensions.DEFAULT;
-        }
-        else if (min != file.getMinValue()){
-            result = baseName + "_min_" + min + FileExtensions.DEFAULT;
-        }
-        else{
-            result = baseName + FileExtensions.DEFAULT;
-        }
+        result = baseName + FileExtensions.DEFAULT;
 
         return result;
     }
