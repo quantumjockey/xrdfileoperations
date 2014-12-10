@@ -4,10 +4,14 @@ import xrdtiffoperations.filehandling.bytewrappers.SignedFloatWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
+import xrdtiffoperations.filehandling.scaling.ScaleData;
 import xrdtiffoperations.filehandling.tools.ByteArray;
 import xrdtiffoperations.imagemodel.FileTypes;
 import xrdtiffoperations.imagemodel.TiffBase;
+import xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
+import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
+import xrdtiffoperations.imagemodel.ifd.fields.FieldTypes;
 import xrdtiffoperations.imagemodel.ifd.fields.SampleTypes;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 import java.nio.ByteBuffer;
@@ -106,11 +110,11 @@ public class MARTiffImage extends TiffBase {
         switch (imageType) {
             case FileTypes.TIFF_8_BIT_INT:
                 bytes = createByteBuffer(order, numPixels, 1);
-                cycleImageDataBytes((y, x) -> bytes.put(scaleDataToByte(getIntensityMapValue(y, x))));
+                cycleImageDataBytes((y, x) -> bytes.put(ScaleData.toByte(getIntensityMapValue(y, x), getMaxValue(), getMinValue())));
                 break;
             case FileTypes.TIFF_16_BIT_INT:
                 bytes = createByteBuffer(order, numPixels, 2);
-                cycleImageDataBytes((y, x) -> bytes.putChar(scaleDataToUnsignedShort(getIntensityMapValue(y, x))));
+                cycleImageDataBytes((y, x) -> bytes.putChar(ScaleData.toUnsignedShort(getIntensityMapValue(y, x), getMaxValue(), getMinValue())));
                 break;
             case FileTypes.TIFF_32_BIT_FLOAT:
                 bytes = createByteBuffer(order, numPixels, 4);
@@ -186,24 +190,49 @@ public class MARTiffImage extends TiffBase {
         });
     }
 
-    private byte scaleDataToByte(int dataValue){
-        byte scaledValue;
-        float scale;
+    private void modifyImageIfdForImageExport(String imageType, int imageByteCount){
+        int bitsPerSample, sampleFormat;
 
-        scale = (dataValue - getMinValue()) / (getMaxValue() - getMinValue());
-        scaledValue = (byte)(scale * (float)Byte.MAX_VALUE);
+        this.getIfdListing().get(0).removeEntry(FieldTags.BITS_PER_SAMPLE);
+        this.getIfdListing().get(0).removeEntry(FieldTags.STRIP_OFFSETS);
+        this.getIfdListing().get(0).removeEntry(FieldTags.ORIENTATION);
+        this.getIfdListing().get(0).removeEntry(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED);
+        this.getIfdListing().get(0).removeEntry(FieldTags.STRIP_BYTE_COUNTS);
+        this.getIfdListing().get(0).removeEntry(FieldTags.SAMPLE_FORMAT);
 
-        return scaledValue;
-    }
+        switch (imageType) {
+            case FileTypes.TIFF_8_BIT_INT:
+                bitsPerSample = 8;
+                sampleFormat = SampleTypes.UNSIGNED_INTEGER_DATA;
+                break;
+            case FileTypes.TIFF_16_BIT_INT:
+                bitsPerSample = 16;
+                sampleFormat = SampleTypes.UNSIGNED_INTEGER_DATA;
+                break;
+            case FileTypes.TIFF_32_BIT_FLOAT:
+                bitsPerSample = 32;
+                sampleFormat = SampleTypes.IEEE_FLOATING_POINT_DATA;
+                break;
+            default: //FileTypes.TIFF_32_BIT_INT:
+                bitsPerSample = 32;
+                sampleFormat = SampleTypes.UNSIGNED_INTEGER_DATA;
+                break;
+        }
 
-    private char scaleDataToUnsignedShort(int dataValue){
-        char scaledValue;
-        float scale;
+        this.getIfdListing().get(0).addEntry(FieldTags.BITS_PER_SAMPLE, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, bitsPerSample);
+        this.getIfdListing().get(0).addEntry(FieldTags.STRIP_OFFSETS, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, 512);
+        this.getIfdListing().get(0).addEntry(FieldTags.STRIP_BYTE_COUNTS, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, imageByteCount);
+        this.getIfdListing().get(0).addEntry(FieldTags.SAMPLE_FORMAT, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, sampleFormat);
 
-        scale = (dataValue - getMinValue()) / (getMaxValue() - getMinValue());
-        scaledValue = (char)(scale * (float)Character.MAX_VALUE);
+        int byteLength = TiffHeader.BYTE_LENGTH + this.getIfdListing().get(0).getByteLength();
 
-        return scaledValue;
+        this.getIfdListing().get(0).removeEntry(FieldTags.X_RESOLUTION_OFFSET);
+        this.getIfdListing().get(0).addEntry(FieldTags.X_RESOLUTION_OFFSET, FieldTypes.RATIONAL, 1, byteLength);
+
+        this.getIfdListing().get(0).removeEntry(FieldTags.Y_RESOLUTION_OFFSET);
+        this.getIfdListing().get(0).addEntry(FieldTags.Y_RESOLUTION_OFFSET, FieldTypes.RATIONAL, 1, byteLength + ResolutionAxis.BYTE_LENGTH);
+
+        this.getIfdListing().get(0).sort();
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
@@ -211,8 +240,10 @@ public class MARTiffImage extends TiffBase {
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order){
         super.fromByteArray(dataBytes, order);
-        getCalibrationData(dataBytes, order);
-        getImageData(dataBytes, order);
+        if (this.getIfdListing().get(0).getTagValue(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED) != -1){
+            getCalibrationData(dataBytes, header.getByteOrder());
+        }
+        getImageData(dataBytes, header.getByteOrder());
     }
 
     @Override
@@ -222,10 +253,10 @@ public class MARTiffImage extends TiffBase {
         int totalSize;
 
         imageDataBytes = createImageBytes(order, this.fileOutputFormat);
+        modifyImageIfdForImageExport(this.fileOutputFormat, imageDataBytes.length);
 
         imageMetaBytes = super.toByteArray(order);
-        emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED));
-
+        emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(FieldTags.STRIP_OFFSETS));
         totalSize = imageMetaBytes.length + emptyBytes.length + imageDataBytes.length;
 
         bytes = ByteBuffer.allocate(totalSize);

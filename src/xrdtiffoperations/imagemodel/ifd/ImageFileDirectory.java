@@ -7,6 +7,8 @@ import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ImageFileDirectory extends ByteSerializer {
 
@@ -72,6 +74,17 @@ public class ImageFileDirectory extends ByteSerializer {
 
     public void removeEntry(short specifiedTag){
         fields.remove(getField(specifiedTag));
+    }
+
+    public void sort(){
+        Collections.sort(fields, new Comparator<DirectoryField>() {
+            @Override
+            public int compare(DirectoryField o1, DirectoryField o2) {
+                Short tagOne = o1.getTag();
+                Short tagTwo = o2.getTag();
+                return tagOne.compareTo(tagTwo);
+            }
+        });
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
