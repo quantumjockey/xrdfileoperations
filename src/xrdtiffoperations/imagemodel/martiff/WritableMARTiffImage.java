@@ -2,8 +2,6 @@ package xrdtiffoperations.imagemodel.martiff;
 
 import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
-import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 public class WritableMARTiffImage extends MARTiffImage{
@@ -22,20 +20,6 @@ public class WritableMARTiffImage extends MARTiffImage{
 
     public void setIfdListing(ArrayList<ImageFileDirectory> listing){
         ifdListing = listing;
-    }
-
-    // MARTiffImage fields
-
-    public void initializeIntensityMap(int height, int width){
-        generatedImage.initializeIntensityMap(height, width);
-    }
-
-    public void setCalibration(CalibrationData data){
-        generatedImage.setCalibration(data);
-    }
-
-    public void setIntensityMapCoordinate(int y, int x, int value) {
-        generatedImage.setIntensityMapCoordinate(y, x, value);
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////

@@ -17,16 +17,16 @@ public class DataSubtraction {
         temp = new WritableMARTiffImage(filename);
         temp.setIfdListing(backgroundImage.getIfdListing());
         temp.setHeader(backgroundImage.getHeader());
-        temp.setCalibration(backgroundImage.getGeneratedImage().getCalibration());
+        temp.getGeneratedImage().setCalibration(backgroundImage.getGeneratedImage().getCalibration());
 
         height = (backgroundImage.getGeneratedImage().getHeight() < diffractionImage.getGeneratedImage().getHeight()) ? backgroundImage.getGeneratedImage().getHeight() : diffractionImage.getGeneratedImage().getHeight();
         width  = (backgroundImage.getGeneratedImage().getWidth() < diffractionImage.getGeneratedImage().getWidth()) ? backgroundImage.getGeneratedImage().getWidth() : diffractionImage.getGeneratedImage().getWidth();
 
-        temp.initializeIntensityMap(height, width);
+        temp.getGeneratedImage().initializeIntensityMap(height, width);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                temp.setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getGeneratedImage().getIntensityMapValue(y, x), backgroundImage.getGeneratedImage().getIntensityMapValue(y, x)));
+                temp.getGeneratedImage().setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getGeneratedImage().getIntensityMapValue(y, x), backgroundImage.getGeneratedImage().getIntensityMapValue(y, x)));
             }
         }
 

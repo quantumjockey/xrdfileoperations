@@ -17,7 +17,7 @@ public class DataMasking {
         temp.setFilename(name);
         for(int y = 0; y < temp.getGeneratedImage().getHeight(); y++){
             for (int x = 0; x < temp.getGeneratedImage().getWidth(); x++){
-                temp.setIntensityMapCoordinate(y, x, maskValue(temp.getGeneratedImage().getIntensityMapValue(y, x), maxVal, minVal));
+                temp.getGeneratedImage().setIntensityMapCoordinate(y, x, maskValue(temp.getGeneratedImage().getIntensityMapValue(y, x), maxVal, minVal));
             }
         }
 
