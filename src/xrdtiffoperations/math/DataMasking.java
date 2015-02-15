@@ -15,9 +15,9 @@ public class DataMasking {
         temp = (WritableMARTiffImage)image;
         name = generateFilename(image);
         temp.setFilename(name);
-        for(int y = 0; y < temp.getGeneratedImage().getHeight(); y++){
-            for (int x = 0; x < temp.getGeneratedImage().getWidth(); x++){
-                temp.getGeneratedImage().setIntensityMapCoordinate(y, x, maskValue(temp.getGeneratedImage().getIntensityMapValue(y, x), maxVal, minVal));
+        for(int y = 0; y < temp.getDiffractionData().getHeight(); y++){
+            for (int x = 0; x < temp.getDiffractionData().getWidth(); x++){
+                temp.getDiffractionData().setIntensityMapCoordinate(y, x, maskValue(temp.getDiffractionData().getIntensityMapValue(y, x), maxVal, minVal));
             }
         }
 

@@ -13,7 +13,7 @@ import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTypes;
 import xrdtiffoperations.imagemodel.ifd.fields.SampleTypes;
-import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -21,22 +21,22 @@ public class MARTiffImage extends TiffBase {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    protected DiffractionFrame generatedImage;
+    protected DiffractionFrame diffractionData;
 
     // For indicating file format when converting data to byte array
     private String fileOutputFormat;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public DiffractionFrame getGeneratedImage(){
-        return generatedImage;
+    public DiffractionFrame getDiffractionData(){
+        return diffractionData;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public MARTiffImage(String _filename) {
         super(_filename);
-        generatedImage = new DiffractionFrame();
+        diffractionData = new DiffractionFrame();
         fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
@@ -63,16 +63,16 @@ public class MARTiffImage extends TiffBase {
         ByteBuffer bytes;
         int numPixels;
 
-        numPixels = generatedImage.getHeight() * generatedImage.getWidth();
+        numPixels = diffractionData.getHeight() * diffractionData.getWidth();
 
         switch (imageType) {
             case FileTypes.TIFF_32_BIT_FLOAT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                generatedImage.cycleImageDataBytes((y, x) -> bytes.putFloat((float) generatedImage.getIntensityMapValue(y, x)));
+                diffractionData.cycleImageDataBytes((y, x) -> bytes.putFloat((float) diffractionData.getIntensityMapValue(y, x)));
                 break;
             default: //FileTypes.TIFF_32_BIT_INT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                generatedImage.cycleImageDataBytes((y, x) -> bytes.putInt(generatedImage.getIntensityMapValue(y, x)));
+                diffractionData.cycleImageDataBytes((y, x) -> bytes.putInt(diffractionData.getIntensityMapValue(y, x)));
                 break;
         }
 
@@ -89,7 +89,7 @@ public class MARTiffImage extends TiffBase {
         data = new byte[bufferLength];
         System.arraycopy(fileBytes, calibrationStartByte, data, 0, bufferLength);
 
-        generatedImage.getCalibration().fromByteArray(data, _byteOrder);
+        diffractionData.getCalibration().fromByteArray(data, _byteOrder);
     }
 
     private void getImageData(byte[] fileBytes, ByteOrder _byteOrder){
@@ -104,9 +104,9 @@ public class MARTiffImage extends TiffBase {
         sampleByteLength = searchDirectoriesForTag(FieldTags.BITS_PER_SAMPLE) / Byte.SIZE;
         sampleType = searchDirectoriesForTag(FieldTags.SAMPLE_FORMAT);
 
-        generatedImage.initializeIntensityMap(imageHeight, imageWidth);
-        generatedImage.setImageXResolution(super.imageXResolution);
-        generatedImage.setImageYResolution(super.imageYResolution);
+        diffractionData.initializeIntensityMap(imageHeight, imageWidth);
+        diffractionData.setImageXResolution(super.imageXResolution);
+        diffractionData.setImageYResolution(super.imageYResolution);
 
         switch (sampleByteLength){
             case 4:
@@ -122,9 +122,9 @@ public class MARTiffImage extends TiffBase {
                 break;
         }
 
-        generatedImage.cycleImageDataBytes((y, x) -> {
+        diffractionData.cycleImageDataBytes((y, x) -> {
             System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTemp.getDataBytes(), 0, sampleByteLength);
-            generatedImage.setIntensityMapCoordinate(y, x, pixelTemp.getAsIntPrimitive());
+            diffractionData.setIntensityMapCoordinate(y, x, pixelTemp.getAsIntPrimitive());
         });
     }
 

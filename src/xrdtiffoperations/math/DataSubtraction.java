@@ -17,16 +17,16 @@ public class DataSubtraction {
         temp = new WritableMARTiffImage(filename);
         temp.setIfdListing(backgroundImage.getIfdListing());
         temp.setHeader(backgroundImage.getHeader());
-        temp.getGeneratedImage().setCalibration(backgroundImage.getGeneratedImage().getCalibration());
+        temp.getDiffractionData().setCalibration(backgroundImage.getDiffractionData().getCalibration());
 
-        height = (backgroundImage.getGeneratedImage().getHeight() < diffractionImage.getGeneratedImage().getHeight()) ? backgroundImage.getGeneratedImage().getHeight() : diffractionImage.getGeneratedImage().getHeight();
-        width  = (backgroundImage.getGeneratedImage().getWidth() < diffractionImage.getGeneratedImage().getWidth()) ? backgroundImage.getGeneratedImage().getWidth() : diffractionImage.getGeneratedImage().getWidth();
+        height = (backgroundImage.getDiffractionData().getHeight() < diffractionImage.getDiffractionData().getHeight()) ? backgroundImage.getDiffractionData().getHeight() : diffractionImage.getDiffractionData().getHeight();
+        width  = (backgroundImage.getDiffractionData().getWidth() < diffractionImage.getDiffractionData().getWidth()) ? backgroundImage.getDiffractionData().getWidth() : diffractionImage.getDiffractionData().getWidth();
 
-        temp.getGeneratedImage().initializeIntensityMap(height, width);
+        temp.getDiffractionData().initializeIntensityMap(height, width);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                temp.getGeneratedImage().setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getGeneratedImage().getIntensityMapValue(y, x), backgroundImage.getGeneratedImage().getIntensityMapValue(y, x)));
+                temp.getDiffractionData().setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getDiffractionData().getIntensityMapValue(y, x), backgroundImage.getDiffractionData().getIntensityMapValue(y, x)));
             }
         }
 
