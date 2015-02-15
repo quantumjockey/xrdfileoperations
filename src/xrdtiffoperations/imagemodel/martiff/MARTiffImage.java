@@ -13,6 +13,7 @@ import xrdtiffoperations.imagemodel.header.TiffHeader;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTypes;
 import xrdtiffoperations.imagemodel.ifd.fields.SampleTypes;
+import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -21,6 +22,8 @@ public class MARTiffImage extends TiffBase {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
+    // Not yet useful, but is being included for storing calibration data bytes
+    protected CalibrationData calibration;
     protected DiffractionFrame diffractionData;
 
     // For indicating file format when converting data to byte array
@@ -36,12 +39,14 @@ public class MARTiffImage extends TiffBase {
 
     public MARTiffImage(String _filename) {
         super(_filename);
-        diffractionData = new DiffractionFrame();
+        calibration = new CalibrationData();
+        diffractionData = new DiffractionFrame(_filename);
         fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
     public MARTiffImage(DiffractionFrame data) {
         super(data.getIdentifier());
+        calibration = new CalibrationData();
         diffractionData = data;
         fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
@@ -95,7 +100,7 @@ public class MARTiffImage extends TiffBase {
         data = new byte[bufferLength];
         System.arraycopy(fileBytes, calibrationStartByte, data, 0, bufferLength);
 
-        diffractionData.getCalibration().fromByteArray(data, _byteOrder);
+        calibration.fromByteArray(data, _byteOrder);
     }
 
     private void getImageData(byte[] fileBytes, ByteOrder _byteOrder){

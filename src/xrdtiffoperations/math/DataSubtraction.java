@@ -14,7 +14,6 @@ public class DataSubtraction {
 
         filename = generateFilename(backgroundImage.getIdentifier(), diffractionImage.getIdentifier(), false);
         temp = new DiffractionFrame(filename);
-        temp.setCalibration(backgroundImage.getCalibration());
 
         height = (backgroundImage.getHeight() < diffractionImage.getHeight()) ? backgroundImage.getHeight() : diffractionImage.getHeight();
         width  = (backgroundImage.getWidth() < diffractionImage.getWidth()) ? backgroundImage.getWidth() : diffractionImage.getWidth();
