@@ -81,11 +81,16 @@ public class DiffractionFrame {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public DiffractionFrame() {
+    public DiffractionFrame(String id) {
         calibration = new CalibrationData();
         description = "";
+        identifier = id;
         imageXResolution = new ResolutionAxis();
         imageYResolution = new ResolutionAxis();
+    }
+
+    public DiffractionFrame() {
+        this("");
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////

@@ -40,6 +40,12 @@ public class MARTiffImage extends TiffBase {
         fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
+    public MARTiffImage(DiffractionFrame data) {
+        super(data.getIdentifier());
+        diffractionData = data;
+        fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
+    }
+
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public void setFileOutputFormat(String fileType){

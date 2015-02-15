@@ -1,32 +1,29 @@
 package xrdtiffoperations.math;
 
+import xrdtiffoperations.data.DiffractionFrame;
 import xrdtiffoperations.imagemodel.FileExtensions;
-import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
-import xrdtiffoperations.imagemodel.martiff.WritableMARTiffImage;
 
 public class DataSubtraction {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
-    public static MARTiffImage subtractImages(MARTiffImage backgroundImage, MARTiffImage diffractionImage){
+    public static DiffractionFrame subtractImages(DiffractionFrame backgroundImage, DiffractionFrame diffractionImage){
         String filename;
         int height, width;
-        WritableMARTiffImage temp;
+        DiffractionFrame temp;
 
-        filename = generateFilename(backgroundImage, diffractionImage, false);
-        temp = new WritableMARTiffImage(filename);
-        temp.setIfdListing(backgroundImage.getIfdListing());
-        temp.setHeader(backgroundImage.getHeader());
-        temp.getDiffractionData().setCalibration(backgroundImage.getDiffractionData().getCalibration());
+        filename = generateFilename(backgroundImage.getIdentifier(), diffractionImage.getIdentifier(), false);
+        temp = new DiffractionFrame(filename);
+        temp.setCalibration(backgroundImage.getCalibration());
 
-        height = (backgroundImage.getDiffractionData().getHeight() < diffractionImage.getDiffractionData().getHeight()) ? backgroundImage.getDiffractionData().getHeight() : diffractionImage.getDiffractionData().getHeight();
-        width  = (backgroundImage.getDiffractionData().getWidth() < diffractionImage.getDiffractionData().getWidth()) ? backgroundImage.getDiffractionData().getWidth() : diffractionImage.getDiffractionData().getWidth();
+        height = (backgroundImage.getHeight() < diffractionImage.getHeight()) ? backgroundImage.getHeight() : diffractionImage.getHeight();
+        width  = (backgroundImage.getWidth() < diffractionImage.getWidth()) ? backgroundImage.getWidth() : diffractionImage.getWidth();
 
-        temp.getDiffractionData().initializeIntensityMap(height, width);
+        temp.initializeIntensityMap(height, width);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                temp.getDiffractionData().setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getDiffractionData().getIntensityMapValue(y, x), backgroundImage.getDiffractionData().getIntensityMapValue(y, x)));
+                temp.setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getIntensityMapValue(y, x), backgroundImage.getIntensityMapValue(y, x)));
             }
         }
 
@@ -35,11 +32,11 @@ public class DataSubtraction {
 
     /////////// Private Methods /////////////////////////////////////////////////////////////////
 
-    private static String generateFilename(MARTiffImage backgroundImageFile, MARTiffImage diffractionImageFile, boolean longName){
+    private static String generateFilename(String backgroundImageFile, String diffractionImageFile, boolean longName){
         String firstSegment, result, secondSegment;
 
-        firstSegment = stripFilename(backgroundImageFile.getFilename());
-        secondSegment = stripFilename(diffractionImageFile.getFilename());
+        firstSegment = stripFilename(backgroundImageFile);
+        secondSegment = stripFilename(diffractionImageFile);
         if (longName){
             result = firstSegment + "_minus_" + secondSegment + FileExtensions.DEFAULT;
         }

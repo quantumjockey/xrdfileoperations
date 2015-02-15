@@ -1,35 +1,27 @@
 package xrdtiffoperations.math;
 
+import xrdtiffoperations.data.DiffractionFrame;
 import xrdtiffoperations.imagemodel.FileExtensions;
-import xrdtiffoperations.imagemodel.martiff.MARTiffImage;
-import xrdtiffoperations.imagemodel.martiff.WritableMARTiffImage;
 
 public class DataMasking {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
-    public static MARTiffImage maskImage(MARTiffImage image, int minVal, int maxVal){
-        String name;
-        WritableMARTiffImage temp;
-
-        temp = (WritableMARTiffImage)image;
-        name = generateFilename(image);
-        temp.setFilename(name);
-        for(int y = 0; y < temp.getDiffractionData().getHeight(); y++){
-            for (int x = 0; x < temp.getDiffractionData().getWidth(); x++){
-                temp.getDiffractionData().setIntensityMapCoordinate(y, x, maskValue(temp.getDiffractionData().getIntensityMapValue(y, x), maxVal, minVal));
+    public static void maskImage(DiffractionFrame image, int minVal, int maxVal){
+        image.setIdentifier(generateFilename(image.getIdentifier()));
+        for(int y = 0; y < image.getHeight(); y++){
+            for (int x = 0; x < image.getWidth(); x++){
+                image.setIntensityMapCoordinate(y, x, maskValue(image.getIntensityMapValue(y, x), maxVal, minVal));
             }
         }
-
-        return temp;
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
 
-    private static String generateFilename(MARTiffImage file){
+    private static String generateFilename(String fileName){
         String baseName, result;
 
-        baseName = stripFilename(file.getFilename());
+        baseName = stripFilename(fileName);
         result = baseName + FileExtensions.DEFAULT;
 
         return result;
