@@ -105,6 +105,8 @@ public class MARTiffImage extends TiffBase {
         sampleType = searchDirectoriesForTag(FieldTags.SAMPLE_FORMAT);
 
         generatedImage.initializeIntensityMap(imageHeight, imageWidth);
+        generatedImage.setImageXResolution(super.imageXResolution);
+        generatedImage.setImageYResolution(super.imageYResolution);
 
         switch (sampleByteLength){
             case 4:

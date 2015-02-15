@@ -34,14 +34,6 @@ public class TiffBase extends ByteSerializer {
         return ifdListing;
     }
 
-    public ResolutionAxis getImageXResolution(){
-        return imageXResolution;
-    }
-
-    public ResolutionAxis getImageYResolution(){
-        return imageYResolution;
-    }
-
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TiffBase(String _filename) {

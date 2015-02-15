@@ -1,5 +1,6 @@
 package xrdtiffoperations.data;
 
+import xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
 import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 
 public class DiffractionFrame {
@@ -12,6 +13,8 @@ public class DiffractionFrame {
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     protected CalibrationData calibration;
+    protected ResolutionAxis imageXResolution;
+    protected ResolutionAxis imageYResolution;
     protected int[][] intensityMap;
 
     // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
@@ -22,6 +25,14 @@ public class DiffractionFrame {
 
     public CalibrationData getCalibration(){
         return calibration;
+    }
+
+    public ResolutionAxis getImageXResolution(){
+        return imageXResolution;
+    }
+
+    public ResolutionAxis getImageYResolution(){
+        return imageYResolution;
     }
 
     public int getIntensityMapValue(int y, int x){
@@ -36,6 +47,14 @@ public class DiffractionFrame {
 
     public void setCalibration(CalibrationData data){
         calibration = data;
+    }
+
+    public void setImageXResolution(ResolutionAxis xRes){
+        imageXResolution = xRes;
+    }
+
+    public void setImageYResolution(ResolutionAxis yRes){
+        imageYResolution = yRes;
     }
 
     public void setIntensityMapCoordinate(int y, int x, int value){
