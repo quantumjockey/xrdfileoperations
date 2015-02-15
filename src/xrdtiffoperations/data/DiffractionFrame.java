@@ -13,6 +13,8 @@ public class DiffractionFrame {
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     protected CalibrationData calibration;
+    protected String description;
+    protected String identifier;
     protected ResolutionAxis imageXResolution;
     protected ResolutionAxis imageYResolution;
     protected int[][] intensityMap;
@@ -25,6 +27,14 @@ public class DiffractionFrame {
 
     public CalibrationData getCalibration(){
         return calibration;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 
     public ResolutionAxis getImageXResolution(){
@@ -49,6 +59,14 @@ public class DiffractionFrame {
         calibration = data;
     }
 
+    public void setDescription(String desc){
+        description = desc;
+    }
+
+    public void setIdentifier(String id){
+        identifier = id;
+    }
+
     public void setImageXResolution(ResolutionAxis xRes){
         imageXResolution = xRes;
     }
@@ -65,6 +83,9 @@ public class DiffractionFrame {
 
     public DiffractionFrame() {
         calibration = new CalibrationData();
+        description = "";
+        imageXResolution = new ResolutionAxis();
+        imageYResolution = new ResolutionAxis();
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
