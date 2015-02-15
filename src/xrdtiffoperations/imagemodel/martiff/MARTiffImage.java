@@ -1,5 +1,6 @@
 package xrdtiffoperations.imagemodel.martiff;
 
+import xrdtiffoperations.data.DiffractionFrame;
 import xrdtiffoperations.filehandling.bytewrappers.SignedFloatWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
@@ -18,19 +19,9 @@ import java.nio.ByteOrder;
 
 public class MARTiffImage extends TiffBase {
 
-    /////////// Constants ///////////////////////////////////////////////////////////////////
-
-    private final int INTENSITY_MAXIMUM = Integer.MAX_VALUE;
-    private final int INTENSITY_MINIMUM = Integer.MIN_VALUE;
-
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    protected CalibrationData calibration;
-    protected int[][] intensityMap;
-
-    // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
-    private int intensityMax;
-    private int intensityMin;
+    protected DiffractionFrame generatedImage;
 
     // For indicating file format when converting data to byte array
     private String fileOutputFormat;
@@ -38,49 +29,37 @@ public class MARTiffImage extends TiffBase {
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public CalibrationData getCalibration(){
-        return calibration;
+        return generatedImage.getCalibration();
     }
 
     public int getIntensityMapValue(int y, int x){
-        return intensityMap[y][x];
+        return generatedImage.getIntensityMapValue(y,x);
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public MARTiffImage(String _filename) {
         super(_filename);
-        calibration = new CalibrationData();
+        generatedImage = new DiffractionFrame();
         fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public int getMaxValue(){
-        intensityMax = INTENSITY_MINIMUM;
-        cycleImageDataBytes((y, x) -> {
-            if (intensityMap[y][x] > intensityMax) {
-                intensityMax = intensityMap[y][x];
-            }
-        });
-        return intensityMax;
+        return generatedImage.getMaxValue();
     }
 
     public int getMinValue(){
-        intensityMin = INTENSITY_MAXIMUM;
-        cycleImageDataBytes((y, x) -> {
-            if (intensityMap[y][x] < intensityMin) {
-                intensityMin = intensityMap[y][x];
-            }
-        });
-        return intensityMin;
+        return generatedImage.getMinValue();
     }
 
     public int getHeight(){
-        return intensityMap.length;
+        return generatedImage.getHeight();
     }
 
     public int getWidth(){
-        return intensityMap[0].length;
+        return generatedImage.getWidth();
     }
 
     public void setFileOutputFormat(String fileType){
@@ -109,29 +88,15 @@ public class MARTiffImage extends TiffBase {
         switch (imageType) {
             case FileTypes.TIFF_32_BIT_FLOAT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                cycleImageDataBytes((y, x) -> bytes.putFloat((float)getIntensityMapValue(y, x)));
+                generatedImage.cycleImageDataBytes((y, x) -> bytes.putFloat((float)getIntensityMapValue(y, x)));
                 break;
             default: //FileTypes.TIFF_32_BIT_INT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                cycleImageDataBytes((y, x) -> bytes.putInt(getIntensityMapValue(y, x)));
+                generatedImage.cycleImageDataBytes((y, x) -> bytes.putInt(getIntensityMapValue(y, x)));
                 break;
         }
 
         return bytes.array();
-    }
-
-    private void cycleImageDataBytes(EnvyForCSharpDelegates action){
-        for (int y = 0; y < getHeight(); y++){
-            for (int x = 0; x < getWidth(); x++){
-                try {
-                    action.callMethod(y, x);
-                }
-                catch (Exception e){
-                    System.out.println("Error accessing data at pixel (" + y + "," + x + ").");
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     private void getCalibrationData(byte[] fileBytes, ByteOrder _byteOrder){
@@ -144,7 +109,7 @@ public class MARTiffImage extends TiffBase {
         data = new byte[bufferLength];
         System.arraycopy(fileBytes, calibrationStartByte, data, 0, bufferLength);
 
-        calibration.fromByteArray(data, _byteOrder);
+        generatedImage.getCalibration().fromByteArray(data, _byteOrder);
     }
 
     private void getImageData(byte[] fileBytes, ByteOrder _byteOrder){
@@ -159,7 +124,7 @@ public class MARTiffImage extends TiffBase {
         sampleByteLength = searchDirectoriesForTag(FieldTags.BITS_PER_SAMPLE) / Byte.SIZE;
         sampleType = searchDirectoriesForTag(FieldTags.SAMPLE_FORMAT);
 
-        intensityMap = new int[imageHeight][imageWidth];
+        generatedImage.initializeIntensityMap(imageHeight, imageWidth);
 
         switch (sampleByteLength){
             case 4:
@@ -175,9 +140,9 @@ public class MARTiffImage extends TiffBase {
                 break;
         }
 
-        cycleImageDataBytes((y, x) -> {
+        generatedImage.cycleImageDataBytes((y, x) -> {
             System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTemp.getDataBytes(), 0, sampleByteLength);
-            intensityMap[y][x] = pixelTemp.getAsIntPrimitive();
+            generatedImage.setIntensityMapCoordinate(y, x, pixelTemp.getAsIntPrimitive());
         });
     }
 
@@ -249,12 +214,6 @@ public class MARTiffImage extends TiffBase {
         bytes.put(imageDataBytes);
 
         return bytes.array();
-    }
-
-    /////////// Private Interfaces //////////////////////////////////////////////////////////
-
-    private interface EnvyForCSharpDelegates {
-        void callMethod(int a, int b);
     }
 
 }

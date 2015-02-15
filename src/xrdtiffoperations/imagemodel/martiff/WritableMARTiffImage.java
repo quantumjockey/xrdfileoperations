@@ -27,15 +27,15 @@ public class WritableMARTiffImage extends MARTiffImage{
     // MARTiffImage fields
 
     public void initializeIntensityMap(int height, int width){
-        intensityMap = new int[height][width];
+        generatedImage.initializeIntensityMap(height, width);
     }
 
     public void setCalibration(CalibrationData data){
-        calibration = data;
+        generatedImage.setCalibration(data);
     }
 
-    public void setIntensityMapCoordinate(int y, int x, int value){
-        intensityMap[y][x] = value;
+    public void setIntensityMapCoordinate(int y, int x, int value) {
+        generatedImage.setIntensityMapCoordinate(y, x, value);
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
