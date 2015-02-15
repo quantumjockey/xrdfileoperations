@@ -28,12 +28,8 @@ public class MARTiffImage extends TiffBase {
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public CalibrationData getCalibration(){
-        return generatedImage.getCalibration();
-    }
-
-    public int getIntensityMapValue(int y, int x){
-        return generatedImage.getIntensityMapValue(y,x);
+    public DiffractionFrame getGeneratedImage(){
+        return generatedImage;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
@@ -45,22 +41,6 @@ public class MARTiffImage extends TiffBase {
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
-
-    public int getMaxValue(){
-        return generatedImage.getMaxValue();
-    }
-
-    public int getMinValue(){
-        return generatedImage.getMinValue();
-    }
-
-    public int getHeight(){
-        return generatedImage.getHeight();
-    }
-
-    public int getWidth(){
-        return generatedImage.getWidth();
-    }
 
     public void setFileOutputFormat(String fileType){
         this.fileOutputFormat = fileType;
@@ -83,16 +63,16 @@ public class MARTiffImage extends TiffBase {
         ByteBuffer bytes;
         int numPixels;
 
-        numPixels = getHeight() * getWidth();
+        numPixels = generatedImage.getHeight() * generatedImage.getWidth();
 
         switch (imageType) {
             case FileTypes.TIFF_32_BIT_FLOAT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                generatedImage.cycleImageDataBytes((y, x) -> bytes.putFloat((float)getIntensityMapValue(y, x)));
+                generatedImage.cycleImageDataBytes((y, x) -> bytes.putFloat((float) generatedImage.getIntensityMapValue(y, x)));
                 break;
             default: //FileTypes.TIFF_32_BIT_INT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                generatedImage.cycleImageDataBytes((y, x) -> bytes.putInt(getIntensityMapValue(y, x)));
+                generatedImage.cycleImageDataBytes((y, x) -> bytes.putInt(generatedImage.getIntensityMapValue(y, x)));
                 break;
         }
 
