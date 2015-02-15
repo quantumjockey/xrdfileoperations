@@ -1,7 +1,6 @@
 package xrdtiffoperations.data;
 
 import xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
-import xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
 
 public class DiffractionFrame {
 
@@ -12,7 +11,6 @@ public class DiffractionFrame {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    protected CalibrationData calibration;
     protected String description;
     protected String identifier;
     protected ResolutionAxis imageXResolution;
@@ -24,10 +22,6 @@ public class DiffractionFrame {
     private int intensityMin;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
-
-    public CalibrationData getCalibration(){
-        return calibration;
-    }
 
     public String getDescription() {
         return description;
@@ -50,14 +44,6 @@ public class DiffractionFrame {
     }
 
     /////////// Mutators ////////////////////////////////////////////////////////////////////
-
-    public void initializeIntensityMap(int height, int width){
-        intensityMap = new int[height][width];
-    }
-
-    public void setCalibration(CalibrationData data){
-        calibration = data;
-    }
 
     public void setDescription(String desc){
         description = desc;
@@ -82,7 +68,6 @@ public class DiffractionFrame {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public DiffractionFrame(String id) {
-        calibration = new CalibrationData();
         description = "";
         identifier = id;
         imageXResolution = new ResolutionAxis();
@@ -135,6 +120,10 @@ public class DiffractionFrame {
 
     public int getWidth(){
         return intensityMap[0].length;
+    }
+
+    public void initializeIntensityMap(int height, int width){
+        intensityMap = new int[height][width];
     }
 
     /////////// Public Interfaces ///////////////////////////////////////////////////////////
