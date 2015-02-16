@@ -173,6 +173,17 @@ public class MARTiffImage extends TiffBase {
         this.getIfdListing().get(0).addEntry(FieldTags.SAMPLE_FORMAT, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, sampleFormat);
     }
 
+    private void generateNewFileHeader(){
+        this.header.setByteOrder(ByteOrder.nativeOrder());
+        this.header.setFileID((short) 42);
+        this.header.setFirstIfdOffset(8);
+    }
+
+    private void syncImageResolutionData(){
+        this.imageXResolution = diffractionData.getImageXResolution();
+        this.imageYResolution = diffractionData.getImageYResolution();
+    }
+
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
@@ -190,6 +201,8 @@ public class MARTiffImage extends TiffBase {
         byte[] emptyBytes, imageDataBytes, imageMetaBytes;
         int totalSize;
 
+        generateNewFileHeader();
+        syncImageResolutionData();
         imageDataBytes = createImageBytes(order, this.fileOutputFormat);
         generateNewIfdForImageExport(this.fileOutputFormat, imageDataBytes.length);
 

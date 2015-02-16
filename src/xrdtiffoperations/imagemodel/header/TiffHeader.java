@@ -37,6 +37,20 @@ public class TiffHeader extends ByteSerializer{
         return firstIfdOffset;
     }
 
+    /////////// Mutators ////////////////////////////////////////////////////////////////////
+
+    public void setByteOrder(ByteOrder order){
+        byteOrder = order;
+    }
+
+    public void setFileID(short id){
+        fileID = id;
+    }
+
+    public void setFirstIfdOffset(int offset){
+        firstIfdOffset = offset;
+    }
+
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
