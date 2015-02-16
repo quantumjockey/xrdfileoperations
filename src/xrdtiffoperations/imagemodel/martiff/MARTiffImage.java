@@ -10,6 +10,8 @@ import xrdtiffoperations.imagemodel.FileTypes;
 import xrdtiffoperations.imagemodel.TiffBase;
 import xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
 import xrdtiffoperations.imagemodel.header.TiffHeader;
+import xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
+import xrdtiffoperations.imagemodel.ifd.fields.DirectoryField;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import xrdtiffoperations.imagemodel.ifd.fields.FieldTypes;
 import xrdtiffoperations.imagemodel.ifd.fields.SampleTypes;
@@ -139,15 +141,8 @@ public class MARTiffImage extends TiffBase {
         });
     }
 
-    private void modifyImageIfdForImageExport(String imageType, int imageByteCount){
+    private void generateNewIfdForImageExport(String imageType, int imageByteCount){
         int bitsPerSample, sampleFormat;
-
-        this.getIfdListing().get(0).removeEntry(FieldTags.BITS_PER_SAMPLE);
-        this.getIfdListing().get(0).removeEntry(FieldTags.STRIP_OFFSETS);
-        this.getIfdListing().get(0).removeEntry(FieldTags.ORIENTATION);
-        this.getIfdListing().get(0).removeEntry(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED);
-        this.getIfdListing().get(0).removeEntry(FieldTags.STRIP_BYTE_COUNTS);
-        this.getIfdListing().get(0).removeEntry(FieldTags.SAMPLE_FORMAT);
 
         switch (imageType) {
             case FileTypes.TIFF_32_BIT_FLOAT:
@@ -160,20 +155,22 @@ public class MARTiffImage extends TiffBase {
                 break;
         }
 
+        int byteLength = TiffHeader.BYTE_LENGTH + (DirectoryField.BYTE_LENGTH * 12);
+
+        this.getIfdListing().clear();
+        this.getIfdListing().add(new ImageFileDirectory());
+        this.getIfdListing().get(0).addEntry(FieldTags.IMAGE_WIDTH, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, diffractionData.getWidth());
+        this.getIfdListing().get(0).addEntry(FieldTags.IMAGE_HEIGHT, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, diffractionData.getHeight());
         this.getIfdListing().get(0).addEntry(FieldTags.BITS_PER_SAMPLE, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, bitsPerSample);
+        this.getIfdListing().get(0).addEntry(FieldTags.COMPRESSION, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, 1);
+        this.getIfdListing().get(0).addEntry(FieldTags.PHOTOMETRIC_INTERPRETATION, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, 1);
         this.getIfdListing().get(0).addEntry(FieldTags.STRIP_OFFSETS, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, 512);
+        this.getIfdListing().get(0).addEntry(FieldTags.ROWS_PER_STRIP, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, diffractionData.getHeight());
         this.getIfdListing().get(0).addEntry(FieldTags.STRIP_BYTE_COUNTS, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, imageByteCount);
-        this.getIfdListing().get(0).addEntry(FieldTags.SAMPLE_FORMAT, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, sampleFormat);
-
-        int byteLength = TiffHeader.BYTE_LENGTH + this.getIfdListing().get(0).getByteLength();
-
-        this.getIfdListing().get(0).removeEntry(FieldTags.X_RESOLUTION_OFFSET);
         this.getIfdListing().get(0).addEntry(FieldTags.X_RESOLUTION_OFFSET, FieldTypes.RATIONAL, 1, byteLength);
-
-        this.getIfdListing().get(0).removeEntry(FieldTags.Y_RESOLUTION_OFFSET);
         this.getIfdListing().get(0).addEntry(FieldTags.Y_RESOLUTION_OFFSET, FieldTypes.RATIONAL, 1, byteLength + ResolutionAxis.BYTE_LENGTH);
-
-        this.getIfdListing().get(0).sort();
+        this.getIfdListing().get(0).addEntry(FieldTags.RESOLUTION_UNIT, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, 3);
+        this.getIfdListing().get(0).addEntry(FieldTags.SAMPLE_FORMAT, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, sampleFormat);
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
@@ -194,7 +191,7 @@ public class MARTiffImage extends TiffBase {
         int totalSize;
 
         imageDataBytes = createImageBytes(order, this.fileOutputFormat);
-        modifyImageIfdForImageExport(this.fileOutputFormat, imageDataBytes.length);
+        generateNewIfdForImageExport(this.fileOutputFormat, imageDataBytes.length);
 
         imageMetaBytes = super.toByteArray(order);
         emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(FieldTags.STRIP_OFFSETS));
