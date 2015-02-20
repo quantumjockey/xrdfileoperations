@@ -80,36 +80,29 @@ public class DiffractionFrame {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void cycleImageDataBytes(EnvyForCSharpDelegates action){
-        for (int y = 0; y < getHeight(); y++){
-            for (int x = 0; x < getWidth(); x++){
-                try {
-                    action.callMethod(y, x);
-                }
-                catch (Exception e){
-                    System.out.println("Error accessing data at pixel (" + y + "," + x + ").");
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void cycleImageDataBytes(EnvyForCSharpDelegates action) {
+        // Issues with multi-threaded execution in JavaFX will be resolved in the future, but
+        // are being tabled for purposes of implementing additional features at this time.
+        //if (!useMultiThreading)
+        cycleMap(0, getHeight(), action);
+        //else
+        //    cycleMapConcurrent(action);
     }
 
     public int getMaxValue(){
         intensityMax = INTENSITY_MINIMUM;
         cycleImageDataBytes((y, x) -> {
-            if (intensityMap[y][x] > intensityMax) {
+            if (intensityMap[y][x] > intensityMax)
                 intensityMax = intensityMap[y][x];
-            }
         });
         return intensityMax;
     }
 
-    public int getMinValue(){
+    public int getMinValue() {
         intensityMin = INTENSITY_MAXIMUM;
         cycleImageDataBytes((y, x) -> {
-            if (intensityMap[y][x] < intensityMin) {
+            if (intensityMap[y][x] < intensityMin)
                 intensityMin = intensityMap[y][x];
-            }
         });
         return intensityMin;
     }
@@ -124,6 +117,25 @@ public class DiffractionFrame {
 
     public void initializeIntensityMap(int height, int width){
         intensityMap = new int[height][width];
+    }
+
+    /////////// Private Methods /////////////////////////////////////////////////////////////
+
+    private void cycleMap(int startRow, int endRow, EnvyForCSharpDelegates action) {
+        for (int y = startRow; y < endRow; y++) {
+            cycleRow(y, action);
+        }
+    }
+
+    private void cycleRow(int y, EnvyForCSharpDelegates action) {
+        for (int x = 0; x < getWidth(); x++) {
+            try {
+                action.callMethod(y, x);
+            } catch (Exception e) {
+                System.out.println("Error accessing data at pixel (" + y + "," + x + ").");
+                e.printStackTrace();
+            }
+        }
     }
 
     /////////// Public Interfaces ///////////////////////////////////////////////////////////
