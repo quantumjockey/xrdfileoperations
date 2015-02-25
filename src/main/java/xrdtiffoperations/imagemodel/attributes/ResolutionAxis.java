@@ -63,12 +63,10 @@ public class ResolutionAxis extends ByteSerializer {
     @Override
     public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
-
         bytes = ByteBuffer.allocate(BYTE_LENGTH);
         bytes.order(order);
         bytes.putInt(numerator);
         bytes.putInt(denominator);
-
         return bytes.array();
     }
 

@@ -31,11 +31,9 @@ public class CalibrationData extends ByteSerializer {
     @Override
     public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
-
         bytes = ByteBuffer.allocate(coreCalibrationBytes.length);
         bytes.order(order);
         bytes.put(coreCalibrationBytes);
-
         return bytes.array();
     }
 

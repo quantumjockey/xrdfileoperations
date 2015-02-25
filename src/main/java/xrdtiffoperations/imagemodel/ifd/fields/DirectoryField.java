@@ -77,14 +77,12 @@ public class DirectoryField extends ByteSerializer {
     @Override
     public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
-
         bytes = ByteBuffer.allocate(BYTE_LENGTH);
         bytes.order(order);
         bytes.putShort(this.getTag());
         bytes.putShort(this.getType());
         bytes.putInt(this.getCount());
         bytes.putInt(this.getValue());
-
         return bytes.array();
     }
 

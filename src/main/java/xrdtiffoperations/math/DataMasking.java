@@ -28,6 +28,7 @@ public class DataMasking {
         int value;
 
         value = _value;
+        
         if (value < _min)
             value = _min;
         else if (value > _max)

@@ -48,12 +48,10 @@ public class TiffBase extends ByteSerializer {
 
     public int searchDirectoriesForTag(int tag) {
         int _value = 0;
-
         for (ImageFileDirectory directory : ifdListing)
             for (DirectoryField item : directory.getFields())
                 if (item.getTag() == tag)
                     _value = item.getValue();
-
         return _value;
     }
 
@@ -106,14 +104,12 @@ public class TiffBase extends ByteSerializer {
     @Override
     public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
-
         bytes = ByteBuffer.allocate(TiffHeader.BYTE_LENGTH + ifdListing.get(0).getByteLength() + (ResolutionAxis.BYTE_LENGTH * 2));
         bytes.order(order);
         bytes.put(header.toByteArray(order));
         bytes.put(ifdListing.get(0).toByteArray(order));
         bytes.put(imageXResolution.toByteArray(order));
         bytes.put(imageYResolution.toByteArray(order));
-
         return bytes.array();
     }
 
