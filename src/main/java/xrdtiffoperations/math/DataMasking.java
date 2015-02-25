@@ -9,7 +9,7 @@ public class DataMasking {
 
     public static void maskImage(DiffractionFrame image, int minVal, int maxVal) {
         image.setIdentifier(generateFilename(image.getIdentifier()));
-        image.cycleImageDataBytes((y, x) ->
+        image.cycleFramePixels((y, x) ->
                 image.setIntensityMapCoordinate(y, x, maskValue(image.getIntensityMapValue(y, x), maxVal, minVal)));
     }
 

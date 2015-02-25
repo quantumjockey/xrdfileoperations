@@ -81,11 +81,11 @@ public class MARTiffImage extends TiffBase {
         switch (imageType) {
             case FileTypes.TIFF_32_BIT_FLOAT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                diffractionData.cycleImageDataBytes((y, x) -> bytes.putFloat((float) diffractionData.getIntensityMapValue(y, x)));
+                diffractionData.cycleFramePixels((y, x) -> bytes.putFloat((float) diffractionData.getIntensityMapValue(y, x)));
                 break;
             default: //FileTypes.TIFF_32_BIT_INT:
                 bytes = createByteBuffer(order, numPixels, 4);
-                diffractionData.cycleImageDataBytes((y, x) -> bytes.putInt(diffractionData.getIntensityMapValue(y, x)));
+                diffractionData.cycleFramePixels((y, x) -> bytes.putInt(diffractionData.getIntensityMapValue(y, x)));
                 break;
         }
 
@@ -135,7 +135,7 @@ public class MARTiffImage extends TiffBase {
                 break;
         }
 
-        diffractionData.cycleImageDataBytes((y, x) -> {
+        diffractionData.cycleFramePixels((y, x) -> {
             System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTemp.getDataBytes(), 0, sampleByteLength);
             diffractionData.setIntensityMapCoordinate(y, x, pixelTemp.getAsIntPrimitive());
         });

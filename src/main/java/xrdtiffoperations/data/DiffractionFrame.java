@@ -80,7 +80,7 @@ public class DiffractionFrame {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void cycleImageDataBytes(EnvyForCSharpDelegates action) {
+    public void cycleFramePixels(EnvyForCSharpDelegates action) {
         // Issues with multi-threaded execution in JavaFX will be resolved in the future, but
         // are being tabled for purposes of implementing additional features at this time.
         //if (!useMultiThreading)
@@ -91,7 +91,7 @@ public class DiffractionFrame {
 
     public int getMaxValue(){
         intensityMax = INTENSITY_MINIMUM;
-        cycleImageDataBytes((y, x) -> {
+        cycleFramePixels((y, x) -> {
             if (intensityMap[y][x] > intensityMax)
                 intensityMax = intensityMap[y][x];
         });
@@ -100,7 +100,7 @@ public class DiffractionFrame {
 
     public int getMinValue() {
         intensityMin = INTENSITY_MAXIMUM;
-        cycleImageDataBytes((y, x) -> {
+        cycleFramePixels((y, x) -> {
             if (intensityMap[y][x] < intensityMin)
                 intensityMin = intensityMap[y][x];
         });

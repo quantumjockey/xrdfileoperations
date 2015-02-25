@@ -19,8 +19,8 @@ public class DataSubtraction {
         width = (backgroundImage.getWidth() < diffractionImage.getWidth()) ? backgroundImage.getWidth() : diffractionImage.getWidth();
 
         temp.initializeIntensityMap(height, width);
-        temp.cycleImageDataBytes((y, x) ->
-            temp.setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getIntensityMapValue(y, x), backgroundImage.getIntensityMapValue(y, x))));
+        temp.cycleFramePixels((y, x) ->
+                temp.setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getIntensityMapValue(y, x), backgroundImage.getIntensityMapValue(y, x))));
 
         return temp;
     }
