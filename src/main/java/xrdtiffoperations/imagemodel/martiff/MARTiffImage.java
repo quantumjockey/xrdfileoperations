@@ -33,7 +33,7 @@ public class MARTiffImage extends TiffBase {
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public DiffractionFrame getDiffractionData(){
+    public DiffractionFrame getDiffractionData() {
         return diffractionData;
     }
 
@@ -55,13 +55,13 @@ public class MARTiffImage extends TiffBase {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void setFileOutputFormat(String fileType){
+    public void setFileOutputFormat(String fileType) {
         this.fileOutputFormat = fileType;
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private ByteBuffer createByteBuffer(ByteOrder order, int numPixels, int bytesPerPixel){
+    private ByteBuffer createByteBuffer(ByteOrder order, int numPixels, int bytesPerPixel) {
         ByteBuffer buffer;
         int numBytes;
 
@@ -72,7 +72,7 @@ public class MARTiffImage extends TiffBase {
         return buffer;
     }
 
-    private byte[] createImageBytes(ByteOrder order, String imageType){
+    private byte[] createImageBytes(ByteOrder order, String imageType) {
         ByteBuffer bytes;
         int numPixels;
 
@@ -92,7 +92,7 @@ public class MARTiffImage extends TiffBase {
         return bytes.array();
     }
 
-    private void getCalibrationData(byte[] fileBytes, ByteOrder _byteOrder){
+    private void getCalibrationData(byte[] fileBytes, ByteOrder _byteOrder) {
         int bufferLength, calibrationStartByte, imageStartByte;
         byte[] data;
 
@@ -105,7 +105,7 @@ public class MARTiffImage extends TiffBase {
         calibration.fromByteArray(data, _byteOrder);
     }
 
-    private void getImageData(byte[] fileBytes, ByteOrder _byteOrder){
+    private void getImageData(byte[] fileBytes, ByteOrder _byteOrder) {
         IntegerWrapper pixelTemp;
         int startingByte;
         int imageHeight, imageWidth;
@@ -121,7 +121,7 @@ public class MARTiffImage extends TiffBase {
         diffractionData.setImageXResolution(super.imageXResolution);
         diffractionData.setImageYResolution(super.imageYResolution);
 
-        switch (sampleByteLength){
+        switch (sampleByteLength) {
             case 4:
                 pixelTemp = (sampleType == SampleTypes.IEEE_FLOATING_POINT_DATA)
                         ? new SignedFloatWrapper(_byteOrder)
@@ -141,7 +141,7 @@ public class MARTiffImage extends TiffBase {
         });
     }
 
-    private void generateNewIfdForImageExport(String imageType, int imageByteCount){
+    private void generateNewIfdForImageExport(String imageType, int imageByteCount) {
         int bitsPerSample, sampleFormat;
 
         switch (imageType) {
@@ -173,13 +173,13 @@ public class MARTiffImage extends TiffBase {
         this.getIfdListing().get(0).addEntry(FieldTags.SAMPLE_FORMAT, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, sampleFormat);
     }
 
-    private void generateNewFileHeader(){
+    private void generateNewFileHeader() {
         this.header.setByteOrder(ByteOrder.nativeOrder());
         this.header.setFileID((short) 42);
         this.header.setFirstIfdOffset(8);
     }
 
-    private void syncImageResolutionData(){
+    private void syncImageResolutionData() {
         this.imageXResolution = diffractionData.getImageXResolution();
         this.imageYResolution = diffractionData.getImageYResolution();
     }
@@ -187,16 +187,15 @@ public class MARTiffImage extends TiffBase {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
         super.fromByteArray(dataBytes, order);
-        if (this.getIfdListing().get(0).getTagValue(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED) != -1){
+        if (this.getIfdListing().get(0).getTagValue(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED) != -1)
             getCalibrationData(dataBytes, header.getByteOrder());
-        }
         getImageData(dataBytes, header.getByteOrder());
     }
 
     @Override
-    public byte[] toByteArray(ByteOrder order){
+    public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
         byte[] emptyBytes, imageDataBytes, imageMetaBytes;
         int totalSize;

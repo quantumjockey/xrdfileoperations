@@ -18,7 +18,7 @@ public class TiffReader {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public TiffReader(Path filePath) throws IOException{
+    public TiffReader(Path filePath) throws IOException {
         fileBytesRaw = Files.readAllBytes(filePath);
         marImageData = new MARTiffImage(filePath.getFileName().toString());
         fileHasBeenRead = false;
@@ -26,18 +26,16 @@ public class TiffReader {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void readFileData(){
+    public void readFileData() {
         marImageData.fromByteArray(fileBytesRaw, null);
         fileHasBeenRead = true;
     }
 
-    public MARTiffImage getImageData(){
-        if (fileHasBeenRead) {
+    public MARTiffImage getImageData() {
+        if (fileHasBeenRead)
             return marImageData;
-        }
-        else {
+        else
             return null;
-        }
     }
 
 }

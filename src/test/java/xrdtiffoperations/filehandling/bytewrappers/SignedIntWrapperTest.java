@@ -10,7 +10,6 @@ public class SignedIntWrapperTest {
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
 
-
     /////////// Setup/Teardown //////////////////////////////////////////////////////////////
 
     @Before
@@ -26,22 +25,23 @@ public class SignedIntWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void get_integerWithinBoundsConverted_returnInput(){
+    public void get_integerWithinBoundsConverted_returnInput() {
 
     }
 
     @Test
-    public void get_integerBeyondBoundsConverted_returnZero(){
+    public void get_integerBeyondBoundsConverted_returnZero() {
 
     }
 
     @Test
-    public void get_InvalidByteArraySize_returnZero(){
+    public void get_InvalidByteArraySize_returnZero() {
 
     }
 
     @Test
-    public void get_IntegerBeyondStorableLimit_returnZero(){
+    public void get_IntegerBeyondStorableLimit_returnZero() {
 
     }
+
 }

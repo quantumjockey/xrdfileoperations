@@ -26,32 +26,32 @@ public class DirectoryField extends ByteSerializer {
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public short getTag(){
+    public short getTag() {
         return tag;
     }
 
-    public short getType(){
+    public short getType() {
         return type;
     }
 
-    public int getCount(){
+    public int getCount() {
         return count;
     }
 
-    public int getValue(){
+    public int getValue() {
         return value;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public DirectoryField(){
+    public DirectoryField() {
         this.count = 1;
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
         SignedShortWrapper _fieldTag, _fieldType;
         SignedIntWrapper _fieldValue, _typeCount;
 
@@ -70,14 +70,12 @@ public class DirectoryField extends ByteSerializer {
             type = _fieldType.get();
             count = _typeCount.get();
             value = _fieldValue.get();
-        }
-        else{
+        } else
             displaySizeAlert(dataBytes.length, BYTE_LENGTH);
-        }
     }
 
     @Override
-    public byte[] toByteArray(ByteOrder order){
+    public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
 
         bytes = ByteBuffer.allocate(BYTE_LENGTH);

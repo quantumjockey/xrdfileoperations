@@ -8,19 +8,19 @@ public class SignedIntWrapper extends ByteWrapper<Integer> implements IntegerWra
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public SignedIntWrapper(ByteOrder order){
+    public SignedIntWrapper(ByteOrder order) {
         super(Integer.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Integer get(){
+    public Integer get() {
         wrap();
         return buffer.getInt();
     }
 
-    public int getAsIntPrimitive(){
+    public int getAsIntPrimitive() {
         return get();
     }
 

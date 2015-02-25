@@ -22,15 +22,15 @@ public class TiffBase extends ByteSerializer {
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public String getFilename(){
+    public String getFilename() {
         return filename;
     }
 
-    public TiffHeader getHeader(){
+    public TiffHeader getHeader() {
         return header;
     }
 
-    public ArrayList<ImageFileDirectory> getIfdListing(){
+    public ArrayList<ImageFileDirectory> getIfdListing() {
         return ifdListing;
     }
 
@@ -46,27 +46,26 @@ public class TiffBase extends ByteSerializer {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public int searchDirectoriesForTag(int tag){
+    public int searchDirectoriesForTag(int tag) {
         int _value = 0;
-        for (ImageFileDirectory directory : ifdListing){
-            for (DirectoryField item : directory.getFields()){
-                if (item.getTag() == tag){
+
+        for (ImageFileDirectory directory : ifdListing)
+            for (DirectoryField item : directory.getFields())
+                if (item.getTag() == tag)
                     _value = item.getValue();
-                }
-            }
-        }
+
         return _value;
     }
 
     /////////// Private Methods //////////////////////////////////////////////////////////////
 
-    private void getFileHeader(byte[] imageData){
+    private void getFileHeader(byte[] imageData) {
         byte[] headerBytes = new byte[TiffHeader.BYTE_LENGTH];
         System.arraycopy(imageData, 0, headerBytes, 0, TiffHeader.BYTE_LENGTH);
         header.fromByteArray(headerBytes, null);
     }
 
-    private void getFirstIFD(byte[] imageData, int firstIfdOffset, ByteOrder _byteOrder){
+    private void getFirstIFD(byte[] imageData, int firstIfdOffset, ByteOrder _byteOrder) {
         byte[] directoryBytes;
         int directoryLength, fieldsCount;
         ImageFileDirectory directory;
@@ -83,7 +82,7 @@ public class TiffBase extends ByteSerializer {
         ifdListing.add(directory);
     }
 
-    private void getImageResolution(byte[] imageData, ByteOrder order){
+    private void getImageResolution(byte[] imageData, ByteOrder order) {
         byte[] xRes, yRes;
 
         xRes = new byte[ResolutionAxis.BYTE_LENGTH];
@@ -98,14 +97,14 @@ public class TiffBase extends ByteSerializer {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
         getFileHeader(dataBytes);
         getFirstIFD(dataBytes, header.getFirstIfdOffset(), header.getByteOrder());
         getImageResolution(dataBytes, order);
     }
 
     @Override
-    public byte[] toByteArray(ByteOrder order){
+    public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
 
         bytes = ByteBuffer.allocate(TiffHeader.BYTE_LENGTH + ifdListing.get(0).getByteLength() + (ResolutionAxis.BYTE_LENGTH * 2));

@@ -10,7 +10,6 @@ public class UnsignedShortWrapperTest {
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
 
-
     /////////// Setup/Teardown //////////////////////////////////////////////////////////////
 
     @Before
@@ -26,22 +25,23 @@ public class UnsignedShortWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void get_characterConverted_returnInput(){
+    public void get_characterConverted_returnInput() {
 
     }
 
     @Test
-    public void get_integerWithinBoundsConverted_returnInput(){
+    public void get_integerWithinBoundsConverted_returnInput() {
 
     }
 
     @Test
-    public void get_InvalidByteArraySize_returnZero(){
+    public void get_InvalidByteArraySize_returnZero() {
 
     }
 
     @Test
-    public void get_CharacterBeyondStorableLimit_returnZero(){
+    public void get_CharacterBeyondStorableLimit_returnZero() {
 
     }
+
 }

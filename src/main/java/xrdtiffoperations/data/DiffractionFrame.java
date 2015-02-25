@@ -122,9 +122,8 @@ public class DiffractionFrame {
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
     private void cycleMap(int startRow, int endRow, EnvyForCSharpDelegates action) {
-        for (int y = startRow; y < endRow; y++) {
+        for (int y = startRow; y < endRow; y++)
             cycleRow(y, action);
-        }
     }
 
     private void cycleRow(int y, EnvyForCSharpDelegates action) {

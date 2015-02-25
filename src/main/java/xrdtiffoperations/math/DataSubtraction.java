@@ -7,7 +7,7 @@ public class DataSubtraction {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
-    public static DiffractionFrame subtractImages(DiffractionFrame backgroundImage, DiffractionFrame diffractionImage){
+    public static DiffractionFrame subtractImages(DiffractionFrame backgroundImage, DiffractionFrame diffractionImage) {
         String filename;
         int height, width;
         DiffractionFrame temp;
@@ -16,30 +16,28 @@ public class DataSubtraction {
         temp = new DiffractionFrame(filename);
 
         height = (backgroundImage.getHeight() < diffractionImage.getHeight()) ? backgroundImage.getHeight() : diffractionImage.getHeight();
-        width  = (backgroundImage.getWidth() < diffractionImage.getWidth()) ? backgroundImage.getWidth() : diffractionImage.getWidth();
+        width = (backgroundImage.getWidth() < diffractionImage.getWidth()) ? backgroundImage.getWidth() : diffractionImage.getWidth();
 
         temp.initializeIntensityMap(height, width);
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
                 temp.setIntensityMapCoordinate(y, x, subtractIntensity(diffractionImage.getIntensityMapValue(y, x), backgroundImage.getIntensityMapValue(y, x)));
-            }
-        }
 
         return temp;
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////////
 
-    private static String generateFilename(String backgroundImageFile, String diffractionImageFile, boolean longName){
+    private static String generateFilename(String backgroundImageFile, String diffractionImageFile, boolean longName) {
         String firstSegment, result, secondSegment;
 
         firstSegment = stripFilename(backgroundImageFile);
         secondSegment = stripFilename(diffractionImageFile);
-        if (longName){
+
+        if (longName)
             result = firstSegment + "_minus_" + secondSegment + FileExtensions.DEFAULT;
-        }
-        else{
+        else {
             String[] suffixParts = secondSegment.split("_");
             result = firstSegment + "_bknd_" + suffixParts[suffixParts.length - 1] + FileExtensions.DEFAULT;
         }
@@ -47,11 +45,11 @@ public class DataSubtraction {
         return result;
     }
 
-    private static String stripFilename(String name){
+    private static String stripFilename(String name) {
         return name.replace(FileExtensions.DEFAULT, "");
     }
 
-    private static int subtractIntensity(int firstValue, int secondValue){
+    private static int subtractIntensity(int firstValue, int secondValue) {
         return (firstValue - secondValue);
     }
 

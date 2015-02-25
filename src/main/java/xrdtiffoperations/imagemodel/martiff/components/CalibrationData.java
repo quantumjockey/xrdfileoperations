@@ -12,23 +12,24 @@ public class CalibrationData extends ByteSerializer {
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public byte[] getCoreCalibrationBytes(){
+    public byte[] getCoreCalibrationBytes() {
         return coreCalibrationBytes;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public CalibrationData() { }
+    public CalibrationData() {
+    }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
         coreCalibrationBytes = dataBytes;
     }
 
     @Override
-    public byte[] toByteArray(ByteOrder order){
+    public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
 
         bytes = ByteBuffer.allocate(coreCalibrationBytes.length);

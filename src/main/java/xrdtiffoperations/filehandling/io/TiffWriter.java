@@ -16,14 +16,14 @@ public class TiffWriter {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public TiffWriter(MARTiffImage dataSource, String fileType){
+    public TiffWriter(MARTiffImage dataSource, String fileType) {
         cachedData = dataSource;
         cachedData.setFileOutputFormat(fileType);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void write(String path){
+    public void write(String path) {
         byte[] allBytes;
         Path destination;
 
@@ -32,15 +32,14 @@ public class TiffWriter {
 
         try {
             Files.write(destination, allBytes);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println("File could not be written.");
         }
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private byte[] generateFileBytes(){
+    private byte[] generateFileBytes() {
         ByteOrder order;
         int byteCount;
         byte[] imageData;

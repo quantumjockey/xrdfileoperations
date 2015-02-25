@@ -10,7 +10,6 @@ public class SignedShortWrapperTest {
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
 
-
     /////////// Setup/Teardown //////////////////////////////////////////////////////////////
 
     @Before
@@ -26,22 +25,23 @@ public class SignedShortWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void get_shortWithinBoundsConverted_returnInput(){
+    public void get_shortWithinBoundsConverted_returnInput() {
 
     }
 
     @Test
-    public void get_shortBeyondBoundsConverted_returnZero(){
+    public void get_shortBeyondBoundsConverted_returnZero() {
 
     }
 
     @Test
-    public void get_InvalidByteArraySize_returnZero(){
+    public void get_InvalidByteArraySize_returnZero() {
 
     }
 
     @Test
-    public void get_ShortBeyondStorableLimit_returnZero(){
+    public void get_ShortBeyondStorableLimit_returnZero() {
 
     }
+    
 }

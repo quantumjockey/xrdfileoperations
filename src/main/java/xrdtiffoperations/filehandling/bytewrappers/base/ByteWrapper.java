@@ -12,7 +12,7 @@ public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public ByteWrapper(int bitCount, ByteOrder _order){
+    public ByteWrapper(int bitCount, ByteOrder _order) {
         super();
         this.order = _order;
         this.dataBytes = new byte[getByteCount(bitCount)];
@@ -24,14 +24,14 @@ public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////
 
-    protected void wrap(){
+    protected void wrap() {
         this.buffer = ByteBuffer.wrap(dataBytes);
         this.buffer.order(order);
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private int getByteCount(int sizeInBits){
+    private int getByteCount(int sizeInBits) {
         return sizeInBits / Byte.SIZE;
     }
 

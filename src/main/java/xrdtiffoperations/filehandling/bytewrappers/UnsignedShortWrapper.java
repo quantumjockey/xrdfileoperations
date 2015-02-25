@@ -8,20 +8,20 @@ public class UnsignedShortWrapper extends ByteWrapper<Character> implements Inte
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public UnsignedShortWrapper(ByteOrder order){
+    public UnsignedShortWrapper(ByteOrder order) {
         super(Character.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Character get(){
+    public Character get() {
         wrap();
         return buffer.getChar();
     }
 
-    public int getAsIntPrimitive(){
-        return (int)get();
+    public int getAsIntPrimitive() {
+        return (int) get();
     }
 
 }

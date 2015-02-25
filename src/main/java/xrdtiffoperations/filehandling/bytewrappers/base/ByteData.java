@@ -8,13 +8,13 @@ public class ByteData {
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public byte[] getDataBytes(){
+    public byte[] getDataBytes() {
         return dataBytes;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public ByteData(int numBytes){
+    public ByteData(int numBytes) {
         this.dataBytes = new byte[numBytes];
     }
 

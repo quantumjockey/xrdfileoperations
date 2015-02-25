@@ -8,19 +8,19 @@ public class SignedFloatWrapper extends ByteWrapper<Float> implements IntegerWra
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public SignedFloatWrapper(ByteOrder order){
+    public SignedFloatWrapper(ByteOrder order) {
         super(Float.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Float get(){
+    public Float get() {
         wrap();
         return buffer.getFloat();
     }
 
-    public int getAsIntPrimitive(){
+    public int getAsIntPrimitive() {
         return Math.round(get());
     }
 

@@ -7,22 +7,22 @@ public class TiffByteOrderWrapper extends ByteData {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public TiffByteOrderWrapper(){
+    public TiffByteOrderWrapper() {
         super(2);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public ByteOrder get(){
+    public ByteOrder get() {
         return getByteOrder(new String(dataBytes));
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private ByteOrder getByteOrder(String orderId){
+    private ByteOrder getByteOrder(String orderId) {
         ByteOrder order;
 
-        switch (orderId){
+        switch (orderId) {
             case "II":
                 order = ByteOrder.LITTLE_ENDIAN;
                 break;

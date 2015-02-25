@@ -5,7 +5,7 @@ import xrdtiffoperations.imagemodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class ResolutionAxis extends ByteSerializer{
+public class ResolutionAxis extends ByteSerializer {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
@@ -18,31 +18,31 @@ public class ResolutionAxis extends ByteSerializer{
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public int getDenominator(){
+    public int getDenominator() {
         return denominator;
     }
 
-    public int getNumerator(){
+    public int getNumerator() {
         return numerator;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public ResolutionAxis(){
+    public ResolutionAxis() {
         numerator = 0;
         denominator = 1;
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public double getValue(){
-        return (double)numerator / (double)denominator;
+    public double getValue() {
+        return (double) numerator / (double) denominator;
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order){
+    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
         SignedIntWrapper denum, num;
         int valueLength;
 
@@ -56,14 +56,12 @@ public class ResolutionAxis extends ByteSerializer{
             denum = new SignedIntWrapper(order);
             System.arraycopy(dataBytes, valueLength, denum.getDataBytes(), 0, valueLength);
             denominator = denum.get();
-        }
-        else{
+        } else
             displaySizeAlert(dataBytes.length, BYTE_LENGTH);
-        }
     }
 
     @Override
-    public byte[] toByteArray(ByteOrder order){
+    public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
 
         bytes = ByteBuffer.allocate(BYTE_LENGTH);

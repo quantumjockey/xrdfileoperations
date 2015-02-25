@@ -9,24 +9,24 @@ public class SignedShortWrapper extends ByteWrapper<Short> implements IntegerWra
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public SignedShortWrapper(ByteOrder order){
+    public SignedShortWrapper(ByteOrder order) {
         super(Short.SIZE, order);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Short get(){
+    public Short get() {
         wrap();
         return buffer.getShort();
     }
 
-    public int getAsIntPrimitive(){
-        return (int)get();
+    public int getAsIntPrimitive() {
+        return (int) get();
     }
 
     @Override
-    public byte[] getDataBytes(){
+    public byte[] getDataBytes() {
         return super.getDataBytes();
     }
 
