@@ -1,13 +1,9 @@
 package edu.hipsec.xrdtiffoperations.data;
 
 import edu.hipsec.xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
+import edu.hipsec.xrdtiffoperations.twodimensionalmapping.TwoDimensionalIntegerMapping;
 
 public class DiffractionFrame {
-
-    /////////// Constants ///////////////////////////////////////////////////////////////////
-
-    private final int INTENSITY_MAXIMUM = Integer.MAX_VALUE;
-    private final int INTENSITY_MINIMUM = Integer.MIN_VALUE;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -15,11 +11,7 @@ public class DiffractionFrame {
     protected String identifier;
     protected ResolutionAxis imageXResolution;
     protected ResolutionAxis imageYResolution;
-    protected int[][] intensityMap;
-
-    // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
-    private int intensityMax;
-    private int intensityMin;
+    protected TwoDimensionalIntegerMapping intensityMap;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
@@ -40,7 +32,7 @@ public class DiffractionFrame {
     }
 
     public int getIntensityMapValue(int y, int x) {
-        return this.intensityMap[y][x];
+        return intensityMap.get(y, x);
     }
 
     /////////// Mutators ////////////////////////////////////////////////////////////////////
@@ -62,7 +54,7 @@ public class DiffractionFrame {
     }
 
     public void setIntensityMapCoordinate(int y, int x, int value) {
-        this.intensityMap[y][x] = value;
+        this.intensityMap.setMapCoordinate(y, x, value);
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
@@ -80,67 +72,28 @@ public class DiffractionFrame {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void cycleFramePixels(EnvyForCSharpDelegates action) {
-        // Issues with multi-threaded execution in JavaFX will be resolved in the future, but
-        // are being tabled for purposes of implementing additional features at this time.
-        //if (!useMultiThreading)
-        this.cycleMap(0, this.getHeight(), action);
-        //else
-        //    cycleMapConcurrent(action);
+    public void cycleFramePixels(TwoDimensionalIntegerMapping.EnvyForCSharpDelegates action) {
+        this.intensityMap.cycleMap(action);
     }
 
     public int getMaxValue() {
-        this.intensityMax = this.INTENSITY_MINIMUM;
-        this.cycleFramePixels((y, x) -> {
-            if (this.intensityMap[y][x] > this.intensityMax)
-                this.intensityMax = this.intensityMap[y][x];
-        });
-        return this.intensityMax;
+        return this.intensityMap.getMaxValue();
     }
 
     public int getMinValue() {
-        this.intensityMin = this.INTENSITY_MAXIMUM;
-        this.cycleFramePixels((y, x) -> {
-            if (this.intensityMap[y][x] < this.intensityMin)
-                this.intensityMin = this.intensityMap[y][x];
-        });
-        return this.intensityMin;
+        return this.intensityMap.getMinValue();
     }
 
     public int getHeight() {
-        return this.intensityMap.length;
+        return this.intensityMap.getHeight();
     }
 
     public int getWidth() {
-        return this.intensityMap[0].length;
+        return this.intensityMap.getWidth();
     }
 
     public void initializeIntensityMap(int height, int width) {
-        this.intensityMap = new int[height][width];
-    }
-
-    /////////// Private Methods /////////////////////////////////////////////////////////////
-
-    private void cycleMap(int startRow, int endRow, EnvyForCSharpDelegates action) {
-        for (int y = startRow; y < endRow; y++)
-            this.cycleRow(y, action);
-    }
-
-    private void cycleRow(int y, EnvyForCSharpDelegates action) {
-        for (int x = 0; x < this.getWidth(); x++) {
-            try {
-                action.callMethod(y, x);
-            } catch (Exception e) {
-                System.out.println("Error accessing data at pixel (" + y + "," + x + ").");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /////////// Public Interfaces ///////////////////////////////////////////////////////////
-
-    public interface EnvyForCSharpDelegates {
-        void callMethod(int a, int b);
+        this.intensityMap = new TwoDimensionalIntegerMapping(height, width);
     }
 
 }
