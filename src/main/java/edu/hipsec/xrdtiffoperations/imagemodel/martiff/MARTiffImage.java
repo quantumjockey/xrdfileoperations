@@ -16,7 +16,6 @@ import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.DirectoryField;
 import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
 import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.FieldTypes;
 import edu.hipsec.xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -41,16 +40,12 @@ public class MARTiffImage extends TiffBase {
 
     public MARTiffImage(String _filename) {
         super(_filename);
-        this.calibration = new CalibrationData();
-        this.diffractionData = new DiffractionFrame(_filename);
-        this.fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
+        this.initializeImageObject(new DiffractionFrame(_filename));
     }
 
     public MARTiffImage(DiffractionFrame data) {
         super(data.getIdentifier());
-        this.calibration = new CalibrationData();
-        this.diffractionData = data;
-        this.fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
+        this.initializeImageObject(data);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -177,6 +172,12 @@ public class MARTiffImage extends TiffBase {
         this.header.setByteOrder(ByteOrder.nativeOrder());
         this.header.setFileID((short) 42);
         this.header.setFirstIfdOffset(8);
+    }
+
+    private void initializeImageObject(DiffractionFrame data) {
+        this.calibration = new CalibrationData();
+        this.diffractionData = data;
+        this.fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
     private void syncImageResolutionData() {
