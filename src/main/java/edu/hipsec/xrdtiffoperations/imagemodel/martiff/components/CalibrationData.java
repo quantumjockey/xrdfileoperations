@@ -13,7 +13,7 @@ public class CalibrationData extends ByteSerializer {
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public byte[] getCoreCalibrationBytes() {
-        return coreCalibrationBytes;
+        return this.coreCalibrationBytes;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
@@ -25,15 +25,15 @@ public class CalibrationData extends ByteSerializer {
 
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order) {
-        coreCalibrationBytes = dataBytes;
+        this.coreCalibrationBytes = dataBytes;
     }
 
     @Override
     public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
-        bytes = ByteBuffer.allocate(coreCalibrationBytes.length);
+        bytes = ByteBuffer.allocate(this.coreCalibrationBytes.length);
         bytes.order(order);
-        bytes.put(coreCalibrationBytes);
+        bytes.put(this.coreCalibrationBytes);
         return bytes.array();
     }
 

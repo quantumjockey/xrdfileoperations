@@ -1,7 +1,6 @@
 package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers;
 
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.base.ByteData;
-
 import java.nio.ByteOrder;
 
 public class TiffByteOrderWrapper extends ByteData {
@@ -15,7 +14,7 @@ public class TiffByteOrderWrapper extends ByteData {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public ByteOrder get() {
-        return getByteOrder(new String(dataBytes));
+        return this.getByteOrder(new String(this.dataBytes));
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////

@@ -17,12 +17,12 @@ public class SignedShortWrapper extends ByteWrapper<Short> implements IntegerWra
 
     @Override
     public Short get() {
-        wrap();
-        return buffer.getShort();
+        this.wrap();
+        return this.buffer.getShort();
     }
 
     public int getAsIntPrimitive() {
-        return (int) get();
+        return (int) this.get();
     }
 
     @Override

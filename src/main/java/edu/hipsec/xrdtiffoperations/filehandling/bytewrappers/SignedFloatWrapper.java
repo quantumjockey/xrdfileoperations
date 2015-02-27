@@ -16,12 +16,12 @@ public class SignedFloatWrapper extends ByteWrapper<Float> implements IntegerWra
 
     @Override
     public Float get() {
-        wrap();
-        return buffer.getFloat();
+        this.wrap();
+        return this.buffer.getFloat();
     }
 
     public int getAsIntPrimitive() {
-        return Math.round(get());
+        return Math.round(this.get());
     }
 
 }

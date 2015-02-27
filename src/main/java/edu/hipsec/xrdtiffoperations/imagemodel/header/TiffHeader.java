@@ -4,7 +4,6 @@ import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.TiffByteOrderWrapper;
 import edu.hipsec.xrdtiffoperations.imagemodel.serialization.ByteSerializer;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -26,30 +25,30 @@ public class TiffHeader extends ByteSerializer {
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public ByteOrder getByteOrder(){
-        return byteOrder;
+    public ByteOrder getByteOrder() {
+        return this.byteOrder;
     }
 
-    public short getFileID(){
-        return fileID;
+    public short getFileID() {
+        return this.fileID;
     }
 
-    public int getFirstIfdOffset(){
-        return firstIfdOffset;
+    public int getFirstIfdOffset() {
+        return this.firstIfdOffset;
     }
 
     /////////// Mutators ////////////////////////////////////////////////////////////////////
 
-    public void setByteOrder(ByteOrder order){
-        byteOrder = order;
+    public void setByteOrder(ByteOrder order) {
+        this.byteOrder = order;
     }
 
-    public void setFileID(short id){
-        fileID = id;
+    public void setFileID(short id) {
+        this.fileID = id;
     }
 
-    public void setFirstIfdOffset(int offset){
-        firstIfdOffset = offset;
+    public void setFirstIfdOffset(int offset) {
+        this.firstIfdOffset = offset;
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
@@ -64,40 +63,40 @@ public class TiffHeader extends ByteSerializer {
             _byteOrder = new TiffByteOrderWrapper();
 
             // extract byte order
-            System.arraycopy(dataBytes, 0, _byteOrder.getDataBytes(), 0, ORDER_BYTES_LENGTH);
-            byteOrder = _byteOrder.get();
+            System.arraycopy(dataBytes, 0, _byteOrder.getDataBytes(), 0, this.ORDER_BYTES_LENGTH);
+            this.byteOrder = _byteOrder.get();
 
             _identifier = new SignedShortWrapper(_byteOrder.get());
             _ifdOffset = new SignedIntWrapper(_byteOrder.get());
 
             // extract file identifier
-            System.arraycopy(dataBytes, 2, _identifier.getDataBytes(), 0, FILE_ID_BYTES_LENGTH);
-            fileID = _identifier.get();
+            System.arraycopy(dataBytes, 2, _identifier.getDataBytes(), 0, this.FILE_ID_BYTES_LENGTH);
+            this.fileID = _identifier.get();
 
             // extract first IFD offset value
-            System.arraycopy(dataBytes, 4, _ifdOffset.getDataBytes(), 0, FIRST_IFD_OFFSET_BYTES_LENGTH);
-            firstIfdOffset = _ifdOffset.get();
+            System.arraycopy(dataBytes, 4, _ifdOffset.getDataBytes(), 0, this.FIRST_IFD_OFFSET_BYTES_LENGTH);
+            this.firstIfdOffset = _ifdOffset.get();
         } else
-            displaySizeAlert(dataBytes.length, BYTE_LENGTH);
+            this.displaySizeAlert(dataBytes.length, BYTE_LENGTH);
 
     }
 
     @Override
-    public byte[] toByteArray(ByteOrder order){
+    public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
         String id;
 
         bytes = ByteBuffer.allocate(BYTE_LENGTH);
         bytes.order(order);
 
-        if(order == ByteOrder.BIG_ENDIAN)
+        if (order == ByteOrder.BIG_ENDIAN)
             id = ByteOrderString.BIG_ENDIAN_STRING;
         else
             id = ByteOrderString.LITTLE_ENDIAN_STRING;
 
         bytes.put(id.getBytes());
-        bytes.putShort(fileID);
-        bytes.putInt(firstIfdOffset);
+        bytes.putShort(this.fileID);
+        bytes.putInt(this.firstIfdOffset);
 
         return bytes.array();
     }

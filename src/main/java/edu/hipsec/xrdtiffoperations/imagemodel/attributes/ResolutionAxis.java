@@ -20,24 +20,24 @@ public class ResolutionAxis extends ByteSerializer {
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public int getDenominator() {
-        return denominator;
+        return this.denominator;
     }
 
     public int getNumerator() {
-        return numerator;
+        return this.numerator;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public ResolutionAxis() {
-        numerator = 0;
-        denominator = 1;
+        this.numerator = 0;
+        this.denominator = 1;
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public double getValue() {
-        return (double) numerator / (double) denominator;
+        return (double) this.numerator / (double) this.denominator;
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
@@ -52,13 +52,13 @@ public class ResolutionAxis extends ByteSerializer {
 
             num = new SignedIntWrapper(order);
             System.arraycopy(dataBytes, 0, num.getDataBytes(), 0, valueLength);
-            numerator = num.get();
+            this.numerator = num.get();
 
             denum = new SignedIntWrapper(order);
             System.arraycopy(dataBytes, valueLength, denum.getDataBytes(), 0, valueLength);
-            denominator = denum.get();
+            this.denominator = denum.get();
         } else
-            displaySizeAlert(dataBytes.length, BYTE_LENGTH);
+            this.displaySizeAlert(dataBytes.length, BYTE_LENGTH);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class ResolutionAxis extends ByteSerializer {
         ByteBuffer bytes;
         bytes = ByteBuffer.allocate(BYTE_LENGTH);
         bytes.order(order);
-        bytes.putInt(numerator);
-        bytes.putInt(denominator);
+        bytes.putInt(this.numerator);
+        bytes.putInt(this.denominator);
         return bytes.array();
     }
 

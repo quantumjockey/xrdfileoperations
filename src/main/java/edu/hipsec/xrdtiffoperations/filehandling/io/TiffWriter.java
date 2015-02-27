@@ -17,8 +17,8 @@ public class TiffWriter {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TiffWriter(MARTiffImage dataSource, String fileType) {
-        cachedData = dataSource;
-        cachedData.setFileOutputFormat(fileType);
+        this.cachedData = dataSource;
+        this.cachedData.setFileOutputFormat(fileType);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ public class TiffWriter {
         byte[] allBytes;
         Path destination;
 
-        allBytes = generateFileBytes();
+        allBytes = this.generateFileBytes();
         destination = Paths.get(path);
 
         try {
@@ -45,8 +45,8 @@ public class TiffWriter {
         byte[] imageData;
         ByteBuffer bytes;
 
-        order = cachedData.getHeader().getByteOrder();
-        imageData = cachedData.toByteArray(order);
+        order = this.cachedData.getHeader().getByteOrder();
+        imageData = this.cachedData.toByteArray(order);
         byteCount = imageData.length;
         bytes = ByteBuffer.allocate(byteCount);
         bytes.put(imageData);

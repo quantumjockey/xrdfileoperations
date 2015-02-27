@@ -19,21 +19,21 @@ public class TiffReader {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TiffReader(Path filePath) throws IOException {
-        fileBytesRaw = Files.readAllBytes(filePath);
-        marImageData = new MARTiffImage(filePath.getFileName().toString());
-        fileHasBeenRead = false;
+        this.fileBytesRaw = Files.readAllBytes(filePath);
+        this.marImageData = new MARTiffImage(filePath.getFileName().toString());
+        this.fileHasBeenRead = false;
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public void readFileData() {
-        marImageData.fromByteArray(fileBytesRaw, null);
-        fileHasBeenRead = true;
+        this.marImageData.fromByteArray(this.fileBytesRaw, null);
+        this.fileHasBeenRead = true;
     }
 
     public MARTiffImage getImageData() {
-        if (fileHasBeenRead)
-            return marImageData;
+        if (this.fileHasBeenRead)
+            return this.marImageData;
         else
             return null;
     }

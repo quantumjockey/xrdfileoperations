@@ -15,7 +15,7 @@ public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
     public ByteWrapper(int bitCount, ByteOrder _order) {
         super();
         this.order = _order;
-        this.dataBytes = new byte[getByteCount(bitCount)];
+        this.dataBytes = new byte[this.getByteCount(bitCount)];
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -25,8 +25,8 @@ public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
     /////////// Protected Methods ///////////////////////////////////////////////////////////
 
     protected void wrap() {
-        this.buffer = ByteBuffer.wrap(dataBytes);
-        this.buffer.order(order);
+        this.buffer = ByteBuffer.wrap(this.dataBytes);
+        this.buffer.order(this.order);
     }
 
     /////////// Private Methods /////////////////////////////////////////////////////////////

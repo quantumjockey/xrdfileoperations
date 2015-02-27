@@ -34,23 +34,23 @@ public class MARTiffImage extends TiffBase {
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public DiffractionFrame getDiffractionData() {
-        return diffractionData;
+        return this.diffractionData;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public MARTiffImage(String _filename) {
         super(_filename);
-        calibration = new CalibrationData();
-        diffractionData = new DiffractionFrame(_filename);
-        fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
+        this.calibration = new CalibrationData();
+        this.diffractionData = new DiffractionFrame(_filename);
+        this.fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
     public MARTiffImage(DiffractionFrame data) {
         super(data.getIdentifier());
-        calibration = new CalibrationData();
-        diffractionData = data;
-        fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
+        this.calibration = new CalibrationData();
+        this.diffractionData = data;
+        this.fileOutputFormat = FileTypes.TIFF_32_BIT_INT;
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -76,16 +76,16 @@ public class MARTiffImage extends TiffBase {
         ByteBuffer bytes;
         int numPixels;
 
-        numPixels = diffractionData.getHeight() * diffractionData.getWidth();
+        numPixels = this.diffractionData.getHeight() * this.diffractionData.getWidth();
 
         switch (imageType) {
             case FileTypes.TIFF_32_BIT_FLOAT:
-                bytes = createByteBuffer(order, numPixels, 4);
-                diffractionData.cycleFramePixels((y, x) -> bytes.putFloat((float) diffractionData.getIntensityMapValue(y, x)));
+                bytes = this.createByteBuffer(order, numPixels, 4);
+                this.diffractionData.cycleFramePixels((y, x) -> bytes.putFloat((float) this.diffractionData.getIntensityMapValue(y, x)));
                 break;
             default: //FileTypes.TIFF_32_BIT_INT:
-                bytes = createByteBuffer(order, numPixels, 4);
-                diffractionData.cycleFramePixels((y, x) -> bytes.putInt(diffractionData.getIntensityMapValue(y, x)));
+                bytes = this.createByteBuffer(order, numPixels, 4);
+                this.diffractionData.cycleFramePixels((y, x) -> bytes.putInt(this.diffractionData.getIntensityMapValue(y, x)));
                 break;
         }
 
@@ -96,13 +96,13 @@ public class MARTiffImage extends TiffBase {
         int bufferLength, calibrationStartByte, imageStartByte;
         byte[] data;
 
-        calibrationStartByte = searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED);
-        imageStartByte = searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
+        calibrationStartByte = this.searchDirectoriesForTag(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED);
+        imageStartByte = this.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
         bufferLength = imageStartByte - calibrationStartByte;
         data = new byte[bufferLength];
         System.arraycopy(fileBytes, calibrationStartByte, data, 0, bufferLength);
 
-        calibration.fromByteArray(data, _byteOrder);
+        this.calibration.fromByteArray(data, _byteOrder);
     }
 
     private void getImageData(byte[] fileBytes, ByteOrder _byteOrder) {
@@ -111,15 +111,15 @@ public class MARTiffImage extends TiffBase {
         int imageHeight, imageWidth;
         int sampleByteLength, sampleType;
 
-        imageHeight = searchDirectoriesForTag(FieldTags.IMAGE_HEIGHT);
-        imageWidth = searchDirectoriesForTag(FieldTags.IMAGE_WIDTH);
-        startingByte = searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
-        sampleByteLength = searchDirectoriesForTag(FieldTags.BITS_PER_SAMPLE) / Byte.SIZE;
-        sampleType = searchDirectoriesForTag(FieldTags.SAMPLE_FORMAT);
+        imageHeight = this.searchDirectoriesForTag(FieldTags.IMAGE_HEIGHT);
+        imageWidth = this.searchDirectoriesForTag(FieldTags.IMAGE_WIDTH);
+        startingByte = this.searchDirectoriesForTag(FieldTags.STRIP_OFFSETS);
+        sampleByteLength = this.searchDirectoriesForTag(FieldTags.BITS_PER_SAMPLE) / Byte.SIZE;
+        sampleType = this.searchDirectoriesForTag(FieldTags.SAMPLE_FORMAT);
 
-        diffractionData.initializeIntensityMap(imageHeight, imageWidth);
-        diffractionData.setImageXResolution(super.imageXResolution);
-        diffractionData.setImageYResolution(super.imageYResolution);
+        this.diffractionData.initializeIntensityMap(imageHeight, imageWidth);
+        this.diffractionData.setImageXResolution(super.imageXResolution);
+        this.diffractionData.setImageYResolution(super.imageYResolution);
 
         switch (sampleByteLength) {
             case 4:
@@ -135,9 +135,9 @@ public class MARTiffImage extends TiffBase {
                 break;
         }
 
-        diffractionData.cycleFramePixels((y, x) -> {
+        this.diffractionData.cycleFramePixels((y, x) -> {
             System.arraycopy(fileBytes, startingByte + ((x + (y * imageHeight)) * sampleByteLength), pixelTemp.getDataBytes(), 0, sampleByteLength);
-            diffractionData.setIntensityMapCoordinate(y, x, pixelTemp.getAsIntPrimitive());
+            this.diffractionData.setIntensityMapCoordinate(y, x, pixelTemp.getAsIntPrimitive());
         });
     }
 
@@ -159,13 +159,13 @@ public class MARTiffImage extends TiffBase {
 
         this.getIfdListing().clear();
         this.getIfdListing().add(new ImageFileDirectory());
-        this.getIfdListing().get(0).addEntry(FieldTags.IMAGE_WIDTH, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, diffractionData.getWidth());
-        this.getIfdListing().get(0).addEntry(FieldTags.IMAGE_HEIGHT, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, diffractionData.getHeight());
+        this.getIfdListing().get(0).addEntry(FieldTags.IMAGE_WIDTH, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, this.diffractionData.getWidth());
+        this.getIfdListing().get(0).addEntry(FieldTags.IMAGE_HEIGHT, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, this.diffractionData.getHeight());
         this.getIfdListing().get(0).addEntry(FieldTags.BITS_PER_SAMPLE, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, bitsPerSample);
         this.getIfdListing().get(0).addEntry(FieldTags.COMPRESSION, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, 1);
         this.getIfdListing().get(0).addEntry(FieldTags.PHOTOMETRIC_INTERPRETATION, FieldTypes.SIXTEEN_BIT_UNSIGNED_INT, 1, 1);
         this.getIfdListing().get(0).addEntry(FieldTags.STRIP_OFFSETS, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, 512);
-        this.getIfdListing().get(0).addEntry(FieldTags.ROWS_PER_STRIP, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, diffractionData.getHeight());
+        this.getIfdListing().get(0).addEntry(FieldTags.ROWS_PER_STRIP, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, this.diffractionData.getHeight());
         this.getIfdListing().get(0).addEntry(FieldTags.STRIP_BYTE_COUNTS, FieldTypes.THIRTY_TWO_BIT_UNSIGNED_INT, 1, imageByteCount);
         this.getIfdListing().get(0).addEntry(FieldTags.X_RESOLUTION_OFFSET, FieldTypes.RATIONAL, 1, byteLength);
         this.getIfdListing().get(0).addEntry(FieldTags.Y_RESOLUTION_OFFSET, FieldTypes.RATIONAL, 1, byteLength + ResolutionAxis.BYTE_LENGTH);
@@ -180,8 +180,8 @@ public class MARTiffImage extends TiffBase {
     }
 
     private void syncImageResolutionData() {
-        this.imageXResolution = diffractionData.getImageXResolution();
-        this.imageYResolution = diffractionData.getImageYResolution();
+        this.imageXResolution = this.diffractionData.getImageXResolution();
+        this.imageYResolution = this.diffractionData.getImageYResolution();
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
@@ -190,8 +190,8 @@ public class MARTiffImage extends TiffBase {
     public void fromByteArray(byte[] dataBytes, ByteOrder order) {
         super.fromByteArray(dataBytes, order);
         if (this.getIfdListing().get(0).getTagValue(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED) != -1)
-            getCalibrationData(dataBytes, header.getByteOrder());
-        getImageData(dataBytes, header.getByteOrder());
+            this.getCalibrationData(dataBytes, header.getByteOrder());
+        this.getImageData(dataBytes, header.getByteOrder());
     }
 
     @Override
@@ -200,10 +200,10 @@ public class MARTiffImage extends TiffBase {
         byte[] emptyBytes, imageDataBytes, imageMetaBytes;
         int totalSize;
 
-        generateNewFileHeader();
-        syncImageResolutionData();
-        imageDataBytes = createImageBytes(order, this.fileOutputFormat);
-        generateNewIfdForImageExport(this.fileOutputFormat, imageDataBytes.length);
+        this.generateNewFileHeader();
+        this.syncImageResolutionData();
+        imageDataBytes = this.createImageBytes(order, this.fileOutputFormat);
+        this.generateNewIfdForImageExport(this.fileOutputFormat, imageDataBytes.length);
 
         imageMetaBytes = super.toByteArray(order);
         emptyBytes = ByteArray.generateEmptyBytes(imageMetaBytes.length, searchDirectoriesForTag(FieldTags.STRIP_OFFSETS));

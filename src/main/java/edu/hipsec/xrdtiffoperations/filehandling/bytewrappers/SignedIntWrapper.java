@@ -17,12 +17,12 @@ public class SignedIntWrapper extends ByteWrapper<Integer> implements IntegerWra
 
     @Override
     public Integer get() {
-        wrap();
-        return buffer.getInt();
+        this.wrap();
+        return this.buffer.getInt();
     }
 
     public int getAsIntPrimitive() {
-        return get();
+        return this.get();
     }
 
 }

@@ -24,32 +24,32 @@ public class TiffBase extends ByteSerializer {
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public String getFilename() {
-        return filename;
+        return this.filename;
     }
 
     public TiffHeader getHeader() {
-        return header;
+        return this.header;
     }
 
     public ArrayList<ImageFileDirectory> getIfdListing() {
-        return ifdListing;
+        return this.ifdListing;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TiffBase(String _filename) {
-        ifdListing = new ArrayList<>();
-        filename = _filename;
-        header = new TiffHeader();
-        imageXResolution = new ResolutionAxis();
-        imageYResolution = new ResolutionAxis();
+        this.ifdListing = new ArrayList<>();
+        this.filename = _filename;
+        this.header = new TiffHeader();
+        this.imageXResolution = new ResolutionAxis();
+        this.imageYResolution = new ResolutionAxis();
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     public int searchDirectoriesForTag(int tag) {
         int _value = 0;
-        for (ImageFileDirectory directory : ifdListing)
+        for (ImageFileDirectory directory : this.ifdListing)
             for (DirectoryField item : directory.getFields())
                 if (item.getTag() == tag)
                     _value = item.getValue();
@@ -61,7 +61,7 @@ public class TiffBase extends ByteSerializer {
     private void getFileHeader(byte[] imageData) {
         byte[] headerBytes = new byte[TiffHeader.BYTE_LENGTH];
         System.arraycopy(imageData, 0, headerBytes, 0, TiffHeader.BYTE_LENGTH);
-        header.fromByteArray(headerBytes, null);
+        this.header.fromByteArray(headerBytes, null);
     }
 
     private void getFirstIFD(byte[] imageData, int firstIfdOffset, ByteOrder _byteOrder) {
@@ -78,39 +78,39 @@ public class TiffBase extends ByteSerializer {
 
         directory = new ImageFileDirectory();
         directory.fromByteArray(directoryBytes, _byteOrder);
-        ifdListing.add(directory);
+        this.ifdListing.add(directory);
     }
 
     private void getImageResolution(byte[] imageData, ByteOrder order) {
         byte[] xRes, yRes;
 
         xRes = new byte[ResolutionAxis.BYTE_LENGTH];
-        System.arraycopy(imageData, searchDirectoriesForTag(FieldTags.X_RESOLUTION_OFFSET), xRes, 0, ResolutionAxis.BYTE_LENGTH);
-        imageXResolution.fromByteArray(xRes, order);
+        System.arraycopy(imageData, this.searchDirectoriesForTag(FieldTags.X_RESOLUTION_OFFSET), xRes, 0, ResolutionAxis.BYTE_LENGTH);
+        this.imageXResolution.fromByteArray(xRes, order);
 
         yRes = new byte[ResolutionAxis.BYTE_LENGTH];
-        System.arraycopy(imageData, searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET), yRes, 0, ResolutionAxis.BYTE_LENGTH);
-        imageYResolution.fromByteArray(yRes, order);
+        System.arraycopy(imageData, this.searchDirectoriesForTag(FieldTags.Y_RESOLUTION_OFFSET), yRes, 0, ResolutionAxis.BYTE_LENGTH);
+        this.imageYResolution.fromByteArray(yRes, order);
     }
 
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order) {
-        getFileHeader(dataBytes);
-        getFirstIFD(dataBytes, header.getFirstIfdOffset(), header.getByteOrder());
-        getImageResolution(dataBytes, order);
+        this.getFileHeader(dataBytes);
+        this.getFirstIFD(dataBytes, this.header.getFirstIfdOffset(), this.header.getByteOrder());
+        this.getImageResolution(dataBytes, order);
     }
 
     @Override
     public byte[] toByteArray(ByteOrder order) {
         ByteBuffer bytes;
-        bytes = ByteBuffer.allocate(TiffHeader.BYTE_LENGTH + ifdListing.get(0).getByteLength() + (ResolutionAxis.BYTE_LENGTH * 2));
+        bytes = ByteBuffer.allocate(TiffHeader.BYTE_LENGTH + this.ifdListing.get(0).getByteLength() + (ResolutionAxis.BYTE_LENGTH * 2));
         bytes.order(order);
-        bytes.put(header.toByteArray(order));
-        bytes.put(ifdListing.get(0).toByteArray(order));
-        bytes.put(imageXResolution.toByteArray(order));
-        bytes.put(imageYResolution.toByteArray(order));
+        bytes.put(this.header.toByteArray(order));
+        bytes.put(this.ifdListing.get(0).toByteArray(order));
+        bytes.put(this.imageXResolution.toByteArray(order));
+        bytes.put(this.imageYResolution.toByteArray(order));
         return bytes.array();
     }
 

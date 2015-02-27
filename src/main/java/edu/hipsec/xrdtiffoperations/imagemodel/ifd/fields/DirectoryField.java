@@ -28,19 +28,19 @@ public class DirectoryField extends ByteSerializer {
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public short getTag() {
-        return tag;
+        return this.tag;
     }
 
     public short getType() {
-        return type;
+        return this.type;
     }
 
     public int getCount() {
-        return count;
+        return this.count;
     }
 
     public int getValue() {
-        return value;
+        return this.value;
     }
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
@@ -62,17 +62,17 @@ public class DirectoryField extends ByteSerializer {
             _typeCount = new SignedIntWrapper(order);
             _fieldValue = new SignedIntWrapper(order);
 
-            System.arraycopy(dataBytes, 0, _fieldTag.getDataBytes(), 0, TAG_BYTES_LENGTH);
-            System.arraycopy(dataBytes, TAG_BYTES_LENGTH, _fieldType.getDataBytes(), 0, TYPE_BYTES_LENGTH);
-            System.arraycopy(dataBytes, TAG_BYTES_LENGTH + TYPE_BYTES_LENGTH, _typeCount.getDataBytes(), 0, COUNT_BYTES_LENGTH);
-            System.arraycopy(dataBytes, TAG_BYTES_LENGTH + TYPE_BYTES_LENGTH + COUNT_BYTES_LENGTH, _fieldValue.getDataBytes(), 0, VALUE_BYTES_LENGTH);
+            System.arraycopy(dataBytes, 0, _fieldTag.getDataBytes(), 0, this.TAG_BYTES_LENGTH);
+            System.arraycopy(dataBytes, this.TAG_BYTES_LENGTH, _fieldType.getDataBytes(), 0, this.TYPE_BYTES_LENGTH);
+            System.arraycopy(dataBytes, this.TAG_BYTES_LENGTH + this.TYPE_BYTES_LENGTH, _typeCount.getDataBytes(), 0, this.COUNT_BYTES_LENGTH);
+            System.arraycopy(dataBytes, this.TAG_BYTES_LENGTH + this.TYPE_BYTES_LENGTH + this.COUNT_BYTES_LENGTH, _fieldValue.getDataBytes(), 0, this.VALUE_BYTES_LENGTH);
 
-            tag = _fieldTag.get();
-            type = _fieldType.get();
-            count = _typeCount.get();
-            value = _fieldValue.get();
+            this.tag = _fieldTag.get();
+            this.type = _fieldType.get();
+            this.count = _typeCount.get();
+            this.value = _fieldValue.get();
         } else
-            displaySizeAlert(dataBytes.length, BYTE_LENGTH);
+            this.displaySizeAlert(dataBytes.length, BYTE_LENGTH);
     }
 
     @Override

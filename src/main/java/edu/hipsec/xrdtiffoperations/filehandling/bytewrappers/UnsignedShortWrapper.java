@@ -16,12 +16,12 @@ public class UnsignedShortWrapper extends ByteWrapper<Character> implements Inte
 
     @Override
     public Character get() {
-        wrap();
-        return buffer.getChar();
+        this.wrap();
+        return this.buffer.getChar();
     }
 
     public int getAsIntPrimitive() {
-        return (int) get();
+        return (int) this.get();
     }
 
 }

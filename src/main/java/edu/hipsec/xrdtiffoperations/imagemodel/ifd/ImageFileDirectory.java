@@ -25,13 +25,13 @@ public class ImageFileDirectory extends ByteSerializer {
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
     public ArrayList<DirectoryField> getFields() {
-        return fields;
+        return this.fields;
     }
 
     /////////// Constructors //////////////////////////////////////////////////////////////////
 
     public ImageFileDirectory() {
-        fields = new ArrayList<>();
+        this.fields = new ArrayList<>();
     }
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ public class ImageFileDirectory extends ByteSerializer {
         newField.setType(type);
         newField.setCount(count);
         newField.setValue(value);
-        fields.add(newField);
+        this.fields.add(newField);
     }
 
     public static int calculateDirectoryLengthWithoutFieldsCount(int fieldsCount) {
@@ -59,21 +59,21 @@ public class ImageFileDirectory extends ByteSerializer {
     }
 
     public int getByteLength() {
-        return FIELD_COUNT_LENGTH + (fields.size() * DirectoryField.BYTE_LENGTH) + END_BUFFER_LENGTH;
+        return FIELD_COUNT_LENGTH + (this.fields.size() * DirectoryField.BYTE_LENGTH) + END_BUFFER_LENGTH;
     }
 
     public int getTagValue(short specifiedTag) {
         DirectoryField selected;
         int value;
 
-        selected = getField(specifiedTag);
+        selected = this.getField(specifiedTag);
         value = (selected != null) ? selected.getValue() : -1;
 
         return value;
     }
 
     public void removeEntry(short specifiedTag) {
-        fields.remove(getField(specifiedTag));
+        this.fields.remove(this.getField(specifiedTag));
     }
 
     public void sort() {
@@ -115,7 +115,7 @@ public class ImageFileDirectory extends ByteSerializer {
 
         bytes = ByteBuffer.allocate(FIELD_COUNT_LENGTH);
         bytes.order(order);
-        bytes.putShort((short) fields.size());
+        bytes.putShort((short) this.fields.size());
 
         return bytes.array();
     }
@@ -125,18 +125,18 @@ public class ImageFileDirectory extends ByteSerializer {
 
         cursor = 0;
 
-        for (int i = 0; i < numFields; i++) {
+        for (int i = 0; i < this.numFields; i++) {
             byte[] fieldBytes = new byte[DirectoryField.BYTE_LENGTH];
             System.arraycopy(bytes, cursor, fieldBytes, 0, DirectoryField.BYTE_LENGTH);
             DirectoryField newField = new DirectoryField();
             newField.fromByteArray(fieldBytes, byteOrder);
-            fields.add(newField);
+            this.fields.add(newField);
             cursor += DirectoryField.BYTE_LENGTH;
         }
     }
 
     private DirectoryField getField(short specifiedTag) {
-        for (DirectoryField item : fields)
+        for (DirectoryField item : this.fields)
             if (item.getTag() == specifiedTag)
                 return item;
         return null;
@@ -146,8 +146,8 @@ public class ImageFileDirectory extends ByteSerializer {
 
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order) {
-        numFields = calculateNumFields(dataBytes);
-        extractFields(dataBytes, order);
+        this.numFields = this.calculateNumFields(dataBytes);
+        this.extractFields(dataBytes, order);
     }
 
     @Override
@@ -155,13 +155,13 @@ public class ImageFileDirectory extends ByteSerializer {
         byte[] count;
         ByteBuffer bytes;
 
-        count = createEntryCountBytes(order);
-        bytes = ByteBuffer.allocate(getByteLength());
+        count = this.createEntryCountBytes(order);
+        bytes = ByteBuffer.allocate(this.getByteLength());
         bytes.order(order);
         bytes.put(count);
-        for (DirectoryField item : fields)
+        for (DirectoryField item : this.fields)
             bytes.put(item.toByteArray(order));
-        bytes.put(createBuffer(order));
+        bytes.put(this.createBuffer(order));
 
         return bytes.array();
     }
