@@ -7,10 +7,13 @@ public class DataMasking {
 
     /////////// Public Methods ////////////////////////////////////////////////////////////////
 
-    public static void maskImage(DiffractionFrame image, int minVal, int maxVal) {
-        image.setIdentifier(generateFilename(image.getIdentifier()));
-        image.cycleFramePixels((y, x) ->
-                image.setIntensityMapCoordinate(y, x, maskValue(image.getIntensityMapValue(y, x), maxVal, minVal)));
+    public static DiffractionFrame maskImage(DiffractionFrame image, int minVal, int maxVal) {
+        DiffractionFrame masked = new DiffractionFrame();
+        masked.setIdentifier(generateFilename(image.getIdentifier()));
+        masked.initializeIntensityMap(image.getHeight(), image.getWidth());
+        masked.cycleFramePixels((y, x) ->
+                masked.setIntensityMapCoordinate(y, x, maskValue(image.getIntensityMapValue(y, x), maxVal, minVal)));
+        return masked;
     }
 
     /////////// Private Methods ///////////////////////////////////////////////////////////////
