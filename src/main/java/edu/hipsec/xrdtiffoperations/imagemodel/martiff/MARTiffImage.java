@@ -191,8 +191,8 @@ public class MARTiffImage extends TiffBase {
     public void fromByteArray(byte[] dataBytes, ByteOrder order) {
         super.fromByteArray(dataBytes, order);
         if (this.getIfdListing().get(0).getTagValue(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED) != -1)
-            this.getCalibrationData(dataBytes, header.getByteOrder());
-        this.getImageData(dataBytes, header.getByteOrder());
+            this.getCalibrationData(dataBytes, this.header.getByteOrder());
+        this.getImageData(dataBytes, this.header.getByteOrder());
     }
 
     @Override
