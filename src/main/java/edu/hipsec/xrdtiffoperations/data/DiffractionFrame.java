@@ -1,7 +1,7 @@
 package edu.hipsec.xrdtiffoperations.data;
 
 import edu.hipsec.xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
-import edu.hipsec.xrdtiffoperations.twodimensionalmapping.TwoDimensionalIntegerMapping;
+import edu.hipsec.xrdtiffoperations.datamapping.TwoDimensionalIntegerMapping;
 
 public class DiffractionFrame {
 
@@ -94,6 +94,10 @@ public class DiffractionFrame {
 
     public void initializeIntensityMap(int height, int width) {
         this.intensityMap = new TwoDimensionalIntegerMapping(height, width);
+    }
+
+    public int scaleImageZero() {
+        return this.intensityMap.scaleDataZero();
     }
 
 }
