@@ -1,39 +1,25 @@
-package edu.hipsec.xrdtiffoperations.twodimensionalmapping;
+package edu.hipsec.xrdtiffoperations.datamapping.base;
 
-public class TwoDimensionalIntegerMapping {
-
-    /////////// Constants ///////////////////////////////////////////////////////////////////
-
-    private final int VALUE_MAXIMUM = Integer.MAX_VALUE;
-    private final int VALUE_MINIMUM = Integer.MIN_VALUE;
+public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    protected int[][] dataMap;
+    protected T[][] dataMap;
 
     // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
-    private int valueMax;
-    private int valueMin;
+    protected T valueMax;
+    protected T valueMin;
 
     /////////// Accessors ///////////////////////////////////////////////////////////////////
 
-    public int get(int y, int x) {
-        if (y < this.getHeight() || y >= 0 || x < this.getWidth() || x >= 0)
-            return this.dataMap[y][x];
-        else
-            return 0;
+    public T get(int y, int x) {
+        return this.dataMap[y][x];
     }
 
     /////////// Mutators ////////////////////////////////////////////////////////////////////
 
-    public void setMapCoordinate(int y, int x, int value) {
+    public void setMapCoordinate(int y, int x, T value) {
         this.dataMap[y][x] = value;
-    }
-
-    /////////// Constructors ////////////////////////////////////////////////////////////////
-
-    public TwoDimensionalIntegerMapping(int height, int width) {
-        dataMap = new int[height][width];
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -47,24 +33,6 @@ public class TwoDimensionalIntegerMapping {
         //    cycleMapConcurrent(action);
     }
 
-    public int getMaxValue() {
-        this.valueMax = this.VALUE_MINIMUM;
-        this.cycleMap((y, x) -> {
-            if (this.dataMap[y][x] > this.valueMax)
-                this.valueMax = this.dataMap[y][x];
-        });
-        return this.valueMax;
-    }
-
-    public int getMinValue() {
-        this.valueMin = this.VALUE_MAXIMUM;
-        this.cycleMap((y, x) -> {
-            if (this.dataMap[y][x] < this.valueMin)
-                this.valueMin = this.dataMap[y][x];
-        });
-        return this.valueMin;
-    }
-
     public int getHeight() {
         return this.dataMap.length;
     }
@@ -72,6 +40,18 @@ public class TwoDimensionalIntegerMapping {
     public int getWidth() {
         return this.dataMap[0].length;
     }
+
+    public abstract T getMaxValue();
+
+    public abstract T getMinValue();
+
+    public abstract T scaleDataZero();
+
+    /////////// Protected Methods ///////////////////////////////////////////////////////////
+
+    protected abstract T getMaxLimit();
+
+    protected abstract T getMinLimit();
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
