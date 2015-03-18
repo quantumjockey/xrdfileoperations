@@ -77,11 +77,11 @@ public class DiffractionFrame {
     }
 
     public int getMaxValue() {
-        return this.intensityMap.getMaxValue();
+        return this.intensityMap.getDynamicMaxValue();
     }
 
     public int getMinValue() {
-        return this.intensityMap.getMinValue();
+        return this.intensityMap.getDynamicMinValue();
     }
 
     public int getHeight() {

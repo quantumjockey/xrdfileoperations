@@ -13,7 +13,7 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Double getMaxValue() {
+    public Double getDynamicMaxValue() {
         this.valueMax = this.getMinLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] > this.valueMax)
@@ -23,7 +23,7 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     }
 
     @Override
-    public Double getMinValue() {
+    public Double getDynamicMinValue() {
         this.valueMin = this.getMaxLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] < this.valueMin)
@@ -34,7 +34,7 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
 
     @Override
     public Double scaleDataZero() {
-        return Math.abs(this.getMinValue());
+        return Math.abs(this.getDynamicMinValue());
     }
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////

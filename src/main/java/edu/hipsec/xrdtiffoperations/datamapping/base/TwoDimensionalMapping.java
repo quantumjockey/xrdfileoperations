@@ -41,9 +41,17 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         return this.dataMap[0].length;
     }
 
-    public abstract T getMaxValue();
+    public abstract T getDynamicMaxValue();
 
-    public abstract T getMinValue();
+    public abstract T getDynamicMinValue();
+
+    public T getStaticMaxValue() {
+        return this.valueMax;
+    }
+
+    public T getStaticMinValue() {
+        return this.valueMin;
+    }
 
     public abstract T scaleDataZero();
 

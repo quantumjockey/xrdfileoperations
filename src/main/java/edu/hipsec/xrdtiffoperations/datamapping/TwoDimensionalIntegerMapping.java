@@ -13,7 +13,7 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Integer getMaxValue() {
+    public Integer getDynamicMaxValue() {
         this.valueMax = this.getMinLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] > this.valueMax)
@@ -23,7 +23,7 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     }
 
     @Override
-    public Integer getMinValue() {
+    public Integer getDynamicMinValue() {
         this.valueMin = this.getMaxLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] < this.valueMin)
@@ -34,7 +34,7 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
 
     @Override
     public Integer scaleDataZero() {
-        return Math.abs(this.getMinValue());
+        return Math.abs(this.getDynamicMinValue());
     }
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////
