@@ -1,11 +1,11 @@
-package xrdtiffoperations.filehandling.bytewrappers;
+package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class UnsignedShortWrapperTest {
+public class SignedShortWrapperTest {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -25,12 +25,12 @@ public class UnsignedShortWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void get_characterConverted_returnInput() {
+    public void get_shortWithinBoundsConverted_returnInput() {
 
     }
 
     @Test
-    public void get_integerWithinBoundsConverted_returnInput() {
+    public void get_shortBeyondBoundsConverted_returnZero() {
 
     }
 
@@ -40,8 +40,8 @@ public class UnsignedShortWrapperTest {
     }
 
     @Test
-    public void get_CharacterBeyondStorableLimit_returnZero() {
+    public void get_ShortBeyondStorableLimit_returnZero() {
 
     }
-
+    
 }

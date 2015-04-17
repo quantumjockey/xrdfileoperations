@@ -1,4 +1,4 @@
-package xrdtiffoperations.filehandling.bytewrappers;
+package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers;
 
 import org.junit.After;
 import org.junit.Assert;
