@@ -33,8 +33,14 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         //    cycleMapConcurrent(action);
     }
 
+    public abstract T[] getColumn(int columnNumber);
+
     public int getHeight() {
         return this.dataMap.length;
+    }
+
+    public T[] getRow(int rowNumber) {
+        return this.dataMap[rowNumber];
     }
 
     public int getWidth() {
@@ -52,6 +58,8 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     public T getStaticMinValue() {
         return this.valueMin;
     }
+
+    public abstract void rotateDataGrid(double angle);
 
     public abstract T scaleDataZero();
 

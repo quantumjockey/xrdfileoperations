@@ -13,6 +13,14 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
+    public Double[] getColumn(int columnNumber) {
+        Double[] column = new Double[this.getHeight()];
+        for (int y = 0; y < this.getHeight(); y++)
+            column[y] = this.dataMap[y][columnNumber];
+        return column;
+    }
+
+    @Override
     public Double getDynamicMaxValue() {
         this.valueMax = this.getMinLimit();
         this.cycleMap((y, x) -> {
@@ -33,6 +41,30 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     }
 
     @Override
+    public void rotateDataGrid(double angle) {
+
+        Double[][] newMapping = new Double[this.getHeight()][this.getWidth()];
+        Double[] linearTemp = new Double[this.getHeight() * this.getWidth()];
+
+        if (angle > 0.0) {
+
+            for (int y = 0; y < this.getHeight(); y++)
+                for (int x = 0; x < this.getWidth(); x++)
+                    linearTemp[y * this.getWidth() + x] = this.dataMap[y][x];
+
+            for (int x = this.getWidth() - 1; x > 0; x--)
+                for (int y = 0; y < this.getHeight(); y++)
+                    newMapping[y][x] = linearTemp[y * this.getWidth() + x];
+
+
+        } else if (angle < 0.0) {
+
+        }
+
+        this.dataMap = newMapping;
+    }
+
+    @Override
     public Double scaleDataZero() {
         return Math.abs(this.getDynamicMinValue());
     }
@@ -40,12 +72,12 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     /////////// Protected Methods ///////////////////////////////////////////////////////////
 
     @Override
-    protected Double getMaxLimit(){
+    protected Double getMaxLimit() {
         return Double.MAX_VALUE;
     }
 
     @Override
-    protected Double getMinLimit(){
+    protected Double getMinLimit() {
         return Double.MIN_VALUE;
     }
 
