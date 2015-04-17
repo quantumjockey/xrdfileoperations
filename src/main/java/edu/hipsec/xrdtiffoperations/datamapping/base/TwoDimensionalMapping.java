@@ -51,14 +51,6 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     public abstract T getDynamicMinValue();
 
-    public T getStaticMaxValue() {
-        return this.valueMax;
-    }
-
-    public T getStaticMinValue() {
-        return this.valueMin;
-    }
-
     public abstract void rotateDataGrid(double angle);
 
     public abstract T scaleDataZero();
