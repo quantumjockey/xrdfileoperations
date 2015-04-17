@@ -29,10 +29,18 @@ public class TwoDimensionalIntegerMappingTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void rotateDataGrid_NinetyDegrees_LastColumnIsFirstRow() {
+    public void rotateDataGrid_NegativeNinetyDegrees_FirstColumnIsFirstRow() {
+        Integer[] firstRow = this.mapping.getRow(0);
+        this.mapping.rotateDataGrid(-90);
+        Integer[] firstColumn = this.mapping.getColumn(0);
+        Assert.assertArrayEquals(firstRow, firstColumn);
+    }
+
+    @Test
+    public void rotateDataGrid_PositiveNinetyDegrees_LastColumnIsFirstRow() {
         Integer[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(90);
-        Integer[] lastColumn = this.mapping.getColumn(this.mapping.getHeight() - 1);
+        Integer[] lastColumn = this.mapping.getColumn(this.mapping.getWidth() - 1);
         Assert.assertArrayEquals(firstRow, lastColumn);
     }
 
