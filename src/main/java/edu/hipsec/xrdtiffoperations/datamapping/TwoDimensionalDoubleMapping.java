@@ -8,7 +8,7 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TwoDimensionalDoubleMapping(int height, int width) {
-        dataMap = new Double[height][width];
+        this.dataMap = (Double[][]) Array.newInstance(Double.class, height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
 
     @Override
     public Double[] getColumn(int columnNumber) {
-        Double[] column = new Double[this.getHeight()];
+        Double[] column = (Double[]) Array.newInstance(Double.class, this.getHeight());
         for (int y = 0; y < this.getHeight(); y++)
             column[y] = this.dataMap[y][columnNumber];
         return column;

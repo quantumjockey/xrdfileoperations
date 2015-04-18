@@ -8,7 +8,7 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TwoDimensionalIntegerMapping(int height, int width) {
-        dataMap = new Integer[height][width];
+        this.dataMap = (Integer[][]) Array.newInstance(Integer.class, height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
 
     @Override
     public Integer[] getColumn(int columnNumber) {
-        Integer[] column = new Integer[this.getHeight()];
+        Integer[] column = (Integer[]) Array.newInstance(Integer.class, this.getHeight());
         for (int y = 0; y < this.getHeight(); y++)
             column[y] = this.dataMap[y][columnNumber];
         return column;
