@@ -8,21 +8,10 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TwoDimensionalDoubleMapping(int height, int width) {
-        super(Double.class);
-        this.dataMap = (Double[][]) Array.newInstance(Double.class, height, width);
+        super(Double.class, height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
-
-    @Override
-    protected Double[] generateOneDimensionalTypedArray(int size) {
-        return (Double[]) Array.newInstance(Double.class, size);
-    }
-
-    @Override
-    protected Double[][] generateTwoDimensionalTypedArray(int ySize, int xSize) {
-        return (Double[][]) Array.newInstance(Double.class, ySize, xSize);
-    }
 
     @Override
     public Double[] getColumn(int columnNumber) {

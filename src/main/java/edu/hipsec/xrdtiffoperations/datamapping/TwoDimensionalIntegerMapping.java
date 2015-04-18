@@ -8,21 +8,10 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TwoDimensionalIntegerMapping(int height, int width) {
-        super(Integer.class);
-        this.dataMap = (Integer[][]) Array.newInstance(Integer.class, height, width);
+        super(Integer.class, height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
-
-    @Override
-    protected Integer[] generateOneDimensionalTypedArray(int size) {
-        return (Integer[]) Array.newInstance(Integer.class, size);
-    }
-
-    @Override
-    protected Integer[][] generateTwoDimensionalTypedArray(int ySize, int xSize) {
-        return (Integer[][]) Array.newInstance(Integer.class, ySize, xSize);
-    }
 
     @Override
     public Integer[] getColumn(int columnNumber) {

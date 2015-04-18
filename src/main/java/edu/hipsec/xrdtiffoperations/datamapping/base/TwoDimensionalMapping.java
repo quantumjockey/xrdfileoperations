@@ -1,10 +1,12 @@
 package edu.hipsec.xrdtiffoperations.datamapping.base;
 
+import java.lang.reflect.Array;
+
 public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    protected Class<T> objectClass;
+    protected Class<T> derivedClassLiteral;
     protected T[][] dataMap;
 
     // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
@@ -25,8 +27,10 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Constructor /////////////////////////////////////////////////////////////////
 
-    public TwoDimensionalMapping(Class<T> objectClass){
-        this.objectClass = objectClass;
+    @SuppressWarnings("unchecked")
+    public TwoDimensionalMapping(Class<T> derivedClassLiteral, int height, int width) {
+        this.derivedClassLiteral = derivedClassLiteral;
+        this.dataMap = this.generateTwoDimensionalTypedArray(height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -83,10 +87,6 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////
 
-    protected abstract T[] generateOneDimensionalTypedArray(int size);
-
-    protected abstract T[][] generateTwoDimensionalTypedArray(int ySize, int xSize);
-
     protected abstract T getMaxLimit();
 
     protected abstract T getMinLimit();
@@ -107,6 +107,16 @@ public abstract class TwoDimensionalMapping<T extends Number> {
                 e.printStackTrace();
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private T[] generateOneDimensionalTypedArray(int size) {
+        return (T[]) Array.newInstance(this.derivedClassLiteral, size);
+    }
+
+    @SuppressWarnings("unchecked")
+    private T[][] generateTwoDimensionalTypedArray(int ySize, int xSize) {
+        return (T[][]) Array.newInstance(this.derivedClassLiteral, ySize, xSize);
     }
 
     /////////// Public Interfaces ///////////////////////////////////////////////////////////
