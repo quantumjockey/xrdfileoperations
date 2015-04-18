@@ -27,7 +27,6 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Constructor /////////////////////////////////////////////////////////////////
 
-    @SuppressWarnings("unchecked")
     public TwoDimensionalMapping(Class<T> derivedClassLiteral, int height, int width) {
         this.derivedClassLiteral = derivedClassLiteral;
         this.dataMap = this.generateTwoDimensionalTypedArray(height, width);
