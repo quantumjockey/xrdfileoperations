@@ -74,9 +74,12 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         this.cycleMap((y, x) -> linearTemp[y * this.getWidth() + x] = this.dataMap[y][x]);
 
         if (angle > 0.0) {
+            int z = 0;
             for (int x = this.getWidth() - 1; x >= 0; x--)
-                for (int y = 0; y < this.getHeight(); y++)
-                    newMapping[y][x] = linearTemp[x * this.getWidth() + y];
+                for (int y = 0; y < this.getHeight(); y++) {
+                    newMapping[y][x] = linearTemp[z];
+                    z++;
+                }
         } else if (angle < 0.0) {
             for (int y = 0; y < this.getHeight(); y++)
                 for (int x = this.getWidth() - 1; x >= 0; x--)
