@@ -1,7 +1,6 @@
 package edu.hipsec.xrdtiffoperations.datamapping;
 
 import edu.hipsec.xrdtiffoperations.datamapping.base.TwoDimensionalMapping;
-import java.lang.reflect.Array;
 
 public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer> {
 
@@ -12,14 +11,6 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
-
-    @Override
-    public Integer[] getColumn(int columnNumber) {
-        Integer[] column = (Integer[]) Array.newInstance(Integer.class, this.getHeight());
-        for (int y = 0; y < this.getHeight(); y++)
-            column[y] = this.dataMap[y][columnNumber];
-        return column;
-    }
 
     @Override
     public Integer getDynamicMaxValue() {

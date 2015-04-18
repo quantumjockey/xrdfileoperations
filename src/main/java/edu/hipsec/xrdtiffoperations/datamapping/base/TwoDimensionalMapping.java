@@ -44,7 +44,12 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         //    cycleMapConcurrent(action);
     }
 
-    public abstract T[] getColumn(int columnNumber);
+    public T[] getColumn(int columnNumber) {
+        T[] column = this.generateOneDimensionalTypedArray(this.getHeight());
+        for (int y = 0; y < this.getHeight(); y++)
+            column[y] = this.dataMap[y][columnNumber];
+        return column;
+    }
 
     public int getHeight() {
         return this.dataMap.length;
