@@ -1,6 +1,7 @@
 package edu.hipsec.xrdtiffoperations.datamapping;
 
 import edu.hipsec.xrdtiffoperations.datamapping.base.TwoDimensionalMapping;
+import java.lang.reflect.Array;
 
 public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
 
@@ -11,6 +12,16 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
+
+    @Override
+    protected Double[] generateOneDimensionalTypedArray(int size) {
+        return (Double[]) Array.newInstance(Double.class, size);
+    }
+
+    @Override
+    protected Double[][] generateTwoDimensionalTypedArray(int ySize, int xSize) {
+        return (Double[][]) Array.newInstance(Double.class, ySize, xSize);
+    }
 
     @Override
     public Double[] getColumn(int columnNumber) {
@@ -38,30 +49,6 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
                 this.valueMin = this.dataMap[y][x];
         });
         return this.valueMin;
-    }
-
-    @Override
-    public void rotateDataGrid(double angle) {
-
-        Double[][] newMapping = new Double[this.getHeight()][this.getWidth()];
-        Double[] linearTemp = new Double[this.getHeight() * this.getWidth()];
-
-        if (angle > 0.0) {
-
-            for (int y = 0; y < this.getHeight(); y++)
-                for (int x = 0; x < this.getWidth(); x++)
-                    linearTemp[y * this.getWidth() + x] = this.dataMap[y][x];
-
-            for (int x = this.getWidth() - 1; x > 0; x--)
-                for (int y = 0; y < this.getHeight(); y++)
-                    newMapping[y][x] = linearTemp[y * this.getWidth() + x];
-
-
-        } else if (angle < 0.0) {
-
-        }
-
-        this.dataMap = newMapping;
     }
 
     @Override

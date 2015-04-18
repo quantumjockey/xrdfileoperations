@@ -51,11 +51,34 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     public abstract T getDynamicMinValue();
 
-    public abstract void rotateDataGrid(double angle);
+    public void rotateDataGrid(double angle) {
+
+        final T[][] newMapping = this.generateTwoDimensionalTypedArray(this.getHeight(), this.getWidth());
+        final T[] linearTemp = this.generateOneDimensionalTypedArray(this.getHeight() * this.getWidth());
+
+        this.cycleMap((y, x) -> linearTemp[y * this.getWidth() + x] = this.dataMap[y][x]);
+
+        if (angle > 0.0) {
+            for (int x = this.getWidth() - 1; x >= 0; x--)
+                for (int y = 0; y < this.getHeight(); y++)
+                    newMapping[y][x] = linearTemp[x * this.getWidth() + y];
+        } else if (angle < 0.0) {
+            for (int y = 0; y < this.getHeight(); y++)
+                for (int x = this.getWidth() - 1; x >= 0; x--)
+                    newMapping[x][y] = linearTemp[y * this.getHeight() + x];
+        }
+
+        if (angle != 0.0)
+            this.dataMap = newMapping;
+    }
 
     public abstract T scaleDataZero();
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////
+
+    protected abstract T[] generateOneDimensionalTypedArray(int size);
+
+    protected abstract T[][] generateTwoDimensionalTypedArray(int ySize, int xSize);
 
     protected abstract T getMaxLimit();
 
