@@ -44,4 +44,12 @@ public class TwoDimensionalIntegerMappingTest {
         Assert.assertArrayEquals(firstRow, lastColumn);
     }
 
+    @Test
+    public void rotateDataGrid_ZeroDegrees_NoRotation() {
+        Integer[] firstRow = this.mapping.getRow(0);
+        this.mapping.rotateDataGrid(0);
+        Integer[] firstRowCopy = this.mapping.getRow(0);
+        Assert.assertArrayEquals(firstRow, firstRowCopy);
+    }
+
 }

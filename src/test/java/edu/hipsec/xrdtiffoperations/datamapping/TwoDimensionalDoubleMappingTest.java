@@ -44,4 +44,12 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, lastColumn);
     }
 
+    @Test
+    public void rotateDataGrid_ZeroDegrees_NoRotation() {
+        Double[] firstRow = this.mapping.getRow(0);
+        this.mapping.rotateDataGrid(0);
+        Double[] firstRowCopy = this.mapping.getRow(0);
+        Assert.assertArrayEquals(firstRow, firstRowCopy);
+    }
+
 }
