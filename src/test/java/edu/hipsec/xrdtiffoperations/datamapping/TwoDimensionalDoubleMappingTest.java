@@ -16,9 +16,7 @@ public class TwoDimensionalDoubleMappingTest {
     @Before
     public void setUp() throws Exception {
         this.mapping = new TwoDimensionalDoubleMapping(6, 6);
-        this.mapping.cycleMap((y, x) -> {
-            this.mapping.setMapCoordinate(y, x, (y * this.mapping.getWidth() + x) * 1.0);
-        });
+        this.mapping.cycleMap((y, x) -> this.mapping.setMapCoordinate(y, x, (y * this.mapping.getWidth() + x) * 1.0));
     }
 
     @After

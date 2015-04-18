@@ -16,9 +16,7 @@ public class TwoDimensionalIntegerMappingTest {
     @Before
     public void setUp() throws Exception {
         this.mapping = new TwoDimensionalIntegerMapping(6, 6);
-        this.mapping.cycleMap((y, x) -> {
-            this.mapping.setMapCoordinate(y, x, y * this.mapping.getWidth() + x);
-        });
+        this.mapping.cycleMap((y, x) -> this.mapping.setMapCoordinate(y, x, (y * this.mapping.getWidth() + x)));
     }
 
     @After
