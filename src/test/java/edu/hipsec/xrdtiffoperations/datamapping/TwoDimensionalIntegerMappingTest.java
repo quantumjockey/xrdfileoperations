@@ -46,8 +46,8 @@ public class TwoDimensionalIntegerMappingTest {
     public void rotateDataGrid_NegativeTwoHundredSeventyDegrees_LastColumnIsFirstRow() {
         Integer[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(-270);
-        Integer[] firstColumn = this.mapping.getColumn(this.mapping.getWidth() - 1);
-        Assert.assertArrayEquals(firstRow, firstColumn);
+        Integer[] lastColumn = this.mapping.getColumn(this.mapping.getWidth() - 1);
+        Assert.assertArrayEquals(firstRow, lastColumn);
     }
 
     @Test
