@@ -8,6 +8,7 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TwoDimensionalIntegerMapping(int height, int width) {
+        super(Integer.class);
         this.dataMap = (Integer[][]) Array.newInstance(Integer.class, height, width);
     }
 

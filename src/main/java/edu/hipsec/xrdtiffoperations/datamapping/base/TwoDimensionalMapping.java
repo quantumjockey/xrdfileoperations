@@ -4,6 +4,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
+    protected Class<T> objectClass;
     protected T[][] dataMap;
 
     // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
@@ -20,6 +21,12 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     public void setMapCoordinate(int y, int x, T value) {
         this.dataMap[y][x] = value;
+    }
+
+    /////////// Constructor /////////////////////////////////////////////////////////////////
+
+    public TwoDimensionalMapping(Class<T> objectClass){
+        this.objectClass = objectClass;
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////

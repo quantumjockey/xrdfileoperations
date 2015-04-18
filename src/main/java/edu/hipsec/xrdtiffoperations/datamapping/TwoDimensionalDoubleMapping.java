@@ -8,6 +8,7 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TwoDimensionalDoubleMapping(int height, int width) {
+        super(Double.class);
         this.dataMap = (Double[][]) Array.newInstance(Double.class, height, width);
     }
 
