@@ -27,6 +27,12 @@ public abstract class TwoDimensionalMappingTest<MappingType extends TwoDimension
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
+    public abstract void resetDataGridRotation_GridRotatedAnyAngle_FinalRotationZero();
+
+    @Test
+    public abstract void resetDataGridRotation_GridRotatedAnyAngle_FirstRowUnchanged();
+
+    @Test
     public abstract void rotateDataGrid_NegativeNinetyDegrees_FirstColumnReversedIsFirstRow();
 
     @Test

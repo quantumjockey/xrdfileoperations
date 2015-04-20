@@ -8,6 +8,22 @@ public class TwoDimensionalIntegerMappingTest extends TwoDimensionalMappingTest<
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Override
+    public void resetDataGridRotation_GridRotatedAnyAngle_FinalRotationZero() {
+        this.mapping.rotateDataGrid(270);
+        this.mapping.resetDataGridRotation();
+        Assert.assertEquals(0.0, this.mapping.getRotationAngle(), 0.0);
+    }
+
+    @Override
+    public void resetDataGridRotation_GridRotatedAnyAngle_FirstRowUnchanged() {
+        Integer[] firstRow = this.mapping.getRow(0);
+        this.mapping.rotateDataGrid(90);
+        this.mapping.resetDataGridRotation();
+        Integer[] firstRowCopy = this.mapping.getRow(0);
+        Assert.assertArrayEquals(firstRow, firstRowCopy);
+    }
+
+    @Override
     public void rotateDataGrid_NegativeNinetyDegrees_FirstColumnReversedIsFirstRow() {
         Integer[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(-90);
