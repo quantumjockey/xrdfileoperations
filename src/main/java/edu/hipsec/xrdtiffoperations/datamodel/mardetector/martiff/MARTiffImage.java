@@ -7,15 +7,15 @@ import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.tools.ByteArray;
-import edu.hipsec.xrdtiffoperations.datamodel.FileTypes;
-import edu.hipsec.xrdtiffoperations.datamodel.TiffBase;
+import edu.hipsec.xrdtiffoperations.constants.FileTypes;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.base.TiffBase;
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.header.TiffHeader;
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.ImageFileDirectory;
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.DirectoryField;
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.FieldTags;
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.FieldTypes;
-import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.components.CalibrationData;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes.CalibrationData;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 

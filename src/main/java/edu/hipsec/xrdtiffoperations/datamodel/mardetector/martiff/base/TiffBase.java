@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.datamodel;
+package edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.base;
 
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.ImageFileDirectory;

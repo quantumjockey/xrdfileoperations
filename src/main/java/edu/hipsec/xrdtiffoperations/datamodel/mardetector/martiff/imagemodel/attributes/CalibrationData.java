@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.components;
+package edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes;
 
 import edu.hipsec.xrdtiffoperations.datamodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
