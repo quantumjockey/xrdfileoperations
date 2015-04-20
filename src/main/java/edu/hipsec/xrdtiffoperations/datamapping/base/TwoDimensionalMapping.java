@@ -8,6 +8,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     protected Class<T> derivedClassLiteral;
     protected T[][] dataMap;
+    protected double rotationAngle;
 
     // Added to prevent "variable should be effectively final" compilation errors when passing local variables into lambdas.
     protected T valueMax;
@@ -17,6 +18,9 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     public T get(int y, int x) {
         return this.dataMap[y][x];
+    }
+
+        return this.rotationAngle;
     }
 
     /////////// Mutators ////////////////////////////////////////////////////////////////////
@@ -66,9 +70,13 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     public abstract T getDynamicMinValue();
 
+    }
+
     public void rotateDataGrid(double angle) {
         int numQuarterTurns = Math.abs((int) angle / 90);
         T[][] cachedMapping = this.deepCopyTwoDimensionalArray(this.dataMap);
+
+        this.rotationAngle += angle;
 
         for (int i = 0; i < numQuarterTurns; i++)
             if (angle > 0.0)
