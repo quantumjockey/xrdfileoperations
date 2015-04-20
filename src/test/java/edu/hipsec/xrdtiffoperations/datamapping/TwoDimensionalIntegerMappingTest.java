@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class TwoDimensionalIntegerMappingTest {
 
@@ -15,7 +17,7 @@ public class TwoDimensionalIntegerMappingTest {
 
     @Before
     public void setUp() throws Exception {
-        this.mapping = new TwoDimensionalIntegerMapping(6, 6);
+        this.mapping = new TwoDimensionalIntegerMapping(3, 3);
         this.mapping.cycleMap((y, x) -> this.mapping.setMapCoordinate(y, x, (y * this.mapping.getWidth() + x)));
     }
 
@@ -27,19 +29,19 @@ public class TwoDimensionalIntegerMappingTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void rotateDataGrid_NegativeNinetyDegrees_FirstColumnIsFirstRow() {
+    public void rotateDataGrid_NegativeNinetyDegrees_FirstColumnReversedIsFirstRow() {
         Integer[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(-90);
-        Integer[] firstColumn = this.mapping.getColumn(0);
-        Assert.assertArrayEquals(firstRow, firstColumn);
+        Integer[] firstColumnReversed = this.reverseOrder(this.mapping.getColumn(0));
+        Assert.assertArrayEquals(firstRow, firstColumnReversed);
     }
 
     @Test
-    public void rotateDataGrid_NegativeOneHundredEightyDegrees_LastRowIsFirstRow() {
+    public void rotateDataGrid_NegativeOneHundredEightyDegrees_LastRowReversedIsFirstRow() {
         Integer[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(-180);
-        Integer[] lastRow = this.mapping.getRow(this.mapping.getHeight() - 1);
-        Assert.assertArrayEquals(firstRow, lastRow);
+        Integer[] lastRowReversed = this.reverseOrder(this.mapping.getRow(this.mapping.getHeight() - 1));
+        Assert.assertArrayEquals(firstRow, lastRowReversed);
     }
 
     @Test
@@ -59,19 +61,19 @@ public class TwoDimensionalIntegerMappingTest {
     }
 
     @Test
-    public void rotateDataGrid_PositiveOneHundredEightyDegrees_LastRowIsFirstRow() {
+    public void rotateDataGrid_PositiveOneHundredEightyDegrees_LastRowReversedIsFirstRow() {
         Integer[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(180);
-        Integer[] lastRow = this.mapping.getRow(this.mapping.getHeight() - 1);
-        Assert.assertArrayEquals(firstRow, lastRow);
+        Integer[] lastRowReversed = this.reverseOrder(this.mapping.getRow(this.mapping.getHeight() - 1));
+        Assert.assertArrayEquals(firstRow, lastRowReversed);
     }
 
     @Test
-    public void rotateDataGrid_PositiveTwoHundredSeventyDegrees_FirstColumnIsFirstRow() {
+    public void rotateDataGrid_PositiveTwoHundredSeventyDegrees_FirstColumnReversedIsFirstRow() {
         Integer[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(270);
-        Integer[] firstColumn = this.mapping.getColumn(0);
-        Assert.assertArrayEquals(firstRow, firstColumn);
+        Integer[] firstColumnReversed = this.reverseOrder(this.mapping.getColumn(0));
+        Assert.assertArrayEquals(firstRow, firstColumnReversed);
     }
 
     @Test
@@ -80,6 +82,13 @@ public class TwoDimensionalIntegerMappingTest {
         this.mapping.rotateDataGrid(0);
         Integer[] firstRowCopy = this.mapping.getRow(0);
         Assert.assertArrayEquals(firstRow, firstRowCopy);
+    }
+
+    /////////// Private Methods /////////////////////////////////////////////////////////////
+
+    private Integer[] reverseOrder(Integer[] temp){
+        Collections.reverse(Arrays.asList(temp));
+        return temp;
     }
 
 }
