@@ -14,6 +14,20 @@ public abstract class MAR345OutputSchema {
     protected ArrayList<String> extensions;
     protected double pixelSize;
 
+    /////////// Accessors ///////////////////////////////////////////////////////////////////
+
+    public double getDiameter(){
+        return this.diameter;
+    }
+
+    public ArrayList<String> getExtensions(){
+        return this.extensions;
+    }
+
+    public double pixelSize(){
+        return this.pixelSize;
+    }
+
     /////////// Constructor /////////////////////////////////////////////////////////////////
 
     public MAR345OutputSchema() {
