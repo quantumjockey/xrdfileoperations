@@ -67,27 +67,17 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     public abstract T getDynamicMinValue();
 
     public void rotateDataGrid(double angle) {
+        int numQuarterTurns = (int) angle / 90;
+        T[][] cachedMapping = this.deepCopyTwoDimensionalArray(this.dataMap);
 
-        final T[][] newMapping = this.generateTwoDimensionalTypedArray(this.getHeight(), this.getWidth());
-        final T[] linearTemp = this.generateOneDimensionalTypedArray(this.getHeight() * this.getWidth());
-
-        this.cycleMap((y, x) -> linearTemp[y * this.getWidth() + x] = this.dataMap[y][x]);
-
-        if (angle > 0.0) {
-            int z = 0;
-            for (int x = this.getWidth() - 1; x >= 0; x--)
-                for (int y = 0; y < this.getHeight(); y++) {
-                    newMapping[y][x] = linearTemp[z];
-                    z++;
-                }
-        } else if (angle < 0.0) {
-            for (int y = 0; y < this.getHeight(); y++)
-                for (int x = this.getWidth() - 1; x >= 0; x--)
-                    newMapping[x][y] = linearTemp[y * this.getHeight() + x];
-        }
+        for (int i = 0; i < Math.abs(numQuarterTurns); i++)
+            if (angle > 0.0)
+                cachedMapping = rotateDataGridOneQuarterTurn(true, this.deepCopyTwoDimensionalArray(cachedMapping));
+            else
+                cachedMapping = rotateDataGridOneQuarterTurn(false, this.deepCopyTwoDimensionalArray(cachedMapping));
 
         if (angle != 0.0)
-            this.dataMap = newMapping;
+            this.dataMap = cachedMapping;
     }
 
     public abstract T scaleDataZero();
@@ -124,6 +114,41 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     @SuppressWarnings("unchecked")
     private T[][] generateTwoDimensionalTypedArray(int ySize, int xSize) {
         return (T[][]) Array.newInstance(this.derivedClassLiteral, ySize, xSize);
+    }
+
+    private T[][] rotateDataGridOneQuarterTurn(boolean isClockwise, T[][] cachedMapping) {
+        final T[][] newMapping = this.generateTwoDimensionalTypedArray(this.getHeight(), this.getWidth());
+        final T[] linearTemp = this.generateOneDimensionalTypedArray(this.getHeight() * this.getWidth());
+
+        this.cycleMap((y, x) -> linearTemp[y * this.getWidth() + x] = cachedMapping[y][x]);
+
+        if (isClockwise) {
+            int z = 0;
+            for (int x = this.getWidth() - 1; x >= 0; x--)
+                for (int y = 0; y < this.getHeight(); y++) {
+                    newMapping[y][x] = linearTemp[z];
+                    z++;
+                }
+        } else
+            for (int y = 0; y < this.getHeight(); y++)
+                for (int x = this.getWidth() - 1; x >= 0; x--)
+                    newMapping[x][y] = linearTemp[y * this.getHeight() + x];
+
+        return newMapping;
+    }
+
+    /////////// Generically Applicable Methods //////////////////////////////////////////////
+
+    private T[][] deepCopyTwoDimensionalArray(T[][] sourceArray) {
+        int arrayHeight = sourceArray.length;
+        int arrayWidth = sourceArray[0].length;
+
+        T[][] temp = this.generateTwoDimensionalTypedArray(arrayHeight, arrayWidth);
+
+        for (int y = 0; y < arrayHeight; y++)
+            System.arraycopy(sourceArray[y], 0, temp[y], 0, sourceArray[y].length);
+
+        return temp;
     }
 
     /////////// Public Interfaces ///////////////////////////////////////////////////////////
