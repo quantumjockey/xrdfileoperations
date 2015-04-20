@@ -39,15 +39,17 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
+    // applies lambda passed through delegate interface to all elements within the data grid
     public void cycleMap(EnvyForCSharpDelegates action) {
         // Issues with multi-threaded execution in JavaFX will be resolved in the future, but
         // are being tabled for purposes of implementing additional features at this time.
         //if (!useMultiThreading)
-        this.cycleColumns(0, this.getHeight(), action);
+        this.cycleRows(0, this.getHeight(), action);
         //else
         //    cycleMapConcurrent(action);
     }
 
+    // retrieves specified column from data grid
     public T[] getColumn(int columnNumber) {
         T[] column = this.generateOneDimensionalTypedArray(this.getHeight());
         for (int y = 0; y < this.getHeight(); y++)
@@ -59,6 +61,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         return this.dataMap.length;
     }
 
+    // retrieves specified row from data grid
     public T[] getRow(int rowNumber) {
         return this.dataMap[rowNumber];
     }
@@ -71,10 +74,12 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     public abstract T getDynamicMinValue();
 
+    // rotates data grid elements to "zero" position, effectively restoring orientation of original data set
     public void resetDataGridRotation() {
         this.rotateDataGrid(this.rotationAngle * -1.0);
     }
 
+    // rotates data grid elements by specified angle, rounded to the nearest right angle
     public void rotateDataGrid(double angle) {
         double roundedAngle = this.roundToRightAngle(angle);
         int numQuarterTurns = Math.abs((int) roundedAngle / 90);
@@ -102,11 +107,13 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
-    private void cycleColumns(int startRow, int endRow, EnvyForCSharpDelegates action) {
+    // applies lambda passed through delegate interface to specified rows within data grid
+    private void cycleRows(int startRow, int endRow, EnvyForCSharpDelegates action) {
         for (int y = startRow; y < endRow; y++)
             this.cycleRow(y, action);
     }
 
+    // applies lambda passed through delegate interface to each element within specified row of data grid
     private void cycleRow(int y, EnvyForCSharpDelegates action) {
         for (int x = 0; x < this.getWidth(); x++) {
             try {
@@ -118,16 +125,19 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         }
     }
 
+    // shorthand for generating a one-dimensional array
     @SuppressWarnings("unchecked")
     private T[] generateOneDimensionalTypedArray(int size) {
         return (T[]) Array.newInstance(this.derivedClassLiteral, size);
     }
 
+    // shorthand for generating a two-dimensional array
     @SuppressWarnings("unchecked")
     private T[][] generateTwoDimensionalTypedArray(int ySize, int xSize) {
         return (T[][]) Array.newInstance(this.derivedClassLiteral, ySize, xSize);
     }
 
+    // rotates grid 90 degrees in the positive or negative direction
     private T[][] rotateDataGridOneQuarterTurn(boolean isClockwise, T[][] cachedMapping) {
         final T[][] newMapping = this.generateTwoDimensionalTypedArray(this.getHeight(), this.getWidth());
         final T[] linearTemp = this.generateOneDimensionalTypedArray(this.getHeight() * this.getWidth());
