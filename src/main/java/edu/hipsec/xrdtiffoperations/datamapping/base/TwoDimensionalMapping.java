@@ -76,18 +76,19 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     }
 
     public void rotateDataGrid(double angle) {
-        int numQuarterTurns = Math.abs((int) angle / 90);
+        double roundedAngle = this.roundToRightAngle(angle);
+        int numQuarterTurns = Math.abs((int) roundedAngle / 90);
         T[][] cachedMapping = this.deepCopyTwoDimensionalArray(this.dataMap);
 
-        this.rotationAngle += angle;
+        this.rotationAngle += roundedAngle;
 
         for (int i = 0; i < numQuarterTurns; i++)
-            if (angle > 0.0)
-                cachedMapping = rotateDataGridOneQuarterTurn(true, cachedMapping);
+            if (roundedAngle > 0.0)
+                cachedMapping = this.rotateDataGridOneQuarterTurn(true, cachedMapping);
             else
-                cachedMapping = rotateDataGridOneQuarterTurn(false, cachedMapping);
+                cachedMapping = this.rotateDataGridOneQuarterTurn(false, cachedMapping);
 
-        if (angle != 0.0)
+        if (roundedAngle != 0.0)
             this.dataMap = cachedMapping;
     }
 
@@ -145,6 +146,20 @@ public abstract class TwoDimensionalMapping<T extends Number> {
             }
 
         return newMapping;
+    }
+
+    // preserves simple rotation for square grids
+    private double roundToRightAngle(double input) {
+        double remainder = input % 90.0;
+        double rounded = input;
+
+        if (remainder != 0.0) {
+            rounded = input - remainder;
+            if (remainder >= 45.0)
+                rounded += 90.0;
+        }
+
+        return rounded;
     }
 
     /////////// Generically Applicable Methods //////////////////////////////////////////////
