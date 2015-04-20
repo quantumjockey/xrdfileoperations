@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields;
+package edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields;
 
 public class WritableDirectoryField extends DirectoryField {
 

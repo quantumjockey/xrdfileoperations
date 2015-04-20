@@ -1,9 +1,9 @@
-package edu.hipsec.xrdtiffoperations.imagemodel.ifd;
+package edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd;
 
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.DirectoryField;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.DirectoryField;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.WritableDirectoryField;
-import edu.hipsec.xrdtiffoperations.imagemodel.serialization.ByteSerializer;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.WritableDirectoryField;
+import edu.hipsec.xrdtiffoperations.datamodel.serialization.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;

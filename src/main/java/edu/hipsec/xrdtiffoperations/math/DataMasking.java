@@ -1,7 +1,7 @@
 package edu.hipsec.xrdtiffoperations.math;
 
 import edu.hipsec.xrdtiffoperations.data.DiffractionFrame;
-import edu.hipsec.xrdtiffoperations.imagemodel.FileExtensions;
+import edu.hipsec.xrdtiffoperations.datamodel.FileExtensions;
 
 public class DataMasking {
 

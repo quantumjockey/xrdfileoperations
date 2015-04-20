@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.imagemodel;
+package edu.hipsec.xrdtiffoperations.datamodel;
 
 public class FileTypes {
 

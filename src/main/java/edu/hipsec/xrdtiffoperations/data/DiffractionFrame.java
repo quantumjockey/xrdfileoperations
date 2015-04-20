@@ -1,6 +1,6 @@
 package edu.hipsec.xrdtiffoperations.data;
 
-import edu.hipsec.xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.datamapping.TwoDimensionalIntegerMapping;
 
 public class DiffractionFrame {

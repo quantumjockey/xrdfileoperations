@@ -1,6 +1,6 @@
 package edu.hipsec.xrdtiffoperations.filehandling.io;
 
-import edu.hipsec.xrdtiffoperations.imagemodel.martiff.MARTiffImage;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.MARTiffImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

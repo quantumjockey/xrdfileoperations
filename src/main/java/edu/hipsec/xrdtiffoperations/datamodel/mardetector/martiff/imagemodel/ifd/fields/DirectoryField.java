@@ -1,7 +1,7 @@
-package edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields;
+package edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields;
 
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
-import edu.hipsec.xrdtiffoperations.imagemodel.serialization.ByteSerializer;
+import edu.hipsec.xrdtiffoperations.datamodel.serialization.ByteSerializer;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 
 import java.nio.ByteBuffer;

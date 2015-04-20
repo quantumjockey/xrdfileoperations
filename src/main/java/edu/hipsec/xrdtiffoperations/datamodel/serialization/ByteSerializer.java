@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.imagemodel.serialization;
+package edu.hipsec.xrdtiffoperations.datamodel.serialization;
 
 import java.nio.ByteOrder;
 

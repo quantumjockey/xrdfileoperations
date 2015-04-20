@@ -1,11 +1,11 @@
-package edu.hipsec.xrdtiffoperations.imagemodel;
+package edu.hipsec.xrdtiffoperations.datamodel;
 
-import edu.hipsec.xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
-import edu.hipsec.xrdtiffoperations.imagemodel.serialization.ByteSerializer;
-import edu.hipsec.xrdtiffoperations.imagemodel.header.TiffHeader;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.DirectoryField;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes.ResolutionAxis;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.ImageFileDirectory;
+import edu.hipsec.xrdtiffoperations.datamodel.serialization.ByteSerializer;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.header.TiffHeader;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.DirectoryField;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.FieldTags;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

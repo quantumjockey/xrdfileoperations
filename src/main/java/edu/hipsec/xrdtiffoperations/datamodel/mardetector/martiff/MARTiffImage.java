@@ -1,21 +1,21 @@
-package edu.hipsec.xrdtiffoperations.imagemodel.martiff;
+package edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff;
 
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.SampleTypes;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.SampleTypes;
 import edu.hipsec.xrdtiffoperations.data.DiffractionFrame;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedFloatWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.tools.ByteArray;
-import edu.hipsec.xrdtiffoperations.imagemodel.FileTypes;
-import edu.hipsec.xrdtiffoperations.imagemodel.TiffBase;
-import edu.hipsec.xrdtiffoperations.imagemodel.attributes.ResolutionAxis;
-import edu.hipsec.xrdtiffoperations.imagemodel.header.TiffHeader;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.ImageFileDirectory;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.DirectoryField;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.FieldTags;
-import edu.hipsec.xrdtiffoperations.imagemodel.ifd.fields.FieldTypes;
-import edu.hipsec.xrdtiffoperations.imagemodel.martiff.components.CalibrationData;
+import edu.hipsec.xrdtiffoperations.datamodel.FileTypes;
+import edu.hipsec.xrdtiffoperations.datamodel.TiffBase;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes.ResolutionAxis;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.header.TiffHeader;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.ImageFileDirectory;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.DirectoryField;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.FieldTags;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.ifd.fields.FieldTypes;
+import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.components.CalibrationData;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
