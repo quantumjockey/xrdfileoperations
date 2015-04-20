@@ -1,6 +1,7 @@
 package edu.hipsec.xrdtiffoperations.datamapping.base;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
@@ -27,19 +28,34 @@ public abstract class TwoDimensionalMappingTest<MappingType extends TwoDimension
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public abstract void resetDataGridRotation_GridRotatedAnyAngle_FinalRotationZero();
+    public void resetDataGridRotation_GridRotatedAnyAngle_FinalRotationZero() {
+        this.mapping.rotateDataGrid(270);
+        this.mapping.resetDataGridRotation();
+        Assert.assertEquals(0.0, this.mapping.getRotationAngle(), 0.0);
+    }
 
     @Test
     public abstract void resetDataGridRotation_GridRotatedAnyAngle_FirstRowUnchanged();
 
     @Test
-    public abstract void resetDataGridRotation_MultipleRotations_FirstRotationZero();
+    public void resetDataGridRotation_MultipleRotations_FirstRotationZero() {
+        this.mapping.rotateDataGrid(90);
+        this.mapping.rotateDataGrid(-180);
+        this.mapping.rotateDataGrid(270);
+        this.mapping.resetDataGridRotation();
+        Assert.assertEquals(0.0, this.mapping.getRotationAngle(), 0.0);
+    }
 
     @Test
     public abstract void resetDataGridRotation_MultipleRotations_FirstRowUnchanged();
 
     @Test
-    public abstract void rotateDataGrid_MultipleRotations_RotationValueSumOfRotationArgumentValues();
+    public void rotateDataGrid_MultipleRotations_RotationValueSumOfRotationArgumentValues() {
+        this.mapping.rotateDataGrid(90);
+        this.mapping.rotateDataGrid(-180);
+        this.mapping.rotateDataGrid(270);
+        Assert.assertEquals(180.0, this.mapping.getRotationAngle(), 0.0);
+    }
 
     @Test
     public abstract void rotateDataGrid_NegativeNinetyDegrees_FirstColumnReversedIsFirstRow();
