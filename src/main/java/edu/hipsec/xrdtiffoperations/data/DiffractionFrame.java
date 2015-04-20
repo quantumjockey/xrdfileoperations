@@ -96,6 +96,11 @@ public class DiffractionFrame {
         this.intensityMap = new TwoDimensionalIntegerMapping(height, width);
     }
 
+    public void rotate(double angle){
+        this.intensityMap.resetDataGridRotation();
+        this.intensityMap.rotateDataGrid(angle);
+    }
+
     public int scaleImageZero() {
         return this.intensityMap.scaleDataZero();
     }
