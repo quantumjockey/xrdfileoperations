@@ -39,6 +39,9 @@ public abstract class TwoDimensionalMappingTest<MappingType extends TwoDimension
     public abstract void resetDataGridRotation_MultipleRotations_FirstRowUnchanged();
 
     @Test
+    public abstract void rotateDataGrid_MultipleRotations_RotationValueSumOfRotationArgumentValues();
+
+    @Test
     public abstract void rotateDataGrid_NegativeNinetyDegrees_FirstColumnReversedIsFirstRow();
 
     @Test
