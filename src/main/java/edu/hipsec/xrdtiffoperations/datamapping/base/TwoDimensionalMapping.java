@@ -67,14 +67,14 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     public abstract T getDynamicMinValue();
 
     public void rotateDataGrid(double angle) {
-        int numQuarterTurns = (int) angle / 90;
+        int numQuarterTurns = Math.abs((int) angle / 90);
         T[][] cachedMapping = this.deepCopyTwoDimensionalArray(this.dataMap);
 
-        for (int i = 0; i < Math.abs(numQuarterTurns); i++)
+        for (int i = 0; i < numQuarterTurns; i++)
             if (angle > 0.0)
-                cachedMapping = rotateDataGridOneQuarterTurn(true, this.deepCopyTwoDimensionalArray(cachedMapping));
+                cachedMapping = rotateDataGridOneQuarterTurn(true, cachedMapping);
             else
-                cachedMapping = rotateDataGridOneQuarterTurn(false, this.deepCopyTwoDimensionalArray(cachedMapping));
+                cachedMapping = rotateDataGridOneQuarterTurn(false, cachedMapping);
 
         if (angle != 0.0)
             this.dataMap = cachedMapping;
@@ -122,17 +122,16 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
         this.cycleMap((y, x) -> linearTemp[y * this.getWidth() + x] = cachedMapping[y][x]);
 
-        if (isClockwise) {
-            int z = 0;
-            for (int x = this.getWidth() - 1; x >= 0; x--)
-                for (int y = 0; y < this.getHeight(); y++) {
-                    newMapping[y][x] = linearTemp[z];
+        int z = (isClockwise) ? 0 : linearTemp.length - 1;
+
+        for (int x = this.getWidth() - 1; x >= 0; x--)
+            for (int y = 0; y < this.getHeight(); y++) {
+                newMapping[y][x] = linearTemp[z];
+                if (isClockwise)
                     z++;
-                }
-        } else
-            for (int y = 0; y < this.getHeight(); y++)
-                for (int x = this.getWidth() - 1; x >= 0; x--)
-                    newMapping[x][y] = linearTemp[y * this.getHeight() + x];
+                else
+                    z--;
+            }
 
         return newMapping;
     }
