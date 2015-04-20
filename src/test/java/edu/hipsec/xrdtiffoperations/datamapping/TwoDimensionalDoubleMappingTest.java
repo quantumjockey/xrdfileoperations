@@ -1,34 +1,13 @@
 package edu.hipsec.xrdtiffoperations.datamapping;
 
-import org.junit.After;
+import edu.hipsec.xrdtiffoperations.datamapping.base.TwoDimensionalMappingTest;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import java.util.Arrays;
-import java.util.Collections;
 
-public class TwoDimensionalDoubleMappingTest {
-
-    /////////// Fields //////////////////////////////////////////////////////////////////////
-
-    TwoDimensionalDoubleMapping mapping;
-
-    /////////// Setup/Teardown //////////////////////////////////////////////////////////////
-
-    @Before
-    public void setUp() throws Exception {
-        this.mapping = new TwoDimensionalDoubleMapping(3, 3);
-        this.mapping.cycleMap((y, x) -> this.mapping.setMapCoordinate(y, x, (y * this.mapping.getWidth() + x) * 1.0));
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
+public class TwoDimensionalDoubleMappingTest extends TwoDimensionalMappingTest<TwoDimensionalDoubleMapping, Double> {
 
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
-    @Test
+    @Override
     public void rotateDataGrid_NegativeNinetyDegrees_FirstColumnReversedIsFirstRow() {
         Double[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(-90);
@@ -36,7 +15,7 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, firstColumnReversed);
     }
 
-    @Test
+    @Override
     public void rotateDataGrid_NegativeOneHundredEightyDegrees_LastRowReversedIsFirstRow() {
         Double[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(-180);
@@ -44,7 +23,7 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, lastRowReversed);
     }
 
-    @Test
+    @Override
     public void rotateDataGrid_NegativeTwoHundredSeventyDegrees_LastColumnIsFirstRow() {
         Double[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(-270);
@@ -52,7 +31,7 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, lastColumn);
     }
 
-    @Test
+    @Override
     public void rotateDataGrid_PositiveNinetyDegrees_LastColumnIsFirstRow() {
         Double[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(90);
@@ -60,7 +39,7 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, lastColumn);
     }
 
-    @Test
+    @Override
     public void rotateDataGrid_PositiveOneHundredEightyDegrees_LastRowReversedIsFirstRow() {
         Double[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(180);
@@ -68,7 +47,7 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, lastRowReversed);
     }
 
-    @Test
+    @Override
     public void rotateDataGrid_PositiveTwoHundredSeventyDegrees_FirstColumnReversedIsFirstRow() {
         Double[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(270);
@@ -76,7 +55,7 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, firstColumnReversed);
     }
 
-    @Test
+    @Override
     public void rotateDataGrid_ZeroDegrees_NoRotation() {
         Double[] firstRow = this.mapping.getRow(0);
         this.mapping.rotateDataGrid(0);
@@ -84,11 +63,12 @@ public class TwoDimensionalDoubleMappingTest {
         Assert.assertArrayEquals(firstRow, firstRowCopy);
     }
 
-    /////////// Private Methods /////////////////////////////////////////////////////////////
+    /////////// Protected Methods ///////////////////////////////////////////////////////////
 
-    private Double[] reverseOrder(Double[] temp){
-        Collections.reverse(Arrays.asList(temp));
-        return temp;
+    @Override
+    protected void initializeMappingForTest() {
+        this.mapping = new TwoDimensionalDoubleMapping(3, 3);
+        this.mapping.cycleMap((y, x) -> this.mapping.setMapCoordinate(y, x, (y * this.mapping.getWidth() + x) * 1.0));
     }
 
 }
