@@ -67,6 +67,12 @@ public abstract class TwoDimensionalMappingTest<MappingType extends TwoDimension
     public abstract void rotateDataGrid_NegativeTwoHundredSeventyDegrees_LastColumnIsFirstRow();
 
     @Test
+    public void rotateDataGrid_NonRightAngle_RoundsInputToNearestRightAngle() {
+        this.mapping.rotateDataGrid(136);
+        Assert.assertEquals(180.0, this.mapping.getRotationAngle(), 0.0);
+    }
+
+    @Test
     public abstract void rotateDataGrid_PositiveNinetyDegrees_LastColumnIsFirstRow();
 
     @Test
