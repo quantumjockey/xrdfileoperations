@@ -20,6 +20,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         return this.dataMap[y][x];
     }
 
+    public double getRotationAngle() {
         return this.rotationAngle;
     }
 
@@ -70,6 +71,8 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     public abstract T getDynamicMinValue();
 
+    public void resetDataGridRotation() {
+        this.rotateDataGrid(this.rotationAngle * -1.0);
     }
 
     public void rotateDataGrid(double angle) {

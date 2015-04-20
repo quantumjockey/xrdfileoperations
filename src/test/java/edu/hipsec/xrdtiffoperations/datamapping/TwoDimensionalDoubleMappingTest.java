@@ -8,6 +8,26 @@ public class TwoDimensionalDoubleMappingTest extends TwoDimensionalMappingTest<T
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Override
+    public void resetDataGridRotation_MultipleRotations_FirstRotationZero() {
+        this.mapping.rotateDataGrid(90);
+        this.mapping.rotateDataGrid(-180);
+        this.mapping.rotateDataGrid(270);
+        this.mapping.resetDataGridRotation();
+        Assert.assertEquals(0.0, this.mapping.getRotationAngle(), 0.0);
+    }
+
+    @Override
+    public void resetDataGridRotation_MultipleRotations_FirstRowUnchanged() {
+        Double[] firstRow = this.mapping.getRow(0);
+        this.mapping.rotateDataGrid(90);
+        this.mapping.rotateDataGrid(-180);
+        this.mapping.rotateDataGrid(270);
+        this.mapping.resetDataGridRotation();
+        Double[] firstRowCopy = this.mapping.getRow(0);
+        Assert.assertArrayEquals(firstRow, firstRowCopy);
+    }
+
+    @Override
     public void resetDataGridRotation_GridRotatedAnyAngle_FinalRotationZero() {
         this.mapping.rotateDataGrid(270);
         this.mapping.resetDataGridRotation();
