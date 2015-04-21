@@ -1,12 +1,12 @@
 package edu.hipsec.xrdtiffoperations.datamapping.base;
 
-import java.lang.reflect.Array;
+import edu.hipsec.xrdtiffoperations.utilities.array.ArrayOperator;
 
 public abstract class TwoDimensionalMapping<T extends Number> {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    protected Class<T> derivedClassLiteral;
+    protected ArrayOperator<T> arrayUtils;
     protected T[][] dataMap;
     protected double rotationAngle;
 
@@ -33,8 +33,8 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     /////////// Constructor /////////////////////////////////////////////////////////////////
 
     public TwoDimensionalMapping(Class<T> derivedClassLiteral, int height, int width) {
-        this.derivedClassLiteral = derivedClassLiteral;
-        this.dataMap = this.generateTwoDimensionalTypedArray(height, width);
+        this.arrayUtils = new ArrayOperator<>(derivedClassLiteral);
+        this.dataMap = this.arrayUtils.generateTwoDimensionalTypedArray(height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     // retrieves specified column from data grid
     public T[] getColumn(int columnNumber) {
-        T[] column = this.generateOneDimensionalTypedArray(this.getHeight());
+        T[] column = this.arrayUtils.generateOneDimensionalTypedArray(this.getHeight());
         for (int y = 0; y < this.getHeight(); y++)
             column[y] = this.dataMap[y][columnNumber];
         return column;
@@ -83,7 +83,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     public void rotateDataGrid(double angle) {
         double roundedAngle = this.roundToRightAngle(angle);
         int numQuarterTurns = Math.abs((int) roundedAngle / 90);
-        T[][] cachedMapping = this.deepCopyTwoDimensionalArray(this.dataMap);
+        T[][] cachedMapping = this.arrayUtils.deepCopyTwoDimensionalArray(this.dataMap);
 
         this.rotationAngle += roundedAngle;
 
@@ -125,22 +125,10 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         }
     }
 
-    // shorthand for generating a one-dimensional array
-    @SuppressWarnings("unchecked")
-    private T[] generateOneDimensionalTypedArray(int size) {
-        return (T[]) Array.newInstance(this.derivedClassLiteral, size);
-    }
-
-    // shorthand for generating a two-dimensional array
-    @SuppressWarnings("unchecked")
-    private T[][] generateTwoDimensionalTypedArray(int ySize, int xSize) {
-        return (T[][]) Array.newInstance(this.derivedClassLiteral, ySize, xSize);
-    }
-
     // rotates grid 90 degrees in the positive or negative direction
     private T[][] rotateDataGridOneQuarterTurn(boolean isClockwise, T[][] cachedMapping) {
-        final T[][] newMapping = this.generateTwoDimensionalTypedArray(this.getHeight(), this.getWidth());
-        final T[] linearTemp = this.generateOneDimensionalTypedArray(this.getHeight() * this.getWidth());
+        final T[][] newMapping = this.arrayUtils.generateTwoDimensionalTypedArray(this.getHeight(), this.getWidth());
+        final T[] linearTemp = this.arrayUtils.generateOneDimensionalTypedArray(this.getHeight() * this.getWidth());
 
         this.cycleMap((y, x) -> linearTemp[y * this.getWidth() + x] = cachedMapping[y][x]);
 
@@ -170,20 +158,6 @@ public abstract class TwoDimensionalMapping<T extends Number> {
         }
 
         return rounded;
-    }
-
-    /////////// Generically Applicable Methods //////////////////////////////////////////////
-
-    private T[][] deepCopyTwoDimensionalArray(T[][] sourceArray) {
-        int arrayHeight = sourceArray.length;
-        int arrayWidth = sourceArray[0].length;
-
-        T[][] temp = this.generateTwoDimensionalTypedArray(arrayHeight, arrayWidth);
-
-        for (int y = 0; y < arrayHeight; y++)
-            System.arraycopy(sourceArray[y], 0, temp[y], 0, sourceArray[y].length);
-
-        return temp;
     }
 
     /////////// Public Interfaces ///////////////////////////////////////////////////////////
