@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.math;
+package edu.hipsec.xrdtiffoperations.data.math;
 
 import edu.hipsec.xrdtiffoperations.data.DiffractionFrame;
 import edu.hipsec.xrdtiffoperations.constants.FileExtensions;
