@@ -1,5 +1,6 @@
-package edu.hipsec.xrdtiffoperations.datamapping.base;
+package edu.hipsec.xrdtiffoperations.data.mapping.base;
 
+import edu.hipsec.xrdtiffoperations.data.mapping.base.TwoDimensionalMapping;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

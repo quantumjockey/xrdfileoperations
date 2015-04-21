@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.datamapping.base;
+package edu.hipsec.xrdtiffoperations.data.mapping.base;
 
 import edu.hipsec.xrdtiffoperations.utilities.array.ArrayOperator;
 import edu.hipsec.xrdtiffoperations.utilities.delegate.EnvyForCSharpDelegates;

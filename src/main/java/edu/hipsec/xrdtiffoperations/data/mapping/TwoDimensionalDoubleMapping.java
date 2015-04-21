@@ -1,19 +1,19 @@
-package edu.hipsec.xrdtiffoperations.datamapping;
+package edu.hipsec.xrdtiffoperations.data.mapping;
 
-import edu.hipsec.xrdtiffoperations.datamapping.base.TwoDimensionalMapping;
+import edu.hipsec.xrdtiffoperations.data.mapping.base.TwoDimensionalMapping;
 
-public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer> {
+public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public TwoDimensionalIntegerMapping(int height, int width) {
-        super(Integer.class, height, width);
+    public TwoDimensionalDoubleMapping(int height, int width) {
+        super(Double.class, height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Integer getDynamicMaxValue() {
+    public Double getDynamicMaxValue() {
         this.valueMax = this.getMinLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] > this.valueMax)
@@ -23,7 +23,7 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     }
 
     @Override
-    public Integer getDynamicMinValue() {
+    public Double getDynamicMinValue() {
         this.valueMin = this.getMaxLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] < this.valueMin)
@@ -33,20 +33,20 @@ public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer>
     }
 
     @Override
-    public Integer scaleDataZero() {
+    public Double scaleDataZero() {
         return Math.abs(this.getDynamicMinValue());
     }
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////
 
     @Override
-    protected Integer getMaxLimit() {
-        return Integer.MAX_VALUE;
+    protected Double getMaxLimit() {
+        return Double.MAX_VALUE;
     }
 
     @Override
-    protected Integer getMinLimit() {
-        return Integer.MIN_VALUE;
+    protected Double getMinLimit() {
+        return Double.MIN_VALUE;
     }
 
 }

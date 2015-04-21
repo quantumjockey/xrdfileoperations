@@ -1,19 +1,19 @@
-package edu.hipsec.xrdtiffoperations.datamapping;
+package edu.hipsec.xrdtiffoperations.data.mapping;
 
-import edu.hipsec.xrdtiffoperations.datamapping.base.TwoDimensionalMapping;
+import edu.hipsec.xrdtiffoperations.data.mapping.base.TwoDimensionalMapping;
 
-public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
+public class TwoDimensionalIntegerMapping extends TwoDimensionalMapping<Integer> {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public TwoDimensionalDoubleMapping(int height, int width) {
-        super(Double.class, height, width);
+    public TwoDimensionalIntegerMapping(int height, int width) {
+        super(Integer.class, height, width);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     @Override
-    public Double getDynamicMaxValue() {
+    public Integer getDynamicMaxValue() {
         this.valueMax = this.getMinLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] > this.valueMax)
@@ -23,7 +23,7 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     }
 
     @Override
-    public Double getDynamicMinValue() {
+    public Integer getDynamicMinValue() {
         this.valueMin = this.getMaxLimit();
         this.cycleMap((y, x) -> {
             if (this.dataMap[y][x] < this.valueMin)
@@ -33,20 +33,20 @@ public class TwoDimensionalDoubleMapping extends TwoDimensionalMapping<Double> {
     }
 
     @Override
-    public Double scaleDataZero() {
+    public Integer scaleDataZero() {
         return Math.abs(this.getDynamicMinValue());
     }
 
     /////////// Protected Methods ///////////////////////////////////////////////////////////
 
     @Override
-    protected Double getMaxLimit() {
-        return Double.MAX_VALUE;
+    protected Integer getMaxLimit() {
+        return Integer.MAX_VALUE;
     }
 
     @Override
-    protected Double getMinLimit() {
-        return Double.MIN_VALUE;
+    protected Integer getMinLimit() {
+        return Integer.MIN_VALUE;
     }
 
 }
