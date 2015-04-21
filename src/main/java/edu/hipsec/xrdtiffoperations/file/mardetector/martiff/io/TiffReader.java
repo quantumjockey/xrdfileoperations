@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.filehandling.io;
+package edu.hipsec.xrdtiffoperations.file.mardetector.martiff.io;
 
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.MARTiffImage;
 import java.io.IOException;
