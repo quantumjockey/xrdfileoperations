@@ -2,10 +2,10 @@ package edu.hipsec.xrdtiffoperations.file.mardetector.martiff;
 
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.ifd.fields.SampleTypes;
 import edu.hipsec.xrdtiffoperations.data.DiffractionFrame;
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedFloatWrapper;
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.SignedFloatWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.SignedIntWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.UnsignedShortWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.extensions.IntegerWrapper;
 import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteArray;
 import edu.hipsec.xrdtiffoperations.constants.FileTypes;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.base.TiffBase;

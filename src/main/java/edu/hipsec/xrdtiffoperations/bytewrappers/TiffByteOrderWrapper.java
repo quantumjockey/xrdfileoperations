@@ -1,6 +1,6 @@
-package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers;
+package edu.hipsec.xrdtiffoperations.bytewrappers;
 
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.base.ByteData;
+import edu.hipsec.xrdtiffoperations.bytewrappers.base.ByteData;
 import java.nio.ByteOrder;
 
 public class TiffByteOrderWrapper extends ByteData {

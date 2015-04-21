@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.extensions;
+package edu.hipsec.xrdtiffoperations.bytewrappers.extensions;
 
 public interface IntegerWrapper {
 

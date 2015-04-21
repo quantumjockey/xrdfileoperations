@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.base;
+package edu.hipsec.xrdtiffoperations.bytewrappers.base;
 
 public class ByteData {
 

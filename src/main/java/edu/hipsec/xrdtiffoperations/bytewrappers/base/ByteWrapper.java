@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.base;
+package edu.hipsec.xrdtiffoperations.bytewrappers.base;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

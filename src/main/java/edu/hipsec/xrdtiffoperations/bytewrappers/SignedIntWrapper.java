@@ -1,7 +1,7 @@
-package edu.hipsec.xrdtiffoperations.filehandling.bytewrappers;
+package edu.hipsec.xrdtiffoperations.bytewrappers;
 
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.base.ByteWrapper;
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.base.ByteWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.extensions.IntegerWrapper;
 
 import java.nio.ByteOrder;
 

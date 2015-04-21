@@ -1,8 +1,8 @@
 package edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.header;
 
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
-import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.TiffByteOrderWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.SignedIntWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.SignedShortWrapper;
+import edu.hipsec.xrdtiffoperations.bytewrappers.TiffByteOrderWrapper;
 import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
