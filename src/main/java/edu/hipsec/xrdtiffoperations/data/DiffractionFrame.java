@@ -1,6 +1,6 @@
 package edu.hipsec.xrdtiffoperations.data;
 
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.attributes.ResolutionAxis;
+import edu.hipsec.xrdtiffoperations.file.martiff.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.data.mapping.TwoDimensionalIntegerMapping;
 import edu.hipsec.xrdtiffoperations.utilities.delegate.EnvyForCSharpDelegates;
 

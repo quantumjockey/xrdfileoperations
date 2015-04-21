@@ -1,6 +1,6 @@
 package edu.hipsec.xrdtiffoperations.file.tiff;
 
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.attributes.ResolutionAxis;
+import edu.hipsec.xrdtiffoperations.file.martiff.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.file.tiff.ifd.ImageFileDirectory;
 import edu.hipsec.xrdtiffoperations.file.tiff.header.TiffHeader;
 import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.DirectoryField;
