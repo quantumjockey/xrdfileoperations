@@ -25,6 +25,7 @@ public class DescriptiveStats {
     }
 
     public double calculateStandardDeviation(DiffractionFrame data){
+        // requires functionality - will resume once file reads are completely corrected, tested, and available for use.
         return 0.0;
     }
 
