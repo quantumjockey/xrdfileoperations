@@ -1,6 +1,8 @@
 package edu.hipsec.xrdtiffoperations.datamapping.base;
 
 import edu.hipsec.xrdtiffoperations.utilities.array.ArrayOperator;
+import edu.hipsec.xrdtiffoperations.utilities.delegate.EnvyForCSharpDelegates;
+import edu.hipsec.xrdtiffoperations.utilities.geometry.RoundingOperator;
 
 public abstract class TwoDimensionalMapping<T extends Number> {
 
@@ -81,7 +83,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
 
     // rotates data grid elements by specified angle, rounded to the nearest right angle
     public void rotateDataGrid(double angle) {
-        double roundedAngle = this.roundToRightAngle(angle);
+        double roundedAngle = RoundingOperator.roundToRightAngle(angle);
         int numQuarterTurns = Math.abs((int) roundedAngle / 90);
         T[][] cachedMapping = this.arrayUtils.deepCopyTwoDimensionalArray(this.dataMap);
 
@@ -144,26 +146,6 @@ public abstract class TwoDimensionalMapping<T extends Number> {
             }
 
         return newMapping;
-    }
-
-    // preserves simple rotation for square grids
-    private double roundToRightAngle(double input) {
-        double remainder = input % 90.0;
-        double rounded = input;
-
-        if (remainder != 0.0) {
-            rounded = input - remainder;
-            if (remainder >= 45.0)
-                rounded += 90.0;
-        }
-
-        return rounded;
-    }
-
-    /////////// Public Interfaces ///////////////////////////////////////////////////////////
-
-    public interface EnvyForCSharpDelegates {
-        void callMethod(int a, int b);
     }
 
 }

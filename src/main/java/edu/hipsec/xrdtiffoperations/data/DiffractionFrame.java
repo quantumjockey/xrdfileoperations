@@ -2,6 +2,7 @@ package edu.hipsec.xrdtiffoperations.data;
 
 import edu.hipsec.xrdtiffoperations.datamodel.mardetector.martiff.imagemodel.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.datamapping.TwoDimensionalIntegerMapping;
+import edu.hipsec.xrdtiffoperations.utilities.delegate.EnvyForCSharpDelegates;
 
 public class DiffractionFrame {
 
@@ -72,7 +73,7 @@ public class DiffractionFrame {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void cycleFramePixels(TwoDimensionalIntegerMapping.EnvyForCSharpDelegates action) {
+    public void cycleFramePixels(EnvyForCSharpDelegates action) {
         this.intensityMap.cycleMap(action);
     }
 
