@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.statistics;
+package edu.hipsec.xrdtiffoperations.utilities.statistics;
 
 import edu.hipsec.xrdtiffoperations.data.DiffractionFrame;
 
