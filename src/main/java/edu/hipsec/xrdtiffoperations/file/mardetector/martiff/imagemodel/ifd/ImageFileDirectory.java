@@ -3,7 +3,7 @@ package edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.ifd;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.ifd.fields.DirectoryField;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.ifd.fields.WritableDirectoryField;
-import edu.hipsec.xrdtiffoperations.file.serialization.ByteSerializer;
+import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteSerializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;

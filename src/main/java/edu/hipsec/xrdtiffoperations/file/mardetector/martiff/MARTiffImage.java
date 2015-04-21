@@ -6,7 +6,7 @@ import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedFloatWrapper
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.SignedIntWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.UnsignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.filehandling.bytewrappers.extensions.IntegerWrapper;
-import edu.hipsec.xrdtiffoperations.filehandling.tools.ByteArray;
+import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteArray;
 import edu.hipsec.xrdtiffoperations.constants.FileTypes;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.base.TiffBase;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.attributes.ResolutionAxis;

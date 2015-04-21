@@ -2,7 +2,7 @@ package edu.hipsec.xrdtiffoperations.file.mardetector.martiff.base;
 
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.ifd.ImageFileDirectory;
-import edu.hipsec.xrdtiffoperations.file.serialization.ByteSerializer;
+import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteSerializer;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.header.TiffHeader;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.ifd.fields.DirectoryField;
 import edu.hipsec.xrdtiffoperations.file.mardetector.martiff.imagemodel.ifd.fields.FieldTags;

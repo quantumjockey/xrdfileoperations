@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.filehandling.tools;
+package edu.hipsec.xrdtiffoperations.utilities.bytes;
 
 public class ByteArray {
 
