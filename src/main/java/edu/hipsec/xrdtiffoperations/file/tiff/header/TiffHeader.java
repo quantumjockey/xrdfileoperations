@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.header;
+package edu.hipsec.xrdtiffoperations.file.tiff.header;
 
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedIntWrapper;
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedShortWrapper;

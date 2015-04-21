@@ -1,19 +1,19 @@
 package edu.hipsec.xrdtiffoperations.file.martiff;
 
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.ifd.fields.SampleTypes;
+import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.SampleTypes;
 import edu.hipsec.xrdtiffoperations.data.DiffractionFrame;
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedFloatWrapper;
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedIntWrapper;
 import edu.hipsec.xrdtiffoperations.bytewrappers.UnsignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.bytewrappers.extensions.IntegerWrapper;
-import edu.hipsec.xrdtiffoperations.file.martiff.base.TiffBase;
+import edu.hipsec.xrdtiffoperations.file.tiff.TiffBase;
 import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.attributes.CalibrationData;
 import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.attributes.ResolutionAxis;
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.header.TiffHeader;
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.ifd.ImageFileDirectory;
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.ifd.fields.DirectoryField;
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.ifd.fields.FieldTags;
-import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.ifd.fields.FieldTypes;
+import edu.hipsec.xrdtiffoperations.file.tiff.header.TiffHeader;
+import edu.hipsec.xrdtiffoperations.file.tiff.ifd.ImageFileDirectory;
+import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.DirectoryField;
+import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.FieldTags;
+import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.FieldTypes;
 import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteArray;
 import edu.hipsec.xrdtiffoperations.constants.FileTypes;
 

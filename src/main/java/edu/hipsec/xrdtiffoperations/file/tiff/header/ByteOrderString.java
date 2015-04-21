@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.header;
+package edu.hipsec.xrdtiffoperations.file.tiff.header;
 
 public class ByteOrderString {
 
