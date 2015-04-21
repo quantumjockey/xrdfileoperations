@@ -6,7 +6,7 @@ import edu.hipsec.xrdtiffoperations.bytewrappers.SignedFloatWrapper;
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedIntWrapper;
 import edu.hipsec.xrdtiffoperations.bytewrappers.UnsignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.bytewrappers.extensions.IntegerWrapper;
-import edu.hipsec.xrdtiffoperations.file.tiff.TiffBase;
+import edu.hipsec.xrdtiffoperations.file.tiff.TiffR6Image;
 import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.attributes.CalibrationData;
 import edu.hipsec.xrdtiffoperations.file.martiff.imagemodel.attributes.ResolutionAxis;
 import edu.hipsec.xrdtiffoperations.file.tiff.header.TiffHeader;
@@ -16,11 +16,10 @@ import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.FieldTags;
 import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.FieldTypes;
 import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteArray;
 import edu.hipsec.xrdtiffoperations.constants.FileTypes;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class MARTiffImage extends TiffBase {
+public class MARTiffImage extends TiffR6Image {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 

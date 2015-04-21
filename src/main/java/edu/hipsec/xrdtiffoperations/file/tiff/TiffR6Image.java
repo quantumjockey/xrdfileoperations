@@ -6,12 +6,18 @@ import edu.hipsec.xrdtiffoperations.file.tiff.header.TiffHeader;
 import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.DirectoryField;
 import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.FieldTags;
 import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteSerializer;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 
-public class TiffBase extends ByteSerializer {
+public class TiffR6Image extends ByteSerializer {
+
+    /*
+    This is an abstraction of the TIFF Revision 6.0 specification from Adobe Partners,
+    published by the Adobe Developers Association on June 3rd, 1992
+    More information can be found within: https://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
+    Last Accessed: April 25th, 2015
+    */
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -37,7 +43,7 @@ public class TiffBase extends ByteSerializer {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
-    public TiffBase(String _filename) {
+    public TiffR6Image(String _filename) {
         this.ifdListing = new ArrayList<>();
         this.filename = _filename;
         this.header = new TiffHeader();
