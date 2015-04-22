@@ -7,23 +7,20 @@ import org.junit.Test;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class UnsignedShortWrapperTest {
+public class TiffByteOrderWrapperTest {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     byte[] bytes;
-    UnsignedShortWrapper wrapper;
+    TiffByteOrderWrapper wrapper;
 
     /////////// Setup/Teardown //////////////////////////////////////////////////////////////
 
     @Before
     public void setUp() throws Exception {
-        char value = 'a';
-        int numBytes = Character.BYTES;
-        ByteBuffer buffer = ByteBuffer.allocate(numBytes);
-        buffer.putChar(value);
-        this.wrapper = new UnsignedShortWrapper(ByteOrder.BIG_ENDIAN);
-        this.bytes = buffer.array();
+        String value = "II";
+        this.wrapper = new TiffByteOrderWrapper();
+        this.bytes = value.getBytes();
     }
 
     @After
@@ -36,8 +33,8 @@ public class UnsignedShortWrapperTest {
     @Test
     public void get_characterConverted_returnInput() {
         System.arraycopy(this.bytes, 0, this.wrapper.getDataBytes(), 0, this.bytes.length);
-        char value = this.wrapper.get();
-        Assert.assertEquals('a', value);
+        ByteOrder value = this.wrapper.get();
+        Assert.assertEquals(ByteOrder.LITTLE_ENDIAN, value);
     }
 
 }

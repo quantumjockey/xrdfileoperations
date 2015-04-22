@@ -7,22 +7,22 @@ import org.junit.Test;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class UnsignedShortWrapperTest {
+public class SignedFloatWrapperTest {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
     byte[] bytes;
-    UnsignedShortWrapper wrapper;
+    SignedFloatWrapper wrapper;
 
     /////////// Setup/Teardown //////////////////////////////////////////////////////////////
 
     @Before
     public void setUp() throws Exception {
-        char value = 'a';
-        int numBytes = Character.BYTES;
+        Float value = (float)1.5;
+        int numBytes = Float.BYTES;
         ByteBuffer buffer = ByteBuffer.allocate(numBytes);
-        buffer.putChar(value);
-        this.wrapper = new UnsignedShortWrapper(ByteOrder.BIG_ENDIAN);
+        buffer.putFloat(value);
+        this.wrapper = new SignedFloatWrapper(ByteOrder.BIG_ENDIAN);
         this.bytes = buffer.array();
     }
 
@@ -34,10 +34,11 @@ public class UnsignedShortWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
-    public void get_characterConverted_returnInput() {
+    public void get_floatWithinBoundsConverted_returnInput() {
         System.arraycopy(this.bytes, 0, this.wrapper.getDataBytes(), 0, this.bytes.length);
-        char value = this.wrapper.get();
-        Assert.assertEquals('a', value);
+        float value = this.wrapper.get();
+        Assert.assertEquals((float)1.5, value, 0.0);
     }
 
 }
+
