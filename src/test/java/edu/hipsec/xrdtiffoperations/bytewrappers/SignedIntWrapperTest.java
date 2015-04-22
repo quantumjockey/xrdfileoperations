@@ -34,6 +34,11 @@ public class SignedIntWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
+    public void constructor_checkArraySize_expectedByteLengthForType() {
+        Assert.assertEquals(4, this.wrapper.getDataBytes().length);
+    }
+
+    @Test
     public void get_integerWithinBoundsConverted_returnInput() {
         this.wrapper.extractFromSourceArray(this.bytes, 0);
         int value = this.wrapper.get();

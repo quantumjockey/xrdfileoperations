@@ -34,6 +34,11 @@ public class SignedFloatWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
+    public void constructor_checkArraySize_expectedByteLengthForType() {
+        Assert.assertEquals(4, this.wrapper.getDataBytes().length);
+    }
+
+    @Test
     public void get_floatWithinBoundsConverted_returnInput() {
         this.wrapper.extractFromSourceArray(this.bytes, 0);
         float value = this.wrapper.get();

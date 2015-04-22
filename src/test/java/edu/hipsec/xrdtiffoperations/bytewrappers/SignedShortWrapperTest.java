@@ -34,6 +34,11 @@ public class SignedShortWrapperTest {
     /////////// Tests ///////////////////////////////////////////////////////////////////////
 
     @Test
+    public void constructor_checkArraySize_expectedByteLengthForType() {
+        Assert.assertEquals(2, this.wrapper.getDataBytes().length);
+    }
+
+    @Test
     public void get_shortWithinBoundsConverted_returnInput() {
         this.wrapper.extractFromSourceArray(this.bytes, 0);
         short value = this.wrapper.get();
