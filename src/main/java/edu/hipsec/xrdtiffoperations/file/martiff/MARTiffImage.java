@@ -188,11 +188,12 @@ public class MARTiffImage extends TiffR6Image {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
+    public boolean fromByteArray(byte[] dataBytes, ByteOrder order) {
         super.fromByteArray(dataBytes, order);
         if (this.getIfdListing().get(0).getTagValue(FieldTags.CALIBRATION_DATA_OFFSET_SIGNED) != -1)
             this.getCalibrationData(dataBytes, this.header.getByteOrder());
         this.getImageData(dataBytes, this.header.getByteOrder());
+        return true;
     }
 
     @Override

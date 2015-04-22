@@ -51,11 +51,20 @@ public class DirectoryField extends ByteSerializer {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
+    public boolean fromByteArray(byte[] dataBytes, ByteOrder order) {
         SignedShortWrapper fieldTag, fieldType;
         SignedIntWrapper fieldValue, typeCount;
 
-        if (dataBytes.length == BYTE_LENGTH) {
+        int numZeroes = 0;
+        for(byte element: dataBytes) {
+            if (element == (byte)0)
+                numZeroes++;
+        }
+
+        if (numZeroes == BYTE_LENGTH)
+            return false;
+
+        if (dataBytes.length >= BYTE_LENGTH) {
             fieldTag = new SignedShortWrapper(order);
             fieldType = new SignedShortWrapper(order);
             typeCount = new SignedIntWrapper(order);
@@ -70,8 +79,11 @@ public class DirectoryField extends ByteSerializer {
             this.type = fieldType.get();
             this.count = typeCount.get();
             this.value = fieldValue.get();
-        } else
+            return true;
+        } else {
             this.displaySizeAlert(dataBytes.length, BYTE_LENGTH);
+            return false;
+        }
     }
 
     @Override

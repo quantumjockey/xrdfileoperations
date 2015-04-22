@@ -24,8 +24,9 @@ public class CalibrationData extends ByteSerializer {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
+    public boolean fromByteArray(byte[] dataBytes, ByteOrder order) {
         this.coreCalibrationBytes = dataBytes;
+        return true;
     }
 
     @Override

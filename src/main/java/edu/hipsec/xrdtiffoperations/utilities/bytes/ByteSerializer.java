@@ -6,7 +6,7 @@ public abstract class ByteSerializer {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public abstract void fromByteArray(byte[] dataBytes, ByteOrder order);
+    public abstract boolean fromByteArray(byte[] dataBytes, ByteOrder order);
 
     public abstract byte[] toByteArray(ByteOrder order);
 

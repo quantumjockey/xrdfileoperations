@@ -43,7 +43,7 @@ public class DirectoryFieldTest {
 
     @Test
     public void toByteArray_arrayGenerated_arraySizeSumOfExpectedFieldTypes() {
-        Assert.assertEquals(12, this.field.toByteArray(ByteOrder.BIG_ENDIAN));
+        Assert.assertEquals(12, this.field.toByteArray(ByteOrder.BIG_ENDIAN).length);
     }
 
 }

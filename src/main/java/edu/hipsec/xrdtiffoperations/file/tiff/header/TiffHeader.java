@@ -54,7 +54,7 @@ public class TiffHeader extends ByteSerializer {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
+    public boolean fromByteArray(byte[] dataBytes, ByteOrder order) {
         TiffByteOrderWrapper _byteOrder;
         SignedShortWrapper _identifier;
         SignedIntWrapper _ifdOffset;
@@ -76,8 +76,11 @@ public class TiffHeader extends ByteSerializer {
             // extract first IFD offset value
             System.arraycopy(dataBytes, 4, _ifdOffset.getDataBytes(), 0, this.FIRST_IFD_OFFSET_BYTES_LENGTH);
             this.firstIfdOffset = _ifdOffset.get();
-        } else
+            return true;
+        } else {
             this.displaySizeAlert(dataBytes.length, BYTE_LENGTH);
+            return false;
+        }
 
     }
 
