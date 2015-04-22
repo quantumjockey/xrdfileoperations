@@ -3,7 +3,7 @@ package edu.hipsec.xrdtiffoperations.bytewrappers.base;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
+public abstract class ByteWrapper<T> extends ByteData {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -17,7 +17,7 @@ public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
         this.order = _order;
         this.dataBytes = new byte[this.getByteCount(bitCount)];
     }
-    
+
     public ByteWrapper(int bitCount){
         this(bitCount, ByteOrder.nativeOrder());
     }

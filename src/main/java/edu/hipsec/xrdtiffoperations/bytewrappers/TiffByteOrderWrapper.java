@@ -1,22 +1,19 @@
 package edu.hipsec.xrdtiffoperations.bytewrappers;
 
-import edu.hipsec.xrdtiffoperations.bytewrappers.base.ByteData;
+import edu.hipsec.xrdtiffoperations.bytewrappers.base.ByteWrapper;
 import java.nio.ByteOrder;
 
-public class TiffByteOrderWrapper extends ByteData {
+public class TiffByteOrderWrapper extends ByteWrapper<ByteOrder> {
 
     /////////// Constructors ////////////////////////////////////////////////////////////////
 
     public TiffByteOrderWrapper() {
-        super(2);
+        super(16);
     }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public void extractFromSourceArray(byte[] sourceArray, int startPos){
-        System.arraycopy(sourceArray, startPos, this.dataBytes, 0, this.dataBytes.length);
-    }
-
+    @Override
     public ByteOrder get() {
         return this.getByteOrder(new String(this.dataBytes));
     }
