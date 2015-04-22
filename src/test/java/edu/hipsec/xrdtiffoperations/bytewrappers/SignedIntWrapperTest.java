@@ -4,17 +4,26 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class SignedIntWrapperTest {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
+    byte[] bytes;
+    SignedIntWrapper wrapper;
 
     /////////// Setup/Teardown //////////////////////////////////////////////////////////////
 
     @Before
     public void setUp() throws Exception {
-
+        Integer value = 6;
+        int numBytes = Integer.BYTES;
+        ByteBuffer buffer = ByteBuffer.allocate(numBytes);
+        buffer.putInt(value);
+        this.wrapper = new SignedIntWrapper(ByteOrder.BIG_ENDIAN);
+        this.bytes = buffer.array();
     }
 
     @After
@@ -26,22 +35,9 @@ public class SignedIntWrapperTest {
 
     @Test
     public void get_integerWithinBoundsConverted_returnInput() {
-
-    }
-
-    @Test
-    public void get_integerBeyondBoundsConverted_returnZero() {
-
-    }
-
-    @Test
-    public void get_InvalidByteArraySize_returnZero() {
-
-    }
-
-    @Test
-    public void get_IntegerBeyondStorableLimit_returnZero() {
-
+        System.arraycopy(this.bytes, 0, this.wrapper.getDataBytes(), 0, this.bytes.length);
+        int value = this.wrapper.get();
+        Assert.assertEquals(6, value);
     }
 
 }

@@ -6,33 +6,64 @@ public class DescriptiveStats {
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
-    private long sum;
+    private DiffractionFrame data;
+
+    /////////// Constructor /////////////////////////////////////////////////////////////////
+
+    public DescriptiveStats(DiffractionFrame data) {
+        this.data = data;
+    }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
-    public long calculateSum(DiffractionFrame data) {
-        this.sum = 0;
-        data.cycleFramePixels((y, x) -> {
-            int value = data.getIntensityMapValue(y, x);
-            if (value != 0)
-                this.sum += value;
-        });
-        return this.sum;
+    public long calculateSum() {
+        long sum = 0;
+        for (int y = 0; y < this.data.getHeight(); y++)
+            for (int x = 0; x < this.data.getWidth(); x++)
+                sum += this.data.getIntensityMapValue(y, x);
+        return sum;
     }
 
-    public double calculateMean(DiffractionFrame data) {
-        return calculateSum(data) / getNumSamples(data);
+    public double calculateMean(boolean skipEmptyElements) {
+        return calculateSum() / getNumSamplesTotal(skipEmptyElements);
     }
 
-    public double calculateStandardDeviation(DiffractionFrame data){
-        // requires functionality - will resume once file reads are completely corrected, tested, and available for use.
-        return 0.0;
+    public double calculateStandardDeviation(boolean skipEmptyElements, boolean insetCircleAsSample) {
+
+        double mean = calculateMean(skipEmptyElements);
+        long innerSum = 0;
+        long numElements = (insetCircleAsSample)
+                ? this.getNumSamplesWithinInsetCircle()
+                : this.getNumSamplesTotal(skipEmptyElements);
+
+        for (int y = 0; y < this.data.getHeight(); y++)
+            for (int x = 0; x < this.data.getWidth(); x++) {
+                int value = this.data.getIntensityMapValue(y, x);
+                innerSum += ((value - mean) * (value - mean));
+            }
+
+        double variance = (1 / numElements) * innerSum;
+
+        return Math.sqrt(variance);
     }
 
-    public long getNumSamples(DiffractionFrame data) {
-        int diameter = data.getWidth();
-        int radius = diameter / 2;
-        double dataArea = Math.PI * (radius ^ 2);
+    public long getNumSamplesTotal(boolean skipEmptyElements) {
+        long numSamples = 0;
+        for (int y = 0; y < this.data.getHeight(); y++)
+            for (int x = 0; x < this.data.getWidth(); x++) {
+                if (skipEmptyElements) {
+                    if (this.data.getIntensityMapValue(y, x) != 0)
+                        numSamples++;
+                } else
+                    numSamples++;
+            }
+        return numSamples;
+    }
+
+    public long getNumSamplesWithinInsetCircle() {
+        double diameter = (double) this.data.getWidth();
+        double radius = diameter / 2;
+        double dataArea = Math.PI * radius * radius;
         return Math.round(dataArea);
     }
 
