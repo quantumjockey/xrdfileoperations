@@ -1,4 +1,4 @@
-package edu.hipsec.xrdtiffoperations.utilities.geometry;
+package edu.hipsec.xrdtiffoperations.utilities.trigonometry;
 
 public class RoundingOperator {
 

@@ -2,7 +2,7 @@ package edu.hipsec.xrdtiffoperations.data.mapping.base;
 
 import edu.hipsec.xrdtiffoperations.utilities.array.ArrayOperator;
 import edu.hipsec.xrdtiffoperations.utilities.delegate.EnvyForCSharpDelegates;
-import edu.hipsec.xrdtiffoperations.utilities.geometry.RoundingOperator;
+import edu.hipsec.xrdtiffoperations.utilities.trigonometry.RoundingOperator;
 
 public abstract class TwoDimensionalMapping<T extends Number> {
 
