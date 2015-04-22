@@ -3,7 +3,6 @@ package edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields;
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteSerializer;
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedIntWrapper;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -11,12 +10,12 @@ public class DirectoryField extends ByteSerializer {
 
     /////////// Constants ///////////////////////////////////////////////////////////////////
 
-    private final int COUNT_BYTES_LENGTH = 4;
-    private final int TAG_BYTES_LENGTH = 2;
-    private final int TYPE_BYTES_LENGTH = 2;
-    private final int VALUE_BYTES_LENGTH = 4;
+    private static final int COUNT_BYTES_LENGTH = 4;
+    private static final int TAG_BYTES_LENGTH = 2;
+    private static final int TYPE_BYTES_LENGTH = 2;
+    private static final int VALUE_BYTES_LENGTH = 4;
 
-    public static final int BYTE_LENGTH = 12;
+    public static final int BYTE_LENGTH = TAG_BYTES_LENGTH + TYPE_BYTES_LENGTH + COUNT_BYTES_LENGTH + VALUE_BYTES_LENGTH;
 
     /////////// Fields //////////////////////////////////////////////////////////////////////
 
@@ -53,24 +52,24 @@ public class DirectoryField extends ByteSerializer {
 
     @Override
     public void fromByteArray(byte[] dataBytes, ByteOrder order) {
-        SignedShortWrapper _fieldTag, _fieldType;
-        SignedIntWrapper _fieldValue, _typeCount;
+        SignedShortWrapper fieldTag, fieldType;
+        SignedIntWrapper fieldValue, typeCount;
 
         if (dataBytes.length == BYTE_LENGTH) {
-            _fieldTag = new SignedShortWrapper(order);
-            _fieldType = new SignedShortWrapper(order);
-            _typeCount = new SignedIntWrapper(order);
-            _fieldValue = new SignedIntWrapper(order);
+            fieldTag = new SignedShortWrapper(order);
+            fieldType = new SignedShortWrapper(order);
+            typeCount = new SignedIntWrapper(order);
+            fieldValue = new SignedIntWrapper(order);
 
-            System.arraycopy(dataBytes, 0, _fieldTag.getDataBytes(), 0, this.TAG_BYTES_LENGTH);
-            System.arraycopy(dataBytes, this.TAG_BYTES_LENGTH, _fieldType.getDataBytes(), 0, this.TYPE_BYTES_LENGTH);
-            System.arraycopy(dataBytes, this.TAG_BYTES_LENGTH + this.TYPE_BYTES_LENGTH, _typeCount.getDataBytes(), 0, this.COUNT_BYTES_LENGTH);
-            System.arraycopy(dataBytes, this.TAG_BYTES_LENGTH + this.TYPE_BYTES_LENGTH + this.COUNT_BYTES_LENGTH, _fieldValue.getDataBytes(), 0, this.VALUE_BYTES_LENGTH);
+            fieldTag.extractFromSourceArray(dataBytes, 0);
+            fieldType.extractFromSourceArray(dataBytes, TAG_BYTES_LENGTH);
+            typeCount.extractFromSourceArray(dataBytes, TAG_BYTES_LENGTH + TYPE_BYTES_LENGTH);
+            fieldValue.extractFromSourceArray(dataBytes, TAG_BYTES_LENGTH + TYPE_BYTES_LENGTH + COUNT_BYTES_LENGTH);
 
-            this.tag = _fieldTag.get();
-            this.type = _fieldType.get();
-            this.count = _typeCount.get();
-            this.value = _fieldValue.get();
+            this.tag = fieldTag.get();
+            this.type = fieldType.get();
+            this.count = typeCount.get();
+            this.value = fieldValue.get();
         } else
             this.displaySizeAlert(dataBytes.length, BYTE_LENGTH);
     }
