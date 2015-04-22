@@ -9,10 +9,10 @@ public class ByteArray {
         byte[] emptyBytes;
 
         regionLength = end - start;
-        emptyBytes = new byte[regionLength];
+        emptyBytes = (regionLength > 0) ? new byte[regionLength] : new byte[0];
 
         for (int i = 0; i < regionLength; i++)
-            emptyBytes[i] = 0;
+            emptyBytes[i] = (byte)0;
 
         return emptyBytes;
     }
