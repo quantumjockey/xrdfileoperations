@@ -35,7 +35,7 @@ public class SignedIntWrapperTest {
 
     @Test
     public void get_integerWithinBoundsConverted_returnInput() {
-        System.arraycopy(this.bytes, 0, this.wrapper.getDataBytes(), 0, this.bytes.length);
+        this.wrapper.extractFromSourceArray(this.bytes, 0);
         int value = this.wrapper.get();
         Assert.assertEquals(6, value);
     }

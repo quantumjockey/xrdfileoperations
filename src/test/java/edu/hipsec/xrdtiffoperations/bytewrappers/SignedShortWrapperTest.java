@@ -35,7 +35,7 @@ public class SignedShortWrapperTest {
 
     @Test
     public void get_shortWithinBoundsConverted_returnInput() {
-        System.arraycopy(this.bytes, 0, this.wrapper.getDataBytes(), 0, this.bytes.length);
+        this.wrapper.extractFromSourceArray(this.bytes, 0);
         short value = this.wrapper.get();
         Assert.assertEquals((short)4, value);
     }

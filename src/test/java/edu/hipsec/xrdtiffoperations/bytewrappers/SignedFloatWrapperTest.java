@@ -35,7 +35,7 @@ public class SignedFloatWrapperTest {
 
     @Test
     public void get_floatWithinBoundsConverted_returnInput() {
-        System.arraycopy(this.bytes, 0, this.wrapper.getDataBytes(), 0, this.bytes.length);
+        this.wrapper.extractFromSourceArray(this.bytes, 0);
         float value = this.wrapper.get();
         Assert.assertEquals((float)1.5, value, 0.0);
     }

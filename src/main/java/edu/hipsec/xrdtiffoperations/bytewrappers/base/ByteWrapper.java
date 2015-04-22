@@ -17,8 +17,16 @@ public abstract class ByteWrapper<T extends Comparable<T>> extends ByteData {
         this.order = _order;
         this.dataBytes = new byte[this.getByteCount(bitCount)];
     }
+    
+    public ByteWrapper(int bitCount){
+        this(bitCount, ByteOrder.nativeOrder());
+    }
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
+
+    public void extractFromSourceArray(byte[] sourceArray, int startPos){
+        System.arraycopy(sourceArray, startPos, this.dataBytes, 0, this.dataBytes.length);
+    }
 
     public abstract T get();
 

@@ -31,7 +31,7 @@ public class TiffByteOrderWrapperTest {
 
     @Test
     public void get_characterConverted_returnInput() {
-        System.arraycopy(this.bytes, 0, this.wrapper.getDataBytes(), 0, this.bytes.length);
+        this.wrapper.extractFromSourceArray(this.bytes, 0);
         ByteOrder value = this.wrapper.get();
         Assert.assertEquals(ByteOrder.LITTLE_ENDIAN, value);
     }

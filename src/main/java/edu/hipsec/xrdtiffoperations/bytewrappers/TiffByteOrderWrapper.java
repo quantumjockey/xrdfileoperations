@@ -13,6 +13,10 @@ public class TiffByteOrderWrapper extends ByteData {
 
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
+    public void extractFromSourceArray(byte[] sourceArray, int startPos){
+        System.arraycopy(sourceArray, startPos, this.dataBytes, 0, this.dataBytes.length);
+    }
+
     public ByteOrder get() {
         return this.getByteOrder(new String(this.dataBytes));
     }
