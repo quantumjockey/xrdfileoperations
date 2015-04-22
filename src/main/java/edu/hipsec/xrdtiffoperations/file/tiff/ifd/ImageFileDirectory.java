@@ -1,8 +1,6 @@
 package edu.hipsec.xrdtiffoperations.file.tiff.ifd;
 
 import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.DirectoryField;
-import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.WritableDirectoryField;
-import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.DirectoryField;
 import edu.hipsec.xrdtiffoperations.bytewrappers.SignedShortWrapper;
 import edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields.WritableDirectoryField;
 import edu.hipsec.xrdtiffoperations.utilities.bytes.ByteSerializer;
