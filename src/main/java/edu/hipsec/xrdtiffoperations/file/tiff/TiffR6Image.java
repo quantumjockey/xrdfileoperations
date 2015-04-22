@@ -102,10 +102,11 @@ public class TiffR6Image extends ByteSerializer {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
+    public boolean fromByteArray(byte[] dataBytes, ByteOrder order) {
         this.getFileHeader(dataBytes);
         this.getFirstIFD(dataBytes, this.header.getFirstIfdOffset(), this.header.getByteOrder());
         this.getImageResolution(dataBytes, order);
+        return true;
     }
 
     @Override

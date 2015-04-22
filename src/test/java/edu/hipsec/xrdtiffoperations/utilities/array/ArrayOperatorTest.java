@@ -1,6 +1,5 @@
 package edu.hipsec.xrdtiffoperations.utilities.array;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,11 +15,6 @@ public class ArrayOperatorTest {
     @Before
     public void setUp() throws Exception {
         operator = new ArrayOperator<>(Integer.class);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
     }
 
     /////////// Tests ///////////////////////////////////////////////////////////////////////

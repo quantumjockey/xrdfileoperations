@@ -1,6 +1,5 @@
 package edu.hipsec.xrdtiffoperations.data.mapping.base;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,11 +17,6 @@ public abstract class TwoDimensionalMappingTest<MappingType extends TwoDimension
     @Before
     public void setUp() throws Exception {
         this.initializeMappingForTest();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
     }
 
     /////////// Tests ///////////////////////////////////////////////////////////////////////

@@ -43,7 +43,7 @@ public class ResolutionAxis extends ByteSerializer {
     /////////// ByteSerializer Methods //////////////////////////////////////////////////////
 
     @Override
-    public void fromByteArray(byte[] dataBytes, ByteOrder order) {
+    public boolean fromByteArray(byte[] dataBytes, ByteOrder order) {
         SignedIntWrapper denum, num;
         int valueLength;
 
@@ -57,8 +57,11 @@ public class ResolutionAxis extends ByteSerializer {
             denum = new SignedIntWrapper(order);
             System.arraycopy(dataBytes, valueLength, denum.getDataBytes(), 0, valueLength);
             this.denominator = denum.get();
-        } else
+            return true;
+        } else {
             this.displaySizeAlert(dataBytes.length, BYTE_LENGTH);
+            return false;
+        }
     }
 
     @Override

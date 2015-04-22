@@ -2,7 +2,6 @@ package edu.hipsec.xrdtiffoperations.utilities.statistics;
 
 import edu.hipsec.xrdtiffoperations.data.DiffractionFrame;
 import edu.hipsec.xrdtiffoperations.utilities.array.ArrayOperator;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,11 +29,6 @@ public class DescriptiveStatsTest {
         this.frame = new DiffractionFrame("scan_scientfic_thingamabob.marredmytie");
         this.frame.initializeIntensityMap(dummyData);
         this.frameStats = new DescriptiveStats(this.frame);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
     }
 
     /////////// Tests ///////////////////////////////////////////////////////////////////////
