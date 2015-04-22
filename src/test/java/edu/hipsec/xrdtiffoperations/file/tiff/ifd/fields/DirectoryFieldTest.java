@@ -1,10 +1,8 @@
 package edu.hipsec.xrdtiffoperations.file.tiff.ifd.fields;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.nio.ByteOrder;
 
 public class DirectoryFieldTest {
@@ -18,11 +16,6 @@ public class DirectoryFieldTest {
     @Before
     public void setUp() throws Exception {
         this.field = new DirectoryField();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
     }
 
     /////////// Tests ///////////////////////////////////////////////////////////////////////
@@ -47,4 +40,3 @@ public class DirectoryFieldTest {
     }
 
 }
-
