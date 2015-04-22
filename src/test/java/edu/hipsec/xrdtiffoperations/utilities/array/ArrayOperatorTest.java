@@ -44,7 +44,7 @@ public class ArrayOperatorTest {
 
         for (int y = 0; y < size; y++)
             for (int x = 0; x < size; x++)
-                matrix[y][x] = (y * x) + y;
+                matrix[y][x] = (y * size) + y;
 
         Integer[][] copy = this.operator.deepCopyTwoDimensionalArray(matrix);
 
