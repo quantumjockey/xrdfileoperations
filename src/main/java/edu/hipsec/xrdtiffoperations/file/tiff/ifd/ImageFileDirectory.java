@@ -77,13 +77,10 @@ public class ImageFileDirectory extends ByteSerializer {
     }
 
     public void sort() {
-        Collections.sort(fields, new Comparator<DirectoryField>() {
-            @Override
-            public int compare(DirectoryField o1, DirectoryField o2) {
-                Short tagOne = o1.getTag();
-                Short tagTwo = o2.getTag();
-                return tagOne.compareTo(tagTwo);
-            }
+        Collections.sort(fields, (DirectoryField o1, DirectoryField o2) -> {
+            Short tagOne = o1.getTag();
+            Short tagTwo = o2.getTag();
+            return tagOne.compareTo(tagTwo);
         });
     }
 
