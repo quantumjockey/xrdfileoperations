@@ -1,7 +1,7 @@
 package edu.hipsec.xrdtiffoperations.data.mapping.base;
 
 import edu.hipsec.xrdtiffoperations.utilities.array.ArrayOperator;
-import edu.hipsec.xrdtiffoperations.utilities.delegate.EnvyForCSharpDelegates;
+import edu.hipsec.xrdtiffoperations.utilities.delegate.TwoIntArgumentDelegate;
 import edu.hipsec.xrdtiffoperations.utilities.trigonometry.RoundingOperator;
 
 public abstract class TwoDimensionalMapping<T extends Number> {
@@ -42,7 +42,7 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     /////////// Public Methods //////////////////////////////////////////////////////////////
 
     // applies lambda passed through delegate interface to all elements within the data grid
-    public void cycleMap(EnvyForCSharpDelegates action) {
+    public void cycleMap(TwoIntArgumentDelegate action) {
         // Issues with multi-threaded execution in JavaFX will be resolved in the future, but
         // are being tabled for purposes of implementing additional features at this time.
         //if (!useMultiThreading)
@@ -110,13 +110,13 @@ public abstract class TwoDimensionalMapping<T extends Number> {
     /////////// Private Methods /////////////////////////////////////////////////////////////
 
     // applies lambda passed through delegate interface to specified rows within data grid
-    private void cycleRows(int startRow, int endRow, EnvyForCSharpDelegates action) {
+    private void cycleRows(int startRow, int endRow, TwoIntArgumentDelegate action) {
         for (int y = startRow; y < endRow; y++)
             this.cycleRow(y, action);
     }
 
     // applies lambda passed through delegate interface to each element within specified row of data grid
-    private void cycleRow(int y, EnvyForCSharpDelegates action) {
+    private void cycleRow(int y, TwoIntArgumentDelegate action) {
         for (int x = 0; x < this.getWidth(); x++) {
             try {
                 action.callMethod(y, x);

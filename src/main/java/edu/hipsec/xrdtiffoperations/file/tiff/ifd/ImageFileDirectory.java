@@ -8,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class ImageFileDirectory extends ByteSerializer {
 
