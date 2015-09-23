@@ -1,5 +1,57 @@
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# OSX meta
+.AppleDouble
 .DS_Store
-.idea/
-out/
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.apdisk
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+
+# SBT/Maven build-generated folders
+es
+lib/
 META-INF/
+out/
+project/target/
+project/project/target/
+target/
+
+# IntelliJ-specific files and folders
+.idea/
+.idea_modules/
 *.iml
+
+# Eclipse-specific files and folders
+.classpath
+.project
+.sbtserver/
+.settings/
